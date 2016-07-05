@@ -1,0 +1,34 @@
+{
+  "name": "docker-api",
+  "version": "1.0.0",
+  "description": "Docker Remote API driver for node",
+  "main": "./lib/docker",
+  "scripts": {
+    "test": "./node_modules/standard/bin/cmd.js src && ./node_modules/mocha/bin/mocha --require babel-core/register -R spec",
+    "build": "babel src --presets babel-preset-es2015 --out-dir lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AgustinCB/docker-api.git"
+  },
+  "keywords": [
+    "docker",
+    "api",
+    "node"
+  ],
+  "author": "AgustinCB",
+  "license": "\tGPL-2.0",
+  "bugs": {
+    "url": "https://github.com/AgustinCB/docker-api/issues"
+  },
+  "homepage": "https://github.com/AgustinCB/docker-api#readme",
+  "devDependencies": {
+    "babel-preset-es2015": "^6.9.0",
+    "chai": "^3.5.0",
+    "mocha": "^2.5.3",
+    "standard": "^7.1.2"
+  },
+  "dependencies": {
+    "docker-modem": "^0.3.1"
+  }
+}

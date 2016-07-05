@@ -62,7 +62,7 @@ export default class Docker {
     const call = {
       path: '/info',
       method: 'GET',
-      statusCode: {
+      statusCodes: {
         200: true,
         500: 'server error'
       }
@@ -86,7 +86,7 @@ export default class Docker {
     const call = {
       path: '/version',
       method: 'GET',
-      statusCode: {
+      statusCodes: {
         200: true,
         500: 'server error'
       }
@@ -110,7 +110,7 @@ export default class Docker {
     const call = {
       path: '/_ping',
       method: 'GET',
-      statusCode: {
+      statusCodes: {
         200: true,
         500: 'server error'
       }
@@ -136,7 +136,7 @@ export default class Docker {
       path: '/events?',
       method: 'GET',
       options: opts,
-      statusCode: {
+      statusCodes: {
         200: true,
         500: 'server error'
       }

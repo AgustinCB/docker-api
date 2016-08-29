@@ -10,15 +10,16 @@ class ContainerFs {
    * Get the info about the filesystem of the container
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/retrieving-information-about-files-and-folders-in-a-container
    *
-   * @param  {String}   id    ID of the container to inspect, if it's not set, use the id of the object (optional)
+   * @param  {String}   id    ID of the container to get info, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise returning the info about the filesystem
    */
-  info (id) {
-    [ _, id ] = this.__processArguments(id)
+  info (opts, id) {
+    [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
-      path: `/containers/${id}/archive`,
+      path: `/containers/${id}/archive?`,
       method: 'HEAD',
+      isStream: true,
       options: opts,
       statusCodes: {
         200: true,
@@ -40,15 +41,16 @@ class ContainerFs {
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/get-an-archive-of-a-filesystem-resource-in-a-container
    *
    * @param  {Object}   opts  Query params in the request (optional)
-   * @param  {String}   id    ID of the container to inspect, if it's not set, use the id of the object (optional)
+   * @param  {String}   id    ID of the container to get an archive, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise returning the result as a stream to the tar file
    */
   get (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
-      path: `/containers/${id}/archive`,
+      path: `/containers/${id}/archive?path=${opts.path}&`,
       method: 'GET',
+      isStream: true,
       options: opts,
       statusCodes: {
         200: true,
@@ -71,16 +73,18 @@ class ContainerFs {
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/extract-an-archive-of-files-or-folders-to-a-directory-in-a-container
    *
    * @param  {Object}   opts  Query params in the request (optional)
-   * @param  {String}   id    ID of the container to inspect, if it's not set, use the id of the object (optional)
+   * @param  {String}   id    ID of the container to put the archive, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise returning the result as a stream to the tar file
    */
-  put (opts, id) {
+  put (file, opts, id) {
     [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
-      path: `/containers/${id}/archive`,
+      path: `/containers/${id}/archive?`,
       method: 'PUT',
       options: opts,
+      isStream: true,
+      file: file,
       statusCodes: {
         200: true,
         400: 'bad request',
@@ -102,10 +106,10 @@ class ContainerFs {
     if (typeof opts === "string" && !id) {
       id = opts
     }
-    if (!opts && !id) {
+    if (!id && this.container.id) {
       id = this.container.id
     }
-    return { opts, id }
+    return [ opts, id ]
   }
 }
 
@@ -155,13 +159,14 @@ export default class Container {
    */
   create (opts) {
     const call = {
-      path: '/containers/json',
-      method: 'GET',
+      path: '/containers/create?',
+      method: 'POST',
       options: opts,
       statusCodes: {
         200: true,
+        201: true,
         400: 'bad request',
-        404: 'no such container',
+        404: 'no such image',
         406: 'impossible to attach',
         500: 'server error'
       }
@@ -179,12 +184,13 @@ export default class Container {
   /*
    * Get low-level information on a container
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/inspect-a-container
+   * The reason why this module isn't called inspect is because that interferes with the inspect utility of node.
    *
    * @param  {Object}   opts  Query params in the request (optional)
    * @param  {String}   id    ID of the container to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the new container
    */
-  inspect (opts, id) {
+  status (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
@@ -212,7 +218,7 @@ export default class Container {
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/list-processes-running-inside-a-container
    *
    * @param  {Object}   opts  Query params in the request (optional)
-   * @param  {String}   id    ID of the container to inspect, if it's not set, use the id of the object (optional)
+   * @param  {String}   id    ID of the container to get top processes, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the list of processes
    */
   top (opts, id) {
@@ -242,16 +248,17 @@ export default class Container {
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/get-container-logs
    *
    * @param  {Object}   opts  Query params in the request (optional)
-   * @param  {String}   id    ID of the container to inspect, if it's not set, use the id of the object (optional)
+   * @param  {String}   id    ID of the container to get logs, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise returning the concatenated logs
    */
   logs (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
-      path: `/containers/${id}/logs`,
+      path: `/containers/${id}/logs?`,
       method: 'GET',
       options: opts,
+      isStream: true,
       statusCodes: {
         101: true,
         200: true,
@@ -272,16 +279,16 @@ export default class Container {
    * Get changes on a container's filesystem
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/inspect-changes-on-a-container-s-filesystem
    *
-   * @param  {String}   id    ID of the container to inspect, if it's not set, use the id of the object (optional)
+   * @param  {String}   id    ID of the container to inspect changes, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise returning the changes
    */
   changes (id) {
-    [ _, id ] = this.__processArguments(id)
+    [ , id ] = this.__processArguments(id)
 
     const call = {
       path: `/containers/${id}/changes`,
       method: 'GET',
-      options: opts,
+      options: {},
       statusCodes: {
         200: true,
         404: 'no such container',
@@ -302,7 +309,7 @@ export default class Container {
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/export-a-container
    *
    * @param  {Object}   opts  Query params in the request (optional)
-   * @param  {String}   id      ID of the container to inspect, if it's not set, use the id of the object (optional)
+   * @param  {String}   id      ID of the container to export, if it's not set, use the id of the object (optional)
    * @return {Promise}          Promise returning the content of the tar file as a stream or as a string
    */
   export (opts, id) {
@@ -312,6 +319,7 @@ export default class Container {
       path: `/containers/${id}/export`,
       method: 'GET',
       options: opts,
+      isStream: !!opts.stream,
       statusCodes: {
         200: true,
         404: 'no such container',
@@ -322,7 +330,7 @@ export default class Container {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, tarStream) => {
         if (err) return reject(err)
-        if (opts.stream) return resolve(tarStream)
+        if (!opts.stream) return resolve(tarStream)
         
         let res = []
         tarStream.on('data', (chunk) => {
@@ -341,16 +349,17 @@ export default class Container {
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/export-a-container
    *
    * @param  {Object}   opts  Query params in the request (optional)
-   * @param  {String}   id      ID of the container to inspect, if it's not set, use the id of the object (optional)
+   * @param  {String}   id      ID of the container to get stats, if it's not set, use the id of the object (optional)
    * @return {Promise}          Promise returning the stats, in a stream or string
    */
   stats (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
-      path: `/containers/${id}/export`,
+      path: `/containers/${id}/stats`,
       method: 'GET',
       options: opts,
+      isStream: true,
       statusCodes: {
         200: true,
         404: 'no such container',
@@ -371,7 +380,7 @@ export default class Container {
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/resize-a-container-tty
    *
    * @param  {Object}   opts  Query params in the request (optional)
-   * @param  {String}   id      ID of the container to inspect, if it's not set, use the id of the object (optional)
+   * @param  {String}   id      ID of the container to resize, if it's not set, use the id of the object (optional)
    * @return {Promise}          Promise returning the response
    */
   resize (opts, id) {
@@ -401,7 +410,7 @@ export default class Container {
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/start-a-container
    *
    * @param  {Object}   opts  Query params in the request (optional)
-   * @param  {String}   id      ID of the container to inspect, if it's not set, use the id of the object (optional)
+   * @param  {String}   id      ID of the container to start, if it's not set, use the id of the object (optional)
    * @return {Promise}          Promise returning the response
    */
   start (opts, id) {
@@ -422,7 +431,7 @@ export default class Container {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err) => {
         if (err) return reject(err)
-        resolve()
+        resolve(this.id ? this : (new Container(this.modem, id)))
       })
     })
   }
@@ -432,7 +441,7 @@ export default class Container {
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/stop-a-container
    *
    * @param  {Object}   opts  Query params in the request (optional)
-   * @param  {String}   id      ID of the container to inspect, if it's not set, use the id of the object (optional)
+   * @param  {String}   id      ID of the container to stop, if it's not set, use the id of the object (optional)
    * @return {Promise}          Promise returning the response
    */
   stop (opts, id) {
@@ -453,7 +462,7 @@ export default class Container {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err) => {
         if (err) return reject(err)
-        resolve()
+        resolve(this.id ? this : new Container(this.modem, id))
       })
     })
   }
@@ -463,7 +472,7 @@ export default class Container {
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/restart-a-container
    *
    * @param  {Object}   opts  Query params in the request (optional)
-   * @param  {String}   id      ID of the container to inspect, if it's not set, use the id of the object (optional)
+   * @param  {String}   id      ID of the container to restart, if it's not set, use the id of the object (optional)
    * @return {Promise}          Promise returning the response
    */
   restart (opts, id) {
@@ -483,7 +492,7 @@ export default class Container {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err) => {
         if (err) return reject(err)
-        resolve()
+        resolve(this.id ? this : new Container(this.modem, id))
       })
     })
   }
@@ -493,7 +502,7 @@ export default class Container {
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/kill-a-container
    *
    * @param  {Object}   opts  Query params in the request (optional)
-   * @param  {String}   id      ID of the container to inspect, if it's not set, use the id of the object (optional)
+   * @param  {String}   id      ID of the container to kill, if it's not set, use the id of the object (optional)
    * @return {Promise}          Promise returning the response
    */
   kill (opts, id) {
@@ -513,7 +522,7 @@ export default class Container {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err) => {
         if (err) return reject(err)
-        resolve()
+        resolve(this.id ? this : new Container(this.modem, id))
       })
     })
   }
@@ -524,7 +533,7 @@ export default class Container {
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/update-a-container
    *
    * @param  {Object}   opts  Query params in the request (optional)
-   * @param  {String}   id      ID of the container to inspect, if it's not set, use the id of the object (optional)
+   * @param  {String}   id      ID of the container to update, if it's not set, use the id of the object (optional)
    * @return {Promise}          Promise returning the response
    */
   update (opts, id) {
@@ -544,8 +553,10 @@ export default class Container {
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, warnings) => {
+        let container = this.id ? this : new Container(this.modem, id)
+        container.Warnings = warnings
         if (err) return reject(err)
-        resolve(warnings)
+        resolve(container)
       })
     })
   }
@@ -555,14 +566,14 @@ export default class Container {
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/rename-a-container
    *
    * @param  {Object}   opts  Query params in the request (optional)
-   * @param  {String}   id      ID of the container to inspect, if it's not set, use the id of the object (optional)
+   * @param  {String}   id      ID of the container to rename, if it's not set, use the id of the object (optional)
    * @return {Promise}          Promise returning the response
    */
   rename (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
-      path: `/containers/${id}/rename`,
+      path: `/containers/${id}/rename?`,
       method: 'POST',
       options: opts,
       statusCodes: {
@@ -585,16 +596,16 @@ export default class Container {
    * Pause a container.
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/pause-a-container
    *
-   * @param  {String}   id      ID of the container to inspect, if it's not set, use the id of the object (optional)
+   * @param  {String}   id      ID of the container to pause, if it's not set, use the id of the object (optional)
    * @return {Promise}          Promise returning the response
    */
   pause (id) {
-    [ _, id ] = this.__processArguments(id)
+    [ , id ] = this.__processArguments(id)
 
     const call = {
       path: `/containers/${id}/pause`,
       method: 'POST',
-      options: opts,
+      options: {},
       statusCodes: {
         204: true,
         404: 'no such container',
@@ -605,7 +616,7 @@ export default class Container {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err) => {
         if (err) return reject(err)
-        resolve()
+        resolve(this.id ? this : new Container(this.modem, id))
       })
     })
   }
@@ -614,16 +625,16 @@ export default class Container {
    * Unpause a container.
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/unpause-a-container
    *
-   * @param  {String}   id      ID of the container to inspect, if it's not set, use the id of the object (optional)
+   * @param  {String}   id      ID of the container to resume, if it's not set, use the id of the object (optional)
    * @return {Promise}          Promise returning the response
    */
   unpause (id) {
-    [ _, id ] = this.__processArguments(id)
+    [ , id ] = this.__processArguments(id)
 
     const call = {
       path: `/containers/${id}/unpause`,
       method: 'POST',
-      options: opts,
+      options: {},
       statusCodes: {
         204: true,
         404: 'no such container',
@@ -634,7 +645,7 @@ export default class Container {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err) => {
         if (err) return reject(err)
-        resolve()
+        resolve(this.id ? this : new Container(this.modem, id))
       })
     })
   }
@@ -644,7 +655,7 @@ export default class Container {
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/attach-to-a-container
    *
    * @param  {Object}   opts  Query params in the request (optional)
-   * @param  {String}   id      ID of the container to inspect, if it's not set, use the id of the object (optional)
+   * @param  {String}   id      ID of the container to attach, if it's not set, use the id of the object (optional)
    * @return {Promise}          Promise returning the response
    */
   attach (opts, id) {
@@ -653,6 +664,8 @@ export default class Container {
     const call = {
       path: `/containers/${id}/attach`,
       method: 'POST',
+      isStream: true,
+      openStdin: opts.stdin,
       options: opts,
       statusCodes: {
         101: true,
@@ -666,7 +679,7 @@ export default class Container {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, stream) => {
         if (err) return reject(err)
-        resolve(stream)
+        resolve([ stream, this.id ? this : new Container(this.modem, id) ])
       })
     })
   }
@@ -676,7 +689,7 @@ export default class Container {
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/attach-to-a-container-websocket
    *
    * @param  {Object}   opts  Query params in the request (optional)
-   * @param  {String}   id      ID of the container to inspect, if it's not set, use the id of the object (optional)
+   * @param  {String}   id      ID of the container to attach, if it's not set, use the id of the object (optional)
    * @return {Promise}          Promise returning the response
    */
   wsattach (opts, id) {
@@ -697,7 +710,7 @@ export default class Container {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, stream) => {
         if (err) return reject(err)
-        resolve(stream)
+        resolve([ stream, this.id ? this : new Container(this.modem, id) ])
       })
     })
   }
@@ -706,16 +719,16 @@ export default class Container {
    * Block until a container stops, returning exit code
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/wait-a-container
    *
-   * @param  {String}   id      ID of the container to inspect, if it's not set, use the id of the object (optional)
+   * @param  {String}   id      ID of the container to wait, if it's not set, use the id of the object (optional)
    * @return {Promise}          Promise returning the response
    */
   wait (id) {
-    [ _, id ] = this.__processArguments(id)
+    [ , id ] = this.__processArguments(id)
 
     const call = {
       path: `/containers/${id}/wait`,
       method: 'POST',
-      options: opts,
+      options: {},
       statusCodes: {
         200: true,
         404: 'no such container',
@@ -736,14 +749,14 @@ export default class Container {
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/remove-a-container
    *
    * @param  {Object}   opts  Query params in the request (optional)
-   * @param  {String}   id      ID of the container to inspect, if it's not set, use the id of the object (optional)
+   * @param  {String}   id      ID of the container to remove, if it's not set, use the id of the object (optional)
    * @return {Promise}          Promise returning the response
    */
   delete (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
-      path: `/containers/${id}`,
+      path: `/containers/${id}?`,
       method: 'DELETE',
       options: opts,
       statusCodes: {
@@ -766,9 +779,9 @@ export default class Container {
     if (typeof opts === "string" && !id) {
       id = opts
     }
-    if (!opts && !id) {
+    if (!id && this.id) {
       id = this.id
     }
-    return { opts, id }
+    return [ opts, id ]
   }
 }

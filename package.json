@@ -29,6 +29,7 @@
     "standard": "^7.1.2"
   },
   "dependencies": {
-    "docker-modem": "^0.3.1"
+    "docker-modem": "^0.3.1",
+    "memorystream": "^0.3.1"
   }
 }

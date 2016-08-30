@@ -13,14 +13,14 @@ Support for:
 
 ## Installation
 
-`npm install docke-api`
+`npm install node-docke-api`
 
 ## Usage
 
 Check tests for a more general usage. 
 
 ``` js
-const Docker = require('docker-api')
+const Docker = require('node-docker-api')
 
 let docker = new Docker({ socketPath: '/var/run/docker.sock' })
 

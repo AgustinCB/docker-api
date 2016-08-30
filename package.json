@@ -1,6 +1,6 @@
 {
   "name": "node-docker-api",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Docker Remote API driver for node",
   "main": "./lib/docker",
   "scripts": {

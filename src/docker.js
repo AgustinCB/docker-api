@@ -10,7 +10,7 @@ import Swarm from './swarm'
 import Service from './service'
 import Task from './task'
 
-export default class Docker {
+export class Docker {
   constructor (opts) {
     this.modem = new Modem(opts)
 

@@ -1,5 +1,5 @@
 {
-  "name": "docker-api",
+  "name": "node-docker-api",
   "version": "1.0.0",
   "description": "Docker Remote API driver for node",
   "main": "./lib/docker",

@@ -20,7 +20,7 @@ Support for:
 Check tests for a more general usage. 
 
 ``` js
-const Docker = require('node-docker-api')
+const Docker = require('node-docker-api').Docker
 
 let docker = new Docker({ socketPath: '/var/run/docker.sock' })
 

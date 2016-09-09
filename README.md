@@ -11,6 +11,8 @@ Support for:
 * **tests**
 * **promises**
 
+The current status of the package is in development. From the [API reference](https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24), there's full support and test for section 3.1 and some of 3.3 (everything but commit containers, exec in containers and load and get images), experimental support for section 3.2 and the rest of 3.3. The rest of the API is still pending.
+
 ## Installation
 
 `npm install node-docke-api`

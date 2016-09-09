@@ -1,5 +1,161 @@
 'use strict'
 
+import Image from './image'
+
+class Exec {
+  constructor (modem, container) {
+    this.modem = modem
+    this.container = container
+  }
+
+  /*
+   * Create an exec instance in a container
+   * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/create-a-container
+   *
+   * @param  {Object}   opts  Query params in the request (optional)
+   * @param  {String}   id    ID of the container to get info, if it's not set, use the id of the object (optional)
+   * @return {Promise}        Promise return the new container
+   */
+  create (opts, id) {
+    [ opts, id ] = this.__processContainerArguments(opts, id)
+
+    const call = {
+      path: `/containers/${id}/exec?`,
+      method: 'POST',
+      options: opts,
+      statusCodes: {
+        200: true,
+        201: true,
+        404: 'no such container',
+        409: 'container is paused',
+        500: 'server error'
+      }
+    }
+
+    return new Promise((resolve, reject) => {
+      this.modem.dial(call, (err, conf) => {
+        if (err) return reject(err)
+        let exec = new Exec(this.modem, conf.Id)
+        resolve(Object.assign(exec, conf))
+      })
+    })
+  }
+
+  /*
+   * Start an exec instance
+   * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/exec-start
+   *
+   * @param  {Object}   opts  Query params in the request (optional)
+   * @param  {String}   id    ID of the exec instance to start, if it's not set, use the id of the object (optional)
+   * @return {Promise}        Promise return the new container
+   */
+  start (opts, id) {
+    [ opts, id ] = this.__processArguments(opts, id)
+
+    const call = {
+      path: `/exec/${id}/start?`,
+      method: 'POST',
+      options: opts,
+      isStream: true,
+      statusCodes: {
+        200: true,
+        404: 'no such exec instance',
+        409: 'container is paused'
+      }
+    }
+
+    return new Promise((resolve, reject) => {
+      this.modem.dial(call, (err, stream) => {
+        if (err) return reject(err)
+        resolve(stream)
+      })
+    })
+  }
+
+  /*
+   * Resize an exec instance
+   * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/exec-resize
+   *
+   * @param  {Object}   opts  Query params in the request (optional)
+   * @param  {String}   id    ID of the exec instance to resize, if it's not set, use the id of the object (optional)
+   * @return {Promise}        Promise return the new container
+   */
+  resize (opts, id) {
+    [ opts, id ] = this.__processArguments(opts, id)
+
+    const call = {
+      path: `/exec/${id}/resize?`,
+      method: 'POST',
+      options: opts,
+      isStream: true,
+      statusCodes: {
+        201: true,
+        404: 'no such exec instance'
+      }
+    }
+
+    return new Promise((resolve, reject) => {
+      this.modem.dial(call, (err, res) => {
+        if (err) return reject(err)
+        resolve(res)
+      })
+    })
+  }
+
+  /*
+   * Resize an exec instance
+   * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/exec-inspect
+   * The reason why this module isn't called inspect is because that interferes with the inspect utility of node.
+   *
+   * @param  {Object}   opts  Query params in the request (optional)
+   * @param  {String}   id    ID of the exec instance to inspect, if it's not set, use the id of the object (optional)
+   * @return {Promise}        Promise return the new container
+   */
+  status (opts, id) {
+    [ opts, id ] = this.__processArguments(opts, id)
+
+    const call = {
+      path: `/exec/${id}/json?`,
+      method: 'POST',
+      options: opts,
+      isStream: true,
+      statusCodes: {
+        200: true,
+        404: 'no such exec instance',
+        500: 'server error'
+      }
+    }
+
+    return new Promise((resolve, reject) => {
+      this.modem.dial(call, (err, conf) => {
+        if (err) return reject(err)
+        let exec = new Exec(this.modem, conf.Id)
+        resolve(Object.assign(exec, conf))
+      })
+    })
+  }
+
+  __processArguments (opts, id) {
+    if (typeof opts === "string" && !id) {
+      id = opts
+    }
+    if (!id && this.id) {
+      id = this.id
+    }
+    return [ opts, id ]
+  }
+
+  __processContainerArguments (opts, id) {
+    if (typeof opts === "string" && !id) {
+      id = opts
+    }
+    if (!id && this.container.id) {
+      id = this.container.id
+    }
+    return [ opts, id ]
+  }
+}
+
 class ContainerFs {
   constructor (modem, container) {
     this.modem = modem
@@ -118,6 +274,7 @@ export default class Container {
     this.modem = modem
     this.id = id
     this.fs = new ContainerFs(modem, this)
+    this.exec = new Exec(modem, this)
   }
 
   /*
@@ -771,6 +928,36 @@ export default class Container {
       this.modem.dial(call, (err) => {
         if (err) return reject(err)
         resolve()
+      })
+    })
+  }
+
+  /*
+   * Commit container into an image
+   * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/create-a-new-image-from-a-container-s-changes
+   *
+   * @param  {Object}   opts    Query params in the request (optional)
+   * @param  {String}   id      ID of the container to commit, if it's not set, use the id of the object (optional)
+   * @return {Promise}          Promise returning the response
+   */
+  commit (opts, id) {
+    [ opts, id ] = this.__processArguments(opts, id)
+
+    const call = {
+      path: `/commit?container=${id}&`,
+      method: 'POST',
+      options: opts,
+      statusCodes: {
+        201: true,
+        404: 'no such container',
+        500: 'server error'
+      }
+    }
+
+    return new Promise((resolve, reject) => {
+      this.modem.dial(call, (err, res) => {
+        if (err) return reject(err)
+        resolve(new Image(this.modem, res.Id))
       })
     })
   }

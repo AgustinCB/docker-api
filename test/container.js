@@ -1,6 +1,7 @@
 import chai from 'chai'
 import * as test_utils from './utils'
 import Container from '../lib/container'
+import Image from '../lib/image'
 import {default as MemoryStream} from 'memorystream'
 
 const should = chai.should()
@@ -23,6 +24,9 @@ let containerNames = new Map([
   [ 'rename', 'docker_api_test_rename' ],
   [ 'pause', 'docker_api_test_pause' ],
   [ 'attach', 'docker_api_test_attach' ],
+  [ 'commit', 'docker_api_test_commit' ],
+  [ 'exec', 'docker_api_test_exec' ],
+  [ 'inspect_exec', 'docker_api_test_inspect_exec' ],
   [ 'get_archive', 'docker_api_test_get_archive' ],
   [ 'put_archive', 'docker_api_test_put_archive' ],
   [ 'info_archive', 'docker_api_test_info_archive' ]
@@ -333,6 +337,76 @@ describe('#container', function () {
         })
         .then((container) => {
           container.State.Status.should.equal('running')
+        })
+    })
+  })
+
+  describe('#commit', function () {
+    it('should commit changes in a container', function () {
+      this.timeout(70000)
+      return docker.container.create({ 
+        Image: 'ubuntu', 
+        Cmd: [ '/bin/bash', '-c', 'tail -f /var/log/dmesg' ], 
+        name: containerNames.get('commit') 
+      })
+        .then((container) => {
+          return container.start()
+        })
+        .then((container) => {
+          return container.commit({ comment: 'commit test' })
+        })
+        .then((image) => {
+          image.should.be.instanceof(Image)
+        })
+    })
+  })
+
+  describe('#exec', function () {
+    it('should run exec on a container', function () {
+      this.timeout(70000)
+      return docker.container.create({ 
+        Image: 'ubuntu', 
+        Cmd: [ '/bin/bash', '-c', 'tail -f /var/log/dmesg' ], 
+        name: containerNames.get('exec')
+      })
+        .then((container) => {
+          return container.start()
+        })
+        .then((container) => {
+          return container.exec.create({
+            Cmd: [ "top" ]
+          })
+        })
+        .then((exec) => {
+          return exec.start()
+        })
+        .then((stream) => {
+          stream.pipe.should.be.ok
+        })
+    })
+
+    it('should check status of exec on a container', function () {
+      this.timeout(70000)
+      let Exec
+      return docker.container.create({ 
+        Image: 'ubuntu', 
+        Cmd: [ '/bin/bash', '-c', 'tail -f /var/log/dmesg' ], 
+        name: containerNames.get('inspect_exec')
+      })
+        .then((container) => {
+          return container.start()
+        })
+        .then((container) => {
+          return container.exec.create({
+            Cmd: [ "top" ]
+          })
+        })
+        .then((exec) => {
+          Exec = exec.constructor
+          return exec.status()
+        })
+        .then((exec) => {
+          exec.should.be.instanceof(Exec)
         })
     })
   })

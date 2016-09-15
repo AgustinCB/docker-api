@@ -3,9 +3,10 @@
 import Image from './image'
 
 class Exec {
-  constructor (modem, container) {
+  constructor (modem, container, id) {
     this.modem = modem
     this.container = container
+    this.id = id
   }
 
   /*
@@ -35,7 +36,7 @@ class Exec {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
         if (err) return reject(err)
-        let exec = new Exec(this.modem, conf.Id)
+        let exec = new Exec(this.modem, this.container, conf.Id)
         resolve(Object.assign(exec, conf))
       })
     })
@@ -53,10 +54,12 @@ class Exec {
     [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
-      path: `/exec/${id}/start?`,
+      path: `/exec/${id}/start`,
       method: 'POST',
       options: opts,
       isStream: true,
+      hijack: opts.hijack,
+      openStdin: opts.stdin,
       statusCodes: {
         200: true,
         404: 'no such exec instance',
@@ -87,7 +90,6 @@ class Exec {
       path: `/exec/${id}/resize?`,
       method: 'POST',
       options: opts,
-      isStream: true,
       statusCodes: {
         201: true,
         404: 'no such exec instance'
@@ -116,9 +118,8 @@ class Exec {
 
     const call = {
       path: `/exec/${id}/json?`,
-      method: 'POST',
+      method: 'GET',
       options: opts,
-      isStream: true,
       statusCodes: {
         200: true,
         404: 'no such exec instance',
@@ -129,7 +130,7 @@ class Exec {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
         if (err) return reject(err)
-        let exec = new Exec(this.modem, conf.Id)
+        let exec = new Exec(this.modem, this.container, conf.Id)
         resolve(Object.assign(exec, conf))
       })
     })
@@ -141,6 +142,9 @@ class Exec {
     }
     if (!id && this.id) {
       id = this.id
+    }
+    if (!opts) {
+      opts = {}
     }
     return [ opts, id ]
   }
@@ -943,8 +947,10 @@ export default class Container {
   commit (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id)
 
+    opts.container = this.id
+
     const call = {
-      path: `/commit?container=${id}&`,
+      path: `/commit?`,
       method: 'POST',
       options: opts,
       statusCodes: {
@@ -957,7 +963,7 @@ export default class Container {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, res) => {
         if (err) return reject(err)
-        resolve(new Image(this.modem, res.Id))
+        resolve(new Image(this.modem, res.Id.replace("sha256:", "")))
       })
     })
   }
@@ -968,6 +974,9 @@ export default class Container {
     }
     if (!id && this.id) {
       id = this.id
+    }
+    if (!opts) {
+      opts = {}
     }
     return [ opts, id ]
   }

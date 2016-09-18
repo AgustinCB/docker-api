@@ -4,7 +4,7 @@
   "description": "Docker Remote API driver for node",
   "main": "./lib/docker",
   "scripts": {
-    "test": "./node_modules/standard/bin/cmd.js src && ./node_modules/mocha/bin/mocha --require babel-core/register -R spec",
+    "test": "chmod +x test.sh; ./test.sh",
     "build": "./node_modules/babel-cli/bin/babel.js src --presets babel-preset-es2015 --out-dir lib"
   },
   "repository": {

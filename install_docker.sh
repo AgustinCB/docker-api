@@ -6,7 +6,6 @@ set -e
 DOCKER_VERSION=$1
 
 # disable travis default installation
-service docker stop
 apt-get -y --purge remove docker-engine
 
 # install gpg key for docker rpo

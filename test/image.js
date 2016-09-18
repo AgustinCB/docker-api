@@ -6,9 +6,6 @@ import Image from '../lib/image'
 const should = chai.should()
 
 let docker = test_utils.init()
-let containerNames = new Map([
-  [ 'list', 'docker_api_test_list' ],
-])
 let testImage = 'ubuntu:latest'
 
 describe('#image', function () {

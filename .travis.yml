@@ -1,6 +1,8 @@
-install:
-- npm install
-- npm run build
-- npm run test
 language: node_js
 node_js: "6"
+sudo: required
+env:
+- DOCKER_VERSION=1.12.0
+before_script:
+- sudo ./install_docker.sh ${DOCKER_VERSION}
+- npm run build

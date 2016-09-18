@@ -27,6 +27,7 @@ export default class Volume {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, result) => {
         if (err) return reject(err)
+        if (!result.Volumes || !result.Volumes.length) return resolve([])
         resolve(result.Volumes.map((conf) => {
           let volume = new Volume(this.modem, conf.Name)
           return Object.assign(volume, conf)

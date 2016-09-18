@@ -2,4 +2,4 @@ install:
 - npm install
 - npm run build
 - npm run test
-language: javascript
+language: node_js

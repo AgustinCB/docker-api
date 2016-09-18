@@ -11,7 +11,7 @@ Support for:
 * **tests**
 * **promises**
 
-The current status of the package is in development. From the [API reference](https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24), there's full support and test for sections 3.1, 3.2 and 3.3.
+The current status of the package is in development. From the [API reference](https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24), there's full support and test for sections 3.1, 3.2 and 3.3 and experimental support for section 3.4.
 
 ## Installation
 

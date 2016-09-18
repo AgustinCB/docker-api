@@ -5,6 +5,9 @@ set -e
 # argv[0]
 DOCKER_VERSION=$1
 
+service docker stop
+apt-get -y --purge remove docker-engine
+
 # install gpg key for docker rpo
 apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv 58118E89F3A912897C070ADBF76221572C52609D
 

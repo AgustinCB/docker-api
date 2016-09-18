@@ -1,6 +1,6 @@
 # docker-api
 
-Docker Remote API driver for node.js. It uses the same modem than [dockerode](https://github.com/apocas/docker), but the implementation is promisified and with a different syntax.
+Docker Remote API driver for node.js. It uses the same modem than [dockerode](https://github.com/apocas/docker), but the interface is promisified and with a different syntax.
 
 Support for:
 
@@ -11,7 +11,7 @@ Support for:
 * **tests**
 * **promises**
 
-The current status of the package is in development. From the [API reference](https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24), there's full support and test for section 3.1 and 3.3, experimental support for section 3.2. The rest of the API is still pending.
+The current status of the package is in development. From the [API reference](https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24), there's full support and test for sections 3.1, 3.2 and 3.3.
 
 ## Installation
 

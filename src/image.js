@@ -212,10 +212,10 @@ export default class Image {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, stream) => {
+      this.modem.dial(call, (err, res) => {
         if (err) return reject(err)
         let image = new Image(this.modem, id)
-        resolve(Object.assign(image, conf))
+        resolve(image)
       })
     })
   }
@@ -235,7 +235,7 @@ export default class Image {
       method: 'DELETE',
       options: opts,
       statusCodes: {
-        201: true,
+        200: true,
         404: 'no such image',
         409: 'conflict',
         500: 'server error'
@@ -259,7 +259,7 @@ export default class Image {
    */
   search (opts) {
     const call = {
-      path: `/images/${id}?`,
+      path: `/images/search?`,
       method: 'GET',
       options: opts,
       statusCodes: {
@@ -368,6 +368,7 @@ export default class Image {
     if (!id && this.id) {
       id = this.id
     }
+    if (!opts) opts = {};
     return [ opts, id ]
   }
 }

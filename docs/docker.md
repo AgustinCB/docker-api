@@ -1,16 +1,9 @@
-# Global
-
-
-
-
-
-* * *
-
-
-
-
 ## Class: Docker
-Creates the Docker object
+Creates the Docker object. It contains the following objects:
+- container
+- image
+- volume
+- network
 
 ### Docker.auth(opts) 
 

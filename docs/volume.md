@@ -1,11 +1,3 @@
-# Global
-
-
-
-
-
-* * *
-
 ## Class: Volume
 Create a volume
 

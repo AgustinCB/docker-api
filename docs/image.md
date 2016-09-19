@@ -1,11 +1,3 @@
-# Global
-
-
-
-
-
-* * *
-
 ## Class: Image
 Creates a new image
 

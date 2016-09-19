@@ -1,113 +1,8 @@
-# Global
-
-
-
-
-
-* * *
-
-## Class: Exec
-Create an execution
-
-### Exec.create(opts, id) 
-
-Create an exec instance in a container
-https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/create-a-container
-
-**Parameters**
-
-**opts**: `Object`, Query params in the request (optional)
-
-**id**: `String`, ID of the container to get info, if it's not set, use the id of the object (optional)
-
-**Returns**: `Promise`, Promise return the new exec instance
-
-### Exec.start(opts, id) 
-
-Start an exec instance
-https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/exec-start
-
-**Parameters**
-
-**opts**: `Object`, Query params in the request (optional)
-
-**id**: `String`, ID of the exec instance to start, if it's not set, use the id of the object (optional)
-
-**Returns**: `Promise`, Promise return the stream to the execution
-
-### Exec.resize(opts, id) 
-
-Resize an exec instance
-https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/exec-resize
-
-**Parameters**
-
-**opts**: `Object`, Query params in the request (optional)
-
-**id**: `String`, ID of the exec instance to resize, if it's not set, use the id of the object (optional)
-
-**Returns**: `Promise`, Promise return the result
-
-### Exec.status(opts, id) 
-
-Get status of an exec instance
-https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/exec-inspect
-The reason why this module isn't called inspect is because that interferes with the inspect utility of node.
-
-**Parameters**
-
-**opts**: `Object`, Query params in the request (optional)
-
-**id**: `String`, ID of the exec instance to inspect, if it's not set, use the id of the object (optional)
-
-**Returns**: `Promise`, Promise return the exec instance
-
-
-## Class: ContainerFs
-Create an container filesystem object
-
-### ContainerFs.info(opts, id) 
-
-Get the info about the filesystem of the container
-https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/retrieving-information-about-files-and-folders-in-a-container
-
-**Parameters**
-
-**opts**: `Object`, Query params in the request (optional)
-
-**id**: `String`, ID of the container to get info, if it's not set, use the id of the object (optional)
-
-**Returns**: `Promise`, Promise returning the info about the filesystem
-
-### ContainerFs.get(opts, id) 
-
-Get a tar archive of a resource in the filesystem of a container
-https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/get-an-archive-of-a-filesystem-resource-in-a-container
-
-**Parameters**
-
-**opts**: `Object`, Query params in the request (optional)
-
-**id**: `String`, ID of the container to get an archive, if it's not set, use the id of the object (optional)
-
-**Returns**: `Promise`, Promise returning the result as a stream to the tar file
-
-### ContainerFs.put(opts, id) 
-
-Put an extracted tar archive in the filesystem of a container
-https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/extract-an-archive-of-files-or-folders-to-a-directory-in-a-container
-
-**Parameters**
-
-**opts**: `Object`, Query params in the request (optional)
-
-**id**: `String`, ID of the container to put the archive, if it's not set, use the id of the object (optional)
-
-**Returns**: `Promise`, Promise returning the result
-
-
 ## Class: Container
-Create an container object
+Create an container object. Contains the following objects:
+
+- exec (Exec)
+- fs (ContainerFs)
 
 ### Container.list(opts) 
 
@@ -384,6 +279,105 @@ https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/create-a-
 **id**: `String`, ID of the container to commit, if it's not set, use the id of the object (optional)
 
 **Returns**: `Promise`, Promise returning the container
+## Class: Exec
+Create an execution
+
+### Exec.create(opts, id) 
+
+Create an exec instance in a container
+https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/create-a-container
+
+**Parameters**
+
+**opts**: `Object`, Query params in the request (optional)
+
+**id**: `String`, ID of the container to get info, if it's not set, use the id of the object (optional)
+
+**Returns**: `Promise`, Promise return the new exec instance
+
+### Exec.start(opts, id) 
+
+Start an exec instance
+https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/exec-start
+
+**Parameters**
+
+**opts**: `Object`, Query params in the request (optional)
+
+**id**: `String`, ID of the exec instance to start, if it's not set, use the id of the object (optional)
+
+**Returns**: `Promise`, Promise return the stream to the execution
+
+### Exec.resize(opts, id) 
+
+Resize an exec instance
+https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/exec-resize
+
+**Parameters**
+
+**opts**: `Object`, Query params in the request (optional)
+
+**id**: `String`, ID of the exec instance to resize, if it's not set, use the id of the object (optional)
+
+**Returns**: `Promise`, Promise return the result
+
+### Exec.status(opts, id) 
+
+Get status of an exec instance
+https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/exec-inspect
+The reason why this module isn't called inspect is because that interferes with the inspect utility of node.
+
+**Parameters**
+
+**opts**: `Object`, Query params in the request (optional)
+
+**id**: `String`, ID of the exec instance to inspect, if it's not set, use the id of the object (optional)
+
+**Returns**: `Promise`, Promise return the exec instance
+
+
+## Class: ContainerFs
+Create an container filesystem object
+
+### ContainerFs.info(opts, id) 
+
+Get the info about the filesystem of the container
+https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/retrieving-information-about-files-and-folders-in-a-container
+
+**Parameters**
+
+**opts**: `Object`, Query params in the request (optional)
+
+**id**: `String`, ID of the container to get info, if it's not set, use the id of the object (optional)
+
+**Returns**: `Promise`, Promise returning the info about the filesystem
+
+### ContainerFs.get(opts, id) 
+
+Get a tar archive of a resource in the filesystem of a container
+https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/get-an-archive-of-a-filesystem-resource-in-a-container
+
+**Parameters**
+
+**opts**: `Object`, Query params in the request (optional)
+
+**id**: `String`, ID of the container to get an archive, if it's not set, use the id of the object (optional)
+
+**Returns**: `Promise`, Promise returning the result as a stream to the tar file
+
+### ContainerFs.put(opts, id) 
+
+Put an extracted tar archive in the filesystem of a container
+https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/extract-an-archive-of-files-or-folders-to-a-directory-in-a-container
+
+**Parameters**
+
+**opts**: `Object`, Query params in the request (optional)
+
+**id**: `String`, ID of the container to put the archive, if it's not set, use the id of the object (optional)
+
+**Returns**: `Promise`, Promise returning the result
+
 
 
 

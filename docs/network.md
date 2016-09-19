@@ -9,10 +9,6 @@
 ## Class: Network
 Creates a new network
 
-
-## Class: Network
-Creates a new network
-
 ### Network.list(opts) 
 
 Get the list of networks

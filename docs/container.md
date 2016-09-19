@@ -9,10 +9,6 @@
 ## Class: Exec
 Create an execution
 
-
-## Class: Exec
-Create an execution
-
 ### Exec.create(opts, id) 
 
 Create an exec instance in a container
@@ -70,10 +66,6 @@ The reason why this module isn't called inspect is because that interferes with 
 ## Class: ContainerFs
 Create an container filesystem object
 
-
-## Class: ContainerFs
-Create an container filesystem object
-
 ### ContainerFs.info(opts, id) 
 
 Get the info about the filesystem of the container
@@ -112,10 +104,6 @@ https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/extract-a
 **id**: `String`, ID of the container to put the archive, if it's not set, use the id of the object (optional)
 
 **Returns**: `Promise`, Promise returning the result
-
-
-## Class: Container
-Create an container object
 
 
 ## Class: Container

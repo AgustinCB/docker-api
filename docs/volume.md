@@ -9,10 +9,6 @@
 ## Class: Volume
 Create a volume
 
-
-## Class: Volume
-Create a volume
-
 ### Volume.list(opts) 
 
 Get the list of volumes

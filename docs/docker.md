@@ -10,10 +10,6 @@
 
 
 ## Class: Docker
-
-
-
-## Class: Docker
 Creates the Docker object
 
 ### Docker.auth(opts) 

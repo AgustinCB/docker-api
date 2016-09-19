@@ -9,10 +9,6 @@
 ## Class: Image
 Creates a new image
 
-
-## Class: Image
-Creates a new image
-
 ### Image.list(opts) 
 
 Get the list of images

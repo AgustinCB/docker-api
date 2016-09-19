@@ -1,11 +1,3 @@
-# Global
-
-
-
-
-
-* * *
-
 ## Class: Network
 Creates a new network
 

@@ -44,7 +44,7 @@ class Volume {
   }
 
   /**
-   * Create an volume
+   * Create a volume
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/create-a-volume
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the new volume
@@ -101,7 +101,7 @@ class Volume {
   }
 
   /**
-   * Remove an volume from the filesystem
+   * Remove a volume from the filesystem
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/remove-a-volume
    * @param  {Object}   opts  Query params in the request (optional)
    * @param  {String}   id    ID of the volume to inspect, if it's not set, use the id of the object (optional)

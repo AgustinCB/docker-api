@@ -44,7 +44,7 @@ class Network {
   }
 
   /**
-   * Create an network
+   * Create a network
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/create-a-network
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the new network
@@ -137,6 +137,8 @@ class Network {
    * @return {Promise}        Promise return the network
    */
   connect (opts, id) {
+    [ opts, id ] = this.__processArguments(opts, id)
+
     const call = {
       path: `/networks/${id}/connect?`,
       method: 'POST',
@@ -166,6 +168,8 @@ class Network {
    * @return {Promise}        Promise return the network
    */
   disconnect (opts, id) {
+    [ opts, id ] = this.__processArguments(opts, id)
+
     const call = {
       path: `/networks/${id}/disconnect?`,
       method: 'POST',

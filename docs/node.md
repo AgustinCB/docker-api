@@ -12,7 +12,7 @@ https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/list-node
 
 **Returns**: `Promise`, Promise returning the result as a list of nodes
 
-### Node.update(opts) 
+### Node.update(opts, id) 
 
 Update a node
 https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/update-a-node
@@ -20,6 +20,8 @@ https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/update-a-
 **Parameters**
 
 **opts**: `Object`, Query params in the request (optional)
+
+**id**: `String`, ID of the node to inspect, if it's not set, use the id of the object (optional)
 
 **Returns**: `Promise`, Promise return the new node
 

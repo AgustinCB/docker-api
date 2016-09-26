@@ -47,6 +47,7 @@ class Node {
    * Update a node
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/update-a-node
    * @param  {Object}   opts  Query params in the request (optional)
+   * @param  {String}   id    ID of the node to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the new node
    */
   update (opts, id) {

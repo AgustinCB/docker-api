@@ -1,13 +1,13 @@
 'use strict'
 
 /**
- * Class reprensenting a network
+ * Class reprensenting a plugin
  */
-class Network {
+class Plugin {
   /**
-   * Creates a new network
+   * Creates a new plugin
    * @param  {Modem}      modem     Modem to connect to the remote service
-   * @param  {string}     id        Id of the network (optional)
+   * @param  {string}     id        Id of the plugin (optional)
    */
   constructor (modem, id) {
     this.modem = modem
@@ -15,14 +15,14 @@ class Network {
   }
 
   /**
-   * Get the list of networks
-   * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/list-networks
+   * Get the list of plugins
+   * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/list-plugins
    * @param  {Object}   opts  Query params in the request (optional)
-   * @return {Promise}        Promise returning the result as a list of networks
+   * @return {Promise}        Promise returning the result as a list of plugins
    */
   list (opts) {
     const call = {
-      path: '/networks',
+      path: '/plugins',
       method: 'GET',
       options: opts,
       statusCodes: {
@@ -32,31 +32,30 @@ class Network {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, networks) => {
+      this.modem.dial(call, (err, plugins) => {
         if (err) return reject(err)
-        if (!networks || !networks.length) return resolve([])
-        resolve(networks.map((conf) => {
-          let network = new Network(this.modem, conf.Id)
-          return Object.assign(network, conf)
+        if (!plugins || !plugins.length) return resolve([])
+        resolve(plugins.map((conf) => {
+          let plugin = new Plugin(this.modem, conf.Id)
+          return Object.assign(plugin, conf)
         }))
       })
     })
   }
 
   /**
-   * Create an network
-   * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/create-a-network
+   * install a plugin
+   * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/install-a-plugin
    * @param  {Object}   opts  Query params in the request (optional)
-   * @return {Promise}        Promise return the new network
+   * @return {Promise}        Promise return the new plugin
    */
-  create (opts) {
+  install (opts) {
     const call = {
-      path: '/networks/create?',
+      path: '/plugins/pull?',
       method: 'POST',
       options: opts,
       statusCodes: {
-        201: true,
-        404: 'plugin not found',
+        200: true,
         500: 'server error'
       }
     }
@@ -64,30 +63,30 @@ class Network {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
         if (err) return reject(err)
-        let network = new Network(this.modem, conf.Id)
-        resolve(Object.assign(network, conf))
+        let plugin = new Plugin(this.modem, opts.name)
+        resolve(plugin)
       })
     })
   }
 
   /**
-   * Get low-level information on a network
-   * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/inspect-network
+   * Get low-level information on a plugin
+   * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/inspect-a-plugin
    * The reason why this module isn't called inspect is because that interferes with the inspect utility of node.
    * @param  {Object}   opts  Query params in the request (optional)
-   * @param  {String}   id    ID of the network to inspect, if it's not set, use the id of the object (optional)
-   * @return {Promise}        Promise return the network
+   * @param  {String}   id    ID of the plugin to inspect, if it's not set, use the id of the object (optional)
+   * @return {Promise}        Promise return the plugin
    */
   status (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
-      path: `/networks/${id}?`,
+      path: `/plugins/${id}?`,
       method: 'GET',
       options: opts,
       statusCodes: {
         200: true,
-        404: 'no such network',
+        404: 'no such plugin',
         500: 'server error'
       }
     }
@@ -95,28 +94,28 @@ class Network {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
         if (err) return reject(err)
-        let network = new Network(this.modem, id)
-        resolve(Object.assign(network, conf))
+        let plugin = new Plugin(this.modem, id)
+        resolve(Object.assign(plugin, conf))
       })
     })
   }
 
   /**
-   * Remove a network
-   * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/remove-a-network
+   * Remove a plugin
+   * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/remove-a-plugin
    * @param  {Object}   opts  Query params in the request (optional)
-   * @param  {String}   id    ID of the network to inspect, if it's not set, use the id of the object (optional)
+   * @param  {String}   id    ID of the plugin to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the result
    */
   remove (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id)
     const call = {
-      path: `/networks/${id}?`,
+      path: `/plugins/${id}?`,
       method: 'DELETE',
       options: opts,
       statusCodes: {
         204: true,
-        404: 'no such network',
+        404: 'no such plugin',
         500: 'server error'
       }
     }
@@ -130,21 +129,19 @@ class Network {
   }
 
   /**
-   * Connect a container into the network
-   * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/connect-a-container-to-a-network
+   * Enable a plugin
+   * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/enable-a-plugin
    * @param  {Object}   opts  Query params in the request (optional)
-   * @param  {String}   id    ID of the network, if it's not set, use the id of the object (optional)
-   * @return {Promise}        Promise return the network
+   * @param  {String}   id    ID of the plugin, if it's not set, use the id of the object (optional)
+   * @return {Promise}        Promise return the plugin
    */
-  connect (opts, id) {
+  enable (opts, id) {
     const call = {
-      path: `/networks/${id}/connect?`,
+      path: `/plugins/${id}/enable?`,
       method: 'POST',
       options: opts,
       statusCodes: {
         200: true,
-        403: 'operation not supported for swarm scoped network',
-        404: 'network or container not found',
         500: 'server error'
       }
     }
@@ -152,28 +149,26 @@ class Network {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
         if (err) return reject(err)
-        let network = new Network(this.modem, id)
-        resolve(network)
+        let plugin = new Plugin(this.modem, id)
+        resolve(plugin)
       })
     })
   }
 
   /**
-   * Disonnect a container into the network
-   * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/disconnect-a-container-from-a-network
+   * Disable a plugin
+   * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/disable-a-plugin
    * @param  {Object}   opts  Query params in the request (optional)
-   * @param  {String}   id    ID of the network, if it's not set, use the id of the object (optional)
-   * @return {Promise}        Promise return the network
+   * @param  {String}   id    ID of the plugin, if it's not set, use the id of the object (optional)
+   * @return {Promise}        Promise return the plugin
    */
   disconnect (opts, id) {
     const call = {
-      path: `/networks/${id}/disconnect?`,
+      path: `/plugins/${id}/disable?`,
       method: 'POST',
       options: opts,
       statusCodes: {
         200: true,
-        403: 'operation not supported for swarm scoped network',
-        404: 'network or container not found',
         500: 'server error'
       }
     }
@@ -181,8 +176,8 @@ class Network {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
         if (err) return reject(err)
-        let network = new Network(this.modem, id)
-        resolve(network)
+        let plugin = new Plugin(this.modem, id)
+        resolve(plugin)
       })
     })
   }
@@ -199,4 +194,4 @@ class Network {
   }
 }
 
-export default Network
+export default Plugin

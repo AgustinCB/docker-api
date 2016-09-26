@@ -6,6 +6,7 @@ import Image from './image'
 import Volume from './volume'
 import Network from './network'
 import Node from './node'
+import Plugin from './plugin'
 import Swarm from './swarm'
 import Service from './service'
 import Task from './task'
@@ -26,6 +27,7 @@ export class Docker {
     this.volume = new Volume(this.modem)
     this.network = new Network(this.modem)
     this.node = new Node(this.modem)
+    this.plugin = new Plugin(this.modem)
     this.swarm = new Swarm(this.modem)
     this.service = new Service(this.modem)
     this.task = new Task(this.modem)

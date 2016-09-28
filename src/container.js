@@ -680,7 +680,7 @@ class Container {
     [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
-      path: `/containers/${id}/kill`,
+      path: `/containers/${id}/kill?`,
       method: 'POST',
       options: opts,
       statusCodes: {

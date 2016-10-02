@@ -62,7 +62,7 @@ class Exec {
     [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
-      path: `/exec/${id}/start`,
+      path: `/exec/${id}/start?`,
       method: 'POST',
       options: opts,
       isStream: true,
@@ -312,7 +312,7 @@ class Container {
    */
   list (opts) {
     const call = {
-      path: '/containers/json',
+      path: '/containers/json?',
       method: 'GET',
       options: opts,
       statusCodes: {
@@ -375,7 +375,7 @@ class Container {
     [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
-      path: `/containers/${id}/json`,
+      path: `/containers/${id}/json?`,
       method: 'GET',
       options: opts,
       statusCodes: {
@@ -405,7 +405,7 @@ class Container {
     [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
-      path: `/containers/${id}/top`,
+      path: `/containers/${id}/top?`,
       method: 'GET',
       options: opts,
       statusCodes: {
@@ -464,7 +464,7 @@ class Container {
     [ , id ] = this.__processArguments(id)
 
     const call = {
-      path: `/containers/${id}/changes`,
+      path: `/containers/${id}/changes?`,
       method: 'GET',
       options: {},
       statusCodes: {
@@ -493,7 +493,7 @@ class Container {
     [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
-      path: `/containers/${id}/export`,
+      path: `/containers/${id}/export?`,
       method: 'GET',
       options: opts,
       isStream: !!opts.stream,
@@ -532,7 +532,7 @@ class Container {
     [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
-      path: `/containers/${id}/stats`,
+      path: `/containers/${id}/stats?`,
       method: 'GET',
       options: opts,
       isStream: true,
@@ -562,7 +562,7 @@ class Container {
     [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
-      path: `/containers/${id}/resize`,
+      path: `/containers/${id}/resize?`,
       method: 'GET',
       options: opts,
       statusCodes: {
@@ -591,7 +591,7 @@ class Container {
     [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
-      path: `/containers/${id}/start`,
+      path: `/containers/${id}/start?`,
       method: 'POST',
       options: opts,
       statusCodes: {
@@ -621,7 +621,7 @@ class Container {
     [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
-      path: `/containers/${id}/stop`,
+      path: `/containers/${id}/stop?`,
       method: 'POST',
       options: opts,
       statusCodes: {
@@ -651,7 +651,7 @@ class Container {
     [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
-      path: `/containers/${id}/restart`,
+      path: `/containers/${id}/restart?`,
       method: 'POST',
       options: opts,
       statusCodes: {
@@ -710,7 +710,7 @@ class Container {
     [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
-      path: `/containers/${id}/update`,
+      path: `/containers/${id}/update?`,
       method: 'POST',
       options: opts,
       statusCodes: {
@@ -771,7 +771,7 @@ class Container {
     [ , id ] = this.__processArguments(id)
 
     const call = {
-      path: `/containers/${id}/pause`,
+      path: `/containers/${id}/pause?`,
       method: 'POST',
       options: {},
       statusCodes: {
@@ -799,7 +799,7 @@ class Container {
     [ , id ] = this.__processArguments(id)
 
     const call = {
-      path: `/containers/${id}/unpause`,
+      path: `/containers/${id}/unpause?`,
       method: 'POST',
       options: {},
       statusCodes: {
@@ -828,7 +828,7 @@ class Container {
     [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
-      path: `/containers/${id}/attach`,
+      path: `/containers/${id}/attach?`,
       method: 'POST',
       isStream: true,
       openStdin: opts.stdin,
@@ -861,7 +861,7 @@ class Container {
     [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
-      path: `/containers/${id}/attach/ws`,
+      path: `/containers/${id}/attach/ws?`,
       method: 'GET',
       options: opts,
       statusCodes: {
@@ -890,7 +890,7 @@ class Container {
     [ , id ] = this.__processArguments(id)
 
     const call = {
-      path: `/containers/${id}/wait`,
+      path: `/containers/${id}/wait?`,
       method: 'POST',
       options: {},
       statusCodes: {

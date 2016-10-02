@@ -65,6 +65,10 @@ describe('#plugin', function () {
           plugin.should.be.instanceof(Plugin)
           return plugin.disable()
         })
+        .then((plugin) => {
+          plugin.should.be.instanceof(Plugin)
+          return plugin.remove()
+        })
     })
   })
 })

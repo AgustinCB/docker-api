@@ -11,8 +11,9 @@ Support for:
 * **run**
 * **tests**
 * **promises**
+* **full es6 support**
 
-The current status of the package is in development. From the [API reference](https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24), there's full support and test for sections 3.1, 3.2, 3.3, 3.4 and 3.5. Support for plugins is added (section 3.6), but it's still experimental in the docker API, so errors may appear.
+The current status of the package is in beta state. This module covers the full [API reference](https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24), including experimental stuff such as plugins.
 
 Check the [reference](https://github.com/AgustinCB/docker-api/tree/master/docs).
 

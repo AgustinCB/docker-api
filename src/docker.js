@@ -42,7 +42,7 @@ export class Docker {
    */
   auth (opts) {
     const call = {
-      path: '/auth',
+      path: '/auth?',
       method: 'POST',
       options: opts,
       statusCodes: {
@@ -67,7 +67,7 @@ export class Docker {
    */
   info () {
     const call = {
-      path: '/info',
+      path: '/info?',
       method: 'GET',
       statusCodes: {
         200: true,
@@ -90,7 +90,7 @@ export class Docker {
    */
   version () {
     const call = {
-      path: '/version',
+      path: '/version?',
       method: 'GET',
       statusCodes: {
         200: true,
@@ -113,7 +113,7 @@ export class Docker {
    */
   ping () {
     const call = {
-      path: '/_ping',
+      path: '/_ping?',
       method: 'GET',
       statusCodes: {
         200: true,

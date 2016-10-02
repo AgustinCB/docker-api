@@ -22,7 +22,7 @@ class Image {
    */
   list (opts) {
     const call = {
-      path: '/images/json',
+      path: '/images/json?',
       method: 'GET',
       options: opts,
       statusCodes: {

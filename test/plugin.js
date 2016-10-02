@@ -10,7 +10,7 @@ let docker = test_utils.init()
 
 describe('#plugin', function () {
   /* Docker plugins support is experimental for now */
-  return
+  //return
   describe('#list', function () {
     it('should receive an array of plugins', function () {
       this.timeout(30000)
@@ -64,6 +64,10 @@ describe('#plugin', function () {
         .then((plugin) => {
           plugin.should.be.instanceof(Plugin)
           return plugin.disable()
+        })
+        .then((plugin) => {
+          plugin.should.be.instanceof(Plugin)
+          return plugin.remove()
         })
     })
   })

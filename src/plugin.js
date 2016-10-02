@@ -114,7 +114,7 @@ class Plugin {
       method: 'DELETE',
       options: opts,
       statusCodes: {
-        204: true,
+        200: true,
         404: 'no such plugin',
         500: 'server error'
       }
@@ -136,6 +136,8 @@ class Plugin {
    * @return {Promise}        Promise return the plugin
    */
   enable (opts, id) {
+    [ opts, id ] = this.__processArguments(opts, id)
+
     const call = {
       path: `/plugins/${id}/enable?`,
       method: 'POST',
@@ -162,7 +164,9 @@ class Plugin {
    * @param  {String}   id    ID of the plugin, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the plugin
    */
-  disconnect (opts, id) {
+  disable (opts, id) {
+    [ opts, id ] = this.__processArguments(opts, id)
+
     const call = {
       path: `/plugins/${id}/disable?`,
       method: 'POST',

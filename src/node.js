@@ -34,8 +34,8 @@ class Node {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, result) => {
         if (err) return reject(err)
-        if (!result.Nodes || !result.Nodes.length) return resolve([])
-        resolve(result.Nodes.map((conf) => {
+        if (!result || !result.length) return resolve([])
+        resolve(result.map((conf) => {
           let node = new Node(this.modem, conf.ID)
           return Object.assign(node, conf)
         }))
@@ -67,7 +67,7 @@ class Node {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
         if (err) return reject(err)
-        let node = new Node(this.modem, conf.Name)
+        let node = new Node(this.modem, id)
         resolve(Object.assign(node, conf))
       })
     })

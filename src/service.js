@@ -64,7 +64,7 @@ class Service {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
         if (err) return reject(err)
-        let service = new Service(this.modem, conf.Id)
+        let service = new Service(this.modem, conf.ID)
         resolve(Object.assign(service, conf))
       })
     })
@@ -94,7 +94,7 @@ class Service {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
         if (err) return reject(err)
-        let service = new Service(this.modem, conf.Name)
+        let service = new Service(this.modem, id)
         resolve(Object.assign(service, conf))
       })
     })
@@ -145,7 +145,7 @@ class Service {
       method: 'DELETE',
       options: opts,
       statusCodes: {
-        204: true,
+        200: true,
         404: 'no such service',
         500: 'server error'
       }

@@ -24,11 +24,11 @@ class Swarm {
    */
   init (opts) {
     const call = {
-      path: '/swarms/init?',
+      path: '/swarm/init?',
       method: 'POST',
       options: opts,
       statusCodes: {
-        201: true,
+        200: true,
         400: 'bad parameter',
         406: 'node is already part of a swarm'
       }

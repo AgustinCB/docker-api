@@ -15,8 +15,8 @@ describe("#swarm", function () {
       this.timeout(5000)
 
       return docker.swarm.init({
-        "ListenAddr": "0.0.0.0:4500",
-        "AdvertiseAddr": "0.0.0.0:4500",
+        "ListenAddr": "127.0.0.1:4500",
+        "AdvertiseAddr": "127.0.0.1:4500",
         "ForceNewCluster": false,
         "Spec": {
           "AcceptancePolicy": {

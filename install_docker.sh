@@ -20,3 +20,6 @@ apt-cache gencaches
 apt-get -y --force-yes install docker-engine=${DOCKER_VERSION}-0~trusty
 echo 'DOCKER_OPTS="-H unix:///var/run/docker.sock --pidfile=/var/run/docker.pid"' > /etc/default/docker
 cat /etc/default/docker
+
+docker --version
+docker plugin ls

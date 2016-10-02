@@ -16,6 +16,7 @@ describe("#swarm", function () {
 
       return docker.swarm.init({
         "ListenAddr": "0.0.0.0:4500",
+        "AdvertiseAddr": "0.0.0.0:4500",
         "ForceNewCluster": false,
         "Spec": {
           "AcceptancePolicy": {

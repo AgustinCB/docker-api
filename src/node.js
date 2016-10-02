@@ -22,7 +22,7 @@ class Node {
    */
   list (opts) {
     const call = {
-      path: '/nodes',
+      path: '/nodes?',
       method: 'GET',
       options: opts,
       statusCodes: {

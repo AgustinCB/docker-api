@@ -1,3 +1,15 @@
+# Global
+
+
+
+
+
+* * *
+
+## Class: Volume
+Create a volume
+
+
 ## Class: Volume
 Create a volume
 
@@ -14,7 +26,7 @@ https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/list-volu
 
 ### Volume.create(opts) 
 
-Create an volume
+Create a volume
 https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/create-a-volume
 
 **Parameters**
@@ -39,7 +51,7 @@ The reason why this module isn't called inspect is because that interferes with 
 
 ### Volume.remove(opts, id) 
 
-Remove an volume from the filesystem
+Remove a volume from the filesystem
 https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/remove-a-volume
 
 **Parameters**

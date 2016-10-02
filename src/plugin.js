@@ -22,7 +22,7 @@ class Plugin {
    */
   list (opts) {
     const call = {
-      path: '/plugins',
+      path: '/plugins?',
       method: 'GET',
       options: opts,
       statusCodes: {

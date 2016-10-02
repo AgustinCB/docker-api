@@ -22,7 +22,7 @@ class Network {
    */
   list (opts) {
     const call = {
-      path: '/networks',
+      path: '/networks?',
       method: 'GET',
       options: opts,
       statusCodes: {

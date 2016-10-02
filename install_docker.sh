@@ -22,4 +22,3 @@ echo 'DOCKER_OPTS="-H unix:///var/run/docker.sock --pidfile=/var/run/docker.pid"
 cat /etc/default/docker
 
 docker --version
-docker plugin ls

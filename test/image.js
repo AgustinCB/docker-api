@@ -45,7 +45,7 @@ describe('#image', function () {
   describe('#create', function () {
     it('should create an image from another', function () {
       this.timeout(300000)
-      return docker.image.create({ fromImage: 'ubuntu' })
+      return docker.image.create({}, { fromImage: 'ubuntu' })
         .then((stream) => {
           stream.pipe.should.be.ok
         })

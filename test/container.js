@@ -510,6 +510,6 @@ describe('#container', function () {
       )
     })
     return Promise.all(promises)
-      .catch(console.log)
+      .catch((err) => console.log(err))
   })
 })

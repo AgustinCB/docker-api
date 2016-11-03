@@ -6,8 +6,8 @@ import {default as MemoryStream} from 'memorystream'
 
 const should = chai.should()
 
-let docker = test_utils.init()
-let containerNames = new Map([
+const docker = test_utils.init()
+const containerNames = new Map([
   [ 'create', 'docker_api_test_create' ],
   [ 'inspect', 'docker_api_test_inspect' ],
   [ 'top', 'docker_api_test_top' ],
@@ -435,7 +435,7 @@ describe('#container', function () {
           })
         })
         .then((result) => {
-          let [ stream, container ] = result
+          const [ stream, container ] = result
           stream.should.be.ok
 
           return container.start()

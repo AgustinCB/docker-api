@@ -3,7 +3,7 @@ import * as test_utils from './utils'
 
 const should = chai.should()
 
-let docker = test_utils.init()
+const docker = test_utils.init()
 
 describe('#docker', function() {
   describe('#ping', function() {

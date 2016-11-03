@@ -36,7 +36,7 @@ class Task {
         if (err) return reject(err)
         if (!result.Tasks || !result.Tasks.length) return resolve([])
         resolve(result.Tasks.map((conf) => {
-          let task = new Task(this.modem, conf.ID)
+          const task = new Task(this.modem, conf.ID)
           return Object.assign(task, conf)
         }))
       })
@@ -68,7 +68,7 @@ class Task {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
         if (err) return reject(err)
-        let task = new Task(this.modem, id)
+        const task = new Task(this.modem, id)
         resolve(Object.assign(task, conf))
       })
     })

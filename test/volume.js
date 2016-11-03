@@ -5,7 +5,7 @@ import Volume from '../lib/volume'
 
 const should = chai.should()
 
-let docker = test_utils.init()
+const docker = test_utils.init()
 
 describe('#volume', function () {
   describe('#list', function () {

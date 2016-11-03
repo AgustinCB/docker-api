@@ -7,7 +7,7 @@ import Task from '../lib/task'
 
 const should = chai.should()
 
-let docker = test_utils.init()
+const docker = test_utils.init()
 
 describe("#swarm", function () {
   describe("#initSwarm", function () {

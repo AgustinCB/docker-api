@@ -36,7 +36,7 @@ class Plugin {
         if (err) return reject(err)
         if (!plugins || !plugins.length) return resolve([])
         resolve(plugins.map((conf) => {
-          let plugin = new Plugin(this.modem, conf.Id)
+          const plugin = new Plugin(this.modem, conf.Id)
           return Object.assign(plugin, conf)
         }))
       })
@@ -63,7 +63,7 @@ class Plugin {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
         if (err) return reject(err)
-        let plugin = new Plugin(this.modem, opts.name)
+        const plugin = new Plugin(this.modem, opts.name)
         resolve(plugin)
       })
     })
@@ -94,7 +94,7 @@ class Plugin {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
         if (err) return reject(err)
-        let plugin = new Plugin(this.modem, id)
+        const plugin = new Plugin(this.modem, id)
         resolve(Object.assign(plugin, conf))
       })
     })
@@ -151,7 +151,7 @@ class Plugin {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
         if (err) return reject(err)
-        let plugin = new Plugin(this.modem, id)
+        const plugin = new Plugin(this.modem, id)
         resolve(plugin)
       })
     })
@@ -180,7 +180,7 @@ class Plugin {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
         if (err) return reject(err)
-        let plugin = new Plugin(this.modem, id)
+        const plugin = new Plugin(this.modem, id)
         resolve(plugin)
       })
     })

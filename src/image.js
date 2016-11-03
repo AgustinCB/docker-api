@@ -36,7 +36,7 @@ class Image {
       this.modem.dial(call, (err, images) => {
         if (err) return reject(err)
         resolve(images.map((conf) => {
-          let image = new Image(this.modem, conf.Id)
+          const image = new Image(this.modem, conf.Id)
           return Object.assign(image, conf)
         }))
       })
@@ -124,7 +124,7 @@ class Image {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
         if (err) return reject(err)
-        let image = new Image(this.modem, id)
+        const image = new Image(this.modem, id)
         resolve(Object.assign(image, conf))
       })
     })
@@ -215,7 +215,7 @@ class Image {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, res) => {
         if (err) return reject(err)
-        let image = new Image(this.modem, id)
+        const image = new Image(this.modem, id)
         resolve(image)
       })
     })

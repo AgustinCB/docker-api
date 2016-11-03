@@ -45,7 +45,7 @@ class Exec {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
         if (err) return reject(err)
-        let exec = new Exec(this.modem, this.container, conf.Id)
+        const exec = new Exec(this.modem, this.container, conf.Id)
         resolve(Object.assign(exec, conf))
       })
     })
@@ -136,7 +136,7 @@ class Exec {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
         if (err) return reject(err)
-        let exec = new Exec(this.modem, this.container, conf.Id)
+        const exec = new Exec(this.modem, this.container, conf.Id)
         resolve(Object.assign(exec, conf))
       })
     })
@@ -326,7 +326,7 @@ class Container {
       this.modem.dial(call, (err, containers) => {
         if (err) return reject(err)
         resolve(containers.map((conf) => {
-          let container = new Container(this.modem, conf.Id)
+          const container = new Container(this.modem, conf.Id)
           return Object.assign(container, conf)
         }))
       })
@@ -357,7 +357,7 @@ class Container {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
         if (err) return reject(err)
-        let container = new Container(this.modem, conf.Id)
+        const container = new Container(this.modem, conf.Id)
         resolve(Object.assign(container, conf))
       })
     })
@@ -388,7 +388,7 @@ class Container {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
         if (err) return reject(err)
-        let container = new Container(this.modem, id)
+        const container = new Container(this.modem, id)
         resolve(Object.assign(container, conf))
       })
     })
@@ -509,7 +509,7 @@ class Container {
         if (err) return reject(err)
         if (!opts.stream) return resolve(tarStream)
         
-        let res = []
+        const res = []
         tarStream.on('data', (chunk) => {
           res.push(chunk.toString())
         })
@@ -723,7 +723,7 @@ class Container {
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, warnings) => {
-        let container = this.id ? this : new Container(this.modem, id)
+        const container = this.id ? this : new Container(this.modem, id)
         container.Warnings = warnings
         if (err) return reject(err)
         resolve(container)

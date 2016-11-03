@@ -36,7 +36,7 @@ class Service {
         if (err) return reject(err)
         if (!result.Services || !result.Services.length) return resolve([])
         resolve(result.Services.map((conf) => {
-          let service = new Service(this.modem, conf.ID)
+          const service = new Service(this.modem, conf.ID)
           return Object.assign(service, conf)
         }))
       })
@@ -64,7 +64,7 @@ class Service {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
         if (err) return reject(err)
-        let service = new Service(this.modem, conf.ID)
+        const service = new Service(this.modem, conf.ID)
         resolve(Object.assign(service, conf))
       })
     })
@@ -94,7 +94,7 @@ class Service {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
         if (err) return reject(err)
-        let service = new Service(this.modem, id)
+        const service = new Service(this.modem, id)
         resolve(Object.assign(service, conf))
       })
     })
@@ -125,7 +125,7 @@ class Service {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
         if (err) return reject(err)
-        let service = new Service(this.modem, id)
+        const service = new Service(this.modem, id)
         resolve(Object.assign(service, conf))
       })
     })

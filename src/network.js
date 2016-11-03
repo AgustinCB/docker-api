@@ -36,7 +36,7 @@ class Network {
         if (err) return reject(err)
         if (!networks || !networks.length) return resolve([])
         resolve(networks.map((conf) => {
-          let network = new Network(this.modem, conf.Id)
+          const network = new Network(this.modem, conf.Id)
           return Object.assign(network, conf)
         }))
       })
@@ -64,7 +64,7 @@ class Network {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
         if (err) return reject(err)
-        let network = new Network(this.modem, conf.Id)
+        const network = new Network(this.modem, conf.Id)
         resolve(Object.assign(network, conf))
       })
     })
@@ -95,7 +95,7 @@ class Network {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
         if (err) return reject(err)
-        let network = new Network(this.modem, id)
+        const network = new Network(this.modem, id)
         resolve(Object.assign(network, conf))
       })
     })
@@ -154,7 +154,7 @@ class Network {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
         if (err) return reject(err)
-        let network = new Network(this.modem, id)
+        const network = new Network(this.modem, id)
         resolve(network)
       })
     })
@@ -185,7 +185,7 @@ class Network {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
         if (err) return reject(err)
-        let network = new Network(this.modem, id)
+        const network = new Network(this.modem, id)
         resolve(network)
       })
     })

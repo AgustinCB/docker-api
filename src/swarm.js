@@ -37,7 +37,7 @@ class Swarm {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, nodeId) => {
         if (err) return reject(err)
-        let node = new Node(this.modem, nodeId)
+        const node = new Node(this.modem, nodeId)
         resolve(node)
       })
     })
@@ -65,7 +65,7 @@ class Swarm {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
         if (err) return reject(err)
-        let swarm = new Swarm(this.modem, conf.ID)
+        const swarm = new Swarm(this.modem, conf.ID)
         resolve(Object.assign(swarm, conf))
       })
     })

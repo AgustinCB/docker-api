@@ -36,7 +36,7 @@ class Volume {
         if (err) return reject(err)
         if (!result.Volumes || !result.Volumes.length) return resolve([])
         resolve(result.Volumes.map((conf) => {
-          let volume = new Volume(this.modem, conf.Name)
+          const volume = new Volume(this.modem, conf.Name)
           return Object.assign(volume, conf)
         }))
       })
@@ -63,7 +63,7 @@ class Volume {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
         if (err) return reject(err)
-        let volume = new Volume(this.modem, conf.Name)
+        const volume = new Volume(this.modem, conf.Name)
         resolve(Object.assign(volume, conf))
       })
     })
@@ -94,7 +94,7 @@ class Volume {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
         if (err) return reject(err)
-        let volume = new Volume(this.modem, id)
+        const volume = new Volume(this.modem, id)
         resolve(Object.assign(volume, conf))
       })
     })

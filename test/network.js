@@ -5,7 +5,7 @@ import Network from '../lib/network'
 
 const should = chai.should()
 
-let docker = test_utils.init()
+const docker = test_utils.init()
 
 describe('#network', function () {
   describe('#list', function () {

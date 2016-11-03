@@ -5,8 +5,8 @@ import Image from '../lib/image'
 
 const should = chai.should()
 
-let docker = test_utils.init()
-let testImage = 'ubuntu:latest'
+const docker = test_utils.init()
+const testImage = 'ubuntu:latest'
 
 describe('#image', function () {
   describe('#list', function () {
@@ -27,7 +27,7 @@ describe('#image', function () {
           stream.pipe.should.be.ok
 
           return new Promise((resolve, reject) => {
-            let res = []
+            const res = []
             stream.on('end',() => resolve(Buffer.concat(res).toString()))
             stream.on('data', (d) => res.push(d))
             stream.on('error', reject)

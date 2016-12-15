@@ -19,7 +19,7 @@ Check the [reference](https://github.com/AgustinCB/docker-api/tree/master/docs) 
 
 ## Installation
 
-`npm install node-docke-api`
+`npm install node-docker-api`
 
 ## Usage
 
@@ -30,8 +30,8 @@ const Docker = require('node-docker-api').Docker
 
 let docker = new Docker({ socketPath: '/var/run/docker.sock' })
 
-docker.container.create({ 
-  Image: 'ubuntu', 
+docker.container.create({
+  Image: 'ubuntu',
   name: 'test'
 })
   .then((container) => container.start())
@@ -84,8 +84,8 @@ const Docker = require('node-docker-api').Docker
 let docker = new Docker({ socketPath: '/var/run/docker.sock' })
 let container
 
-docker.container.create({ 
-  Image: 'ubuntu', 
+docker.container.create({
+  Image: 'ubuntu',
   name: 'test'
 })
   .then((container) => container.logs({
@@ -109,8 +109,8 @@ const Docker = require('node-docker-api').Docker,
 let docker = new Docker({ socketPath: '/var/run/docker.sock' })
 let container
 
-docker.container.create({ 
-  Image: 'ubuntu', 
+docker.container.create({
+  Image: 'ubuntu',
   name: 'test'
 })
   .then((container) => container.start())
@@ -137,9 +137,9 @@ const promisifyStream = (stream) => new Promise((resolve, reject) => {
 let docker = new Docker({ socketPath: '/var/run/docker.sock' })
 let container
 
-docker.container.create({ 
-  Image: 'ubuntu', 
-  Cmd: [ '/bin/bash', '-c', 'tail -f /var/log/dmesg' ], 
+docker.container.create({
+  Image: 'ubuntu',
+  Cmd: [ '/bin/bash', '-c', 'tail -f /var/log/dmesg' ],
   name: 'test'
 })
   .then((container) => container.start())
@@ -175,9 +175,9 @@ const promisifyStream = (stream) => new Promise((resolve, reject) => {
 
 let docker = new Docker({ socketPath: '/var/run/docker.sock' })
 
-docker.container.create({ 
-  Image: 'ubuntu', 
-  Cmd: [ '/bin/bash', '-c', 'tail -f /var/log/dmesg' ], 
+docker.container.create({
+  Image: 'ubuntu',
+  Cmd: [ '/bin/bash', '-c', 'tail -f /var/log/dmesg' ],
   name: 'test'
 })
   .then((container) => container.start())

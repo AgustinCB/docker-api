@@ -4,6 +4,7 @@
   "description": "Docker Remote API driver for node",
   "main": "./lib/docker",
   "scripts": {
+    "test-ava": "nodemon --watch src --watch test-ava --exec 'ava --timeout 30000 test-ava'",
     "test": "chmod +x test.sh; ./test.sh",
     "gendoc": "./node_modules/jsdox/bin/jsdox --output docs src",
     "build": "./node_modules/babel-cli/bin/babel.js src --presets babel-preset-es2015 --out-dir lib"
@@ -24,12 +25,14 @@
   },
   "homepage": "https://github.com/AgustinCB/docker-api#readme",
   "devDependencies": {
+    "ava": "^0.17.0",
     "babel-cli": "^6.14.0",
     "babel-core": "^6.14.0",
     "babel-preset-es2015": "^6.9.0",
     "chai": "^3.5.0",
     "jsdox": "^0.4.10",
     "mocha": "^2.5.3",
+    "nodemon": "^1.11.0",
     "standard": "^7.1.2"
   },
   "dependencies": {

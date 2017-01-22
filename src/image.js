@@ -218,6 +218,8 @@ class Image {
         const image = new Image(this.modem, id)
         resolve(image)
       })
+    }).then((image) => {
+      return image.status()
     })
   }
 

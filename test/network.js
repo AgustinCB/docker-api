@@ -1,52 +1,35 @@
-import chai from 'chai'
+import test from 'ava'
 import fs from 'fs'
-import * as test_utils from './utils'
 import Network from '../lib/network'
+import { Docker } from '../lib/docker'
 
-const should = chai.should()
+const socket = process.env.DOCKER_SOCKET || '/var/run/docker.sock'
+const isSocket = fs.existsSync(socket) ? fs.statSync(socket).isSocket() : false
+const docker = isSocket
+  ? new Docker()
+  : new Docker({ socketPath: socket })
 
-const docker = test_utils.init()
+test('list', async t => {
+  const networks = await docker.network.list()
+  t.is(networks.constructor, Array)
+})
 
-describe('#network', function () {
-  describe('#list', function () {
-    it('should receive an array of networks', function () {
-      this.timeout(30000)
-      return docker.network.list()
-        .then((networks) => {
-          networks.should.be.an('array')
-        })
-    })
+test('create', async t => {
+  const network = await docker.network.create({
+    "Name": "test",
+    "Driver": "bridge",
   })
+  t.is(network.constructor, Network)
+  t.notThrows(network.remove())
+})
 
-  describe('#create', function () {
-    it('should create an network and remove it', function () {
-      this.timeout(300000)
-      return docker.network.create({
-          "Name": "test",
-          "Driver": "bridge",
-        })
-        .then((network) => {
-          network.should.be.ok
-          return network.remove()
-        })
-    })
+test('status', async t => {
+  const network = await docker.network.create({
+    "Name": "test",
+    "Driver": "bridge",
   })
-
-  describe('#status', function () {
-    it('should check status of an network', function () {
-      this.timeout(30000)
-      return docker.network.create({
-          "Name": "test",
-          "Driver": "bridge",
-        })
-        .then((network) => {
-          network.should.be.instanceof(Network)
-          return network.status()
-        })
-        .then((network) => {
-          network.should.be.ok
-          return network.remove()
-        })
-    })
-  })
+  t.is(network.constructor, Network)
+  const networkStatus = await network.status()
+  t.is(networkStatus.constructor, Network)
+  t.notThrows(network.remove())
 })

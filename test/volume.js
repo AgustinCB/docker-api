@@ -1,60 +1,43 @@
-import chai from 'chai'
+import test from 'ava'
 import fs from 'fs'
-import * as test_utils from './utils'
+import { Docker } from '../lib/docker'
 import Volume from '../lib/volume'
 
-const should = chai.should()
+const socket = process.env.DOCKER_SOCKET || '/var/run/docker.sock'
+const isSocket = fs.existsSync(socket) ? fs.statSync(socket).isSocket() : false
+const docker = isSocket
+  ? new Docker()
+  : new Docker({ socketPath: socket })
 
-const docker = test_utils.init()
+test('list', async t => {
+  const volumes = await docker.volume.list()
+  t.is(volumes.constructor, Array)
+})
 
-describe('#volume', function () {
-  describe('#list', function () {
-    it('should receive an array of volumes', function () {
-      this.timeout(30000)
-      return docker.volume.list()
-        .then((volumes) => {
-          volumes.should.be.an('array')
-        })
-    })
+test('create', async t => {
+  const volume = await docker.volume.create({
+    "Name": "tardis1",
+    "Labels": {
+      "com.example.some-label": "some-value",
+      "com.example.some-other-label": "some-other-value"
+    },
+    "Driver": "local"
   })
 
-  describe('#create', function () {
-    it('should create an volume and remove it', function () {
-      this.timeout(300000)
-      return docker.volume.create({
-          "Name": "tardis",
-          "Labels": {
-            "com.example.some-label": "some-value",
-            "com.example.some-other-label": "some-other-value"
-          },
-          "Driver": "local"
-        })
-        .then((volume) => {
-          volume.should.be.ok
-          return volume.remove()
-        })
-    })
-  })
+  t.is(volume.constructor, Volume)
+  t.notThrows(volume.remove())
+})
 
-  describe('#status', function () {
-    it('should check status of an volume', function () {
-      this.timeout(30000)
-      return docker.volume.create({
-          "Name": "tardis",
-          "Labels": {
-            "com.example.some-label": "some-value",
-            "com.example.some-other-label": "some-other-value"
-          },
-          "Driver": "local"
-        })
-        .then((volume) => {
-          volume.should.be.instanceof(Volume)
-          return volume.status()
-        })
-        .then((volume) => {
-          volume.should.be.ok
-          return volume.remove()
-        })
-    })
+test('status', async t => {
+  const volume = await docker.volume.create({
+    "Name": "tardis2",
+    "Labels": {
+      "com.example.some-label": "some-value",
+      "com.example.some-other-label": "some-other-value"
+    },
+    "Driver": "local"
   })
+  const volumeStatus = await volume.status()
+  t.is(volumeStatus.constructor, Volume)
+  volume.remove()
 })

@@ -1,110 +1,63 @@
-import chai from 'chai'
+import test from 'ava'
 import fs from 'fs'
-import * as test_utils from './utils'
 import Image from '../lib/image'
+import { Docker } from '../lib/docker'
 
-const should = chai.should()
-
-const docker = test_utils.init()
+const socket = process.env.DOCKER_SOCKET || '/var/run/docker.sock'
+const isSocket = fs.existsSync(socket) ? fs.statSync(socket).isSocket() : false
+const docker = isSocket
+  ? new Docker()
+  : new Docker({ socketPath: socket })
 const testImage = 'ubuntu:latest'
 
-describe('#image', function () {
-  describe('#list', function () {
-    it('should receive an array of images', function () {
-      this.timeout(30000)
-      return docker.image.list()
-        .then((images) => {
-          images.should.be.an('array')
-        })
-    })
-  })
+test('list', async t => {
+  const images = await docker.image.list()
+  t.is(images.constructor, Array)
+})
 
-  describe('#build', function () {
-    it('should build an image from file and remove it', function () {
-      this.timeout(300000)
-      return docker.image.build('./test/test.tar', { t: 'test' })
-        .then((stream) => {
-          stream.pipe.should.be.ok
+test('create', async t => {
+  const stream = await docker.image.create({}, { fromImage: 'ubuntu' })
+  t.truthy(stream.pipe)
+})
 
-          return new Promise((resolve, reject) => {
-            const res = []
-            stream.on('end',() => resolve(Buffer.concat(res).toString()))
-            stream.on('data', (d) => res.push(d))
-            stream.on('error', reject)
-          })
-        })
-        .then((result) => {
-          return docker.image.status('test')
-        })
-        .then((image) => {
-          return image.remove()
-        })
-    })
-  })
+test('status', async t => {
+  const image = await docker.image.status(testImage)
+  t.is(image.constructor, Image)
+})
 
-  describe('#create', function () {
-    it('should create an image from another', function () {
-      this.timeout(300000)
-      return docker.image.create({}, { fromImage: 'ubuntu' })
-        .then((stream) => {
-          stream.pipe.should.be.ok
-        })
-        
-    })
-  })
+test('history', async t => {
+  const history = await docker.image.history(testImage)
+  t.is(history.constructor, Array)
+})
 
-  describe('#status', function () {
-    it('should check status of an image', function () {
-      this.timeout(30000)
-      return docker.image.status(testImage)
-        .then((image) => {
-          image.should.be.instanceof(Image)
-        })
-    })
-  })
+test('tag', async t => {
+  const image = await docker.image.tag({ tag: 'test', repo: 'root' }, testImage)
+  t.is(image.constructor, Image)
+  t.not(image.RepoTags.indexOf('root:test'), -1)
+})
 
-  describe('#history', function () {
-    it('should return history of an image', function () {
-      this.timeout(30000)
-      return docker.image.history(testImage)
-        .then((data) => {
-          data.should.be.an('array')
-        })
-    })
-  })
+test('search', async t => {
+  const images = await docker.image.search({ term: 'ubuntu' })
+  t.is(images.constructor, Array)
+})
 
-  describe('#tag', function () {
-    it('should tag an image', function () {
-      this.timeout(30000)
-      return docker.image.tag({ tag: 'test', repo: 'root' }, testImage)
-        .then((image) => {
-          image.should.be.instanceof(Image)
-          return image.status()
-        })
-        .then((image) => {
-          image.RepoTags.indexOf('root:test').should.not.be.equal(-1)
-        })
-    })
-  })
+test('load', async t => {
+  const stream = await docker.image.build(fs.createReadStream('./test/test.tar'))
+  t.truthy(stream.pipe)
+})
 
-  describe('#search', function () {
-    it('should search an image in docker hub', function () {
-      this.timeout(300000)
-      return docker.image.search({ term: 'ubuntu' })
-        .then((results) => {
-          results.should.be.an('array')
-        })
-        
-    })
-  })
+test('build', async t => {
+  const result = await docker.image.build('./test/test.tar', { t: 'test' })
+    .then((stream) => {
+      t.truthy(stream.pipe)
 
-  describe('#load', function () {
-    it('should load an image from file', function () {
-      this.timeout(300000)
-      return docker.image.build(fs.createReadStream('./test/test.tar'))
-        .then((stream) => {
-          stream.pipe.should.be.ok
-        })
+      return new Promise((resolve, reject) => {
+        const res = []
+        stream.on('end',() => resolve(Buffer.concat(res).toString()))
+        stream.on('data', (d) => res.push(d))
+        stream.on('error', reject)
+      })
     })
-  })
+  const image = await docker.image.status('test')
+  t.notThrows(image.remove())
 })

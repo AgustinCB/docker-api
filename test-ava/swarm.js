@@ -12,82 +12,9 @@ const docker = isSocket
   ? new Docker()
   : new Docker({ socketPath: socket })
 
-const setupNode = async t => {
-  const node = await docker.swarm.init({
-    "ListenAddr": "127.0.0.1:4500",
-    "AdvertiseAddr": "127.0.0.1:4500",
-    "ForceNewCluster": false,
-    "Spec": {
-      "AcceptancePolicy": {
-        "Policies": [{
-          "Role": "MANAGER",
-          "Autoaccept": false
-        }, {
-          "Role": "WORKER",
-          "Autoaccept": true
-        }]
-      },
-      "Orchestration": {},
-      "Raft": {},
-      "Dispatcher": {},
-      "CAConfig": {}
-    }
-  })
-  t.is(node.constructor, Node)
-}
-
-test('init', setupNode)
-
-test('inspect', async t => {
-  await setupNode(t)
-  const swarm = await docker.swarm.status()
-  t.is(swarm.constructor, Swarm)
-})
-
-let service
-
-test('create-service', async t => {
-  await setupNode(t)
-  service = await docker.service.create({
-    "Name": "redis",
-    "TaskTemplate": {
-      "ContainerSpec": {
-        "Image": "redis"
-      }
-    },
-    "Mode": {
-      "Replicated": {
-        "Replicas": 1
-      }
-    },
-    "UpdateConfig": {
-      "Parallelism": 1
-    },
-    "EndpointSpec": {
-      "ExposedPorts": [{
-        "Protocol": "tcp",
-        "Port": 6379
-      }]
-    }
-  })
-  console.log('asd', service)
-  t.is(service.constructor, Service)
-})
-
-test('list-services', async t => {
-  const services = await docker.service.list()
-  t.is(services.constructor, Array)
-})
-
-test('inspect-service', async t => {
-  const _service = await service.status()
-  t.is(_service.constructor, Service)
-})
-
-test('update-service', async t => {
-  const _service = await service.update({
-    "version": 12,
-    "Name": "redis",
+const createService = _ =>
+  docker.service.create({
+    "Name": "redis-" + Date.now(),
     "TaskTemplate": {
       "ContainerSpec": {
         "Image": "redis"
@@ -114,53 +41,88 @@ test('update-service', async t => {
       }]
     }
   })
-  t.is(_service.constructor, Service)
+
+test.before(async t => {
+  const node = await docker.swarm.init({
+    "ListenAddr": "127.0.0.1:4500",
+    "AdvertiseAddr": "127.0.0.1:4500",
+    "ForceNewCluster": true,
+    "Spec": {
+      "AcceptancePolicy": {
+        "Policies": [{
+          "Role": "MANAGER",
+          "Autoaccept": false
+        }, {
+          "Role": "WORKER",
+          "Autoaccept": true
+        }]
+      },
+      "Orchestration": {},
+      "Raft": {},
+      "Dispatcher": {},
+      "CAConfig": {}
+    }
+  })
+  t.is(node.constructor, Node)
 })
 
-test('remove-service', async t => {
-  console.log(service)
+test.after('cleanup', t => {
+  t.notThrows(docker.swarm.leave({ 'force': true }))
+})
+
+test('inspect', async t => {
+  const swarm = await docker.swarm.status()
+  t.is(swarm.constructor, Swarm)
+})
+
+test('create-service', async t => {
+  const service = await createService()
+  t.is(service.constructor, Service)
+})
+
+test('list-services', async t => {
+  const services = await docker.service.list()
+  t.is(services.constructor, Array)
+})
+
+test('inspect-service', async t => {
+  const service = await (await createService()).status()
+  t.is(service.constructor, Service)
+})
+
+test('update-service', async t => {
+  const service = await (await createService()).status()
+  const data = service.Spec
+  data.version = service.Version.Index
+  const res = await service.update(data)
+  t.is(res.constructor, Service)
+})
+
+test('delete-service', async t => {
+  const service = await (await createService()).status()
   t.notThrows(service.remove())
 })
-
-let task
+      
 
 test('list-tasks', async t => {
   const tasks = await docker.task.list()
   t.is(tasks.constructor, Array)
-  if (tasks.length > 0) {
-    task = tasks[0]
-  }
 })
-
-if (task) {
-  test("inspect-task", async t => {
-    const _task = await task.status()
-    t.is(_task.constructor, Task)
-  })
-}
-
-let node
-
+  
 test('list-nodes', async t => {
   const nodes = await docker.node.list()
   t.is(nodes.constructor, Array)
-  node = nodes[0]
+  t.is(nodes[0].constructor, Node)
+})
+
+test('inspect-node', async t => {
+  const nodes = await docker.node.list()
+  const node = await nodes[0].status()
   t.is(node.constructor, Node)
 })
 
-test('status-node', async t => {
-  const _node = await node.status()
-  t.is(_node.constructor, Node)
-})
-
-test ('remove-node', async t => {
-  // error is [Error: (HTTP code 500) server error - rpc error: code = 9 desc = node xxxxxxxxxx is a cluster manager and is a member of the raft cluster. It must be demoted to worker before removal ] 
+test('remove-node', async t => {
+  const nodes = await docker.node.list()
+  const node = await nodes[0].status()
   t.throws(node.remove())
 })
-
-test('leave-swarm', async t => {
-  t.notThrows(docker.swarm.leave({
-    'force': true
-  }))
-})
-

@@ -4,7 +4,7 @@
   "description": "Docker Remote API driver for node",
   "main": "./lib/docker",
   "scripts": {
-    "test-ava": "nodemon --watch src --watch test-ava --exec 'ava --timeout 30000 test-ava'",
+    "watch-test": "nodemon --watch src --watch test --exec 'npm run test'",
     "test": "chmod +x test.sh; ./test.sh",
     "gendoc": "./node_modules/jsdox/bin/jsdox --output docs src",
     "build": "./node_modules/babel-cli/bin/babel.js src --presets babel-preset-es2015 --out-dir lib"

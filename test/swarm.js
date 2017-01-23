@@ -1,217 +1,128 @@
-import chai from 'chai'
-import * as test_utils from './utils'
+import test from 'ava'
+import fs from 'fs'
 import Node from '../lib/node'
 import Service from '../lib/service'
 import Swarm from '../lib/swarm'
 import Task from '../lib/task'
+import { Docker } from '../lib/docker'
 
-const should = chai.should()
+const socket = process.env.DOCKER_SOCKET || '/var/run/docker.sock'
+const isSocket = fs.existsSync(socket) ? fs.statSync(socket).isSocket() : false
+const docker = isSocket
+  ? new Docker()
+  : new Docker({ socketPath: socket })
 
-const docker = test_utils.init()
-
-describe("#swarm", function () {
-  describe("#initSwarm", function () {
-    it("should init swarm", function () {
-      this.timeout(5000)
-
-      return docker.swarm.init({
-        "ListenAddr": "127.0.0.1:4500",
-        "AdvertiseAddr": "127.0.0.1:4500",
-        "ForceNewCluster": false,
-        "Spec": {
-          "AcceptancePolicy": {
-            "Policies": [{
-              "Role": "MANAGER",
-              "Autoaccept": false
-            }, {
-              "Role": "WORKER",
-              "Autoaccept": true
-            }]
-          },
-          "Orchestration": {},
-          "Raft": {},
-          "Dispatcher": {},
-          "CAConfig": {}
-        }
-      })
-        .then((data) => {
-          data.should.be.ok
-        })
-    })
-
-    it("should inspect swarm", function () {
-      return docker.swarm.status()
-        .then((swarm) => {
-          swarm.should.be.instanceof(Swarm)
-        })
-    })
-  })
-
-  describe("#services", function () {
-    let service
-
-    it("should create service", function () {
-      this.timeout(5000)
-
-      return docker.service.create({
-        "Name": "redis",
-        "TaskTemplate": {
-          "ContainerSpec": {
-            "Image": "redis"
-          },
-          "Resources": {
-            "Limits": {},
-            "Reservations": {}
-          },
-          "RestartPolicy": {},
-          "Placement": {}
-        },
-        "Mode": {
-          "Replicated": {
-            "Replicas": 1
-          }
-        },
-        "UpdateConfig": {
-          "Parallelism": 1
-        },
-        "EndpointSpec": {
-          "ExposedPorts": [{
-            "Protocol": "tcp",
-            "Port": 6379
-          }]
-        }
-      })
-        .then((s) => {
-          s.should.be.instanceof(Service)
-          service = s
-        })
-    })
-
-    it("should list services", function () {
-      this.timeout(5000)
-
-      return docker.service.list()
-        .then((services) => {
-          services.should.be.a('array')
-        })
-    })
-
-    it("should inspect service", function () {
-      return service.status()
-        .then((s) => {
-          s.should.be.instanceof(Service)
-        })
-    })
-
-    it("should update service", function () {
-      return service.update({
-        "version": 12,
-        "Name": "redis",
-        "TaskTemplate": {
-          "ContainerSpec": {
-            "Image": "redis"
-          },
-          "Resources": {
-            "Limits": {},
-            "Reservations": {}
-          },
-          "RestartPolicy": {},
-          "Placement": {}
-        },
-        "Mode": {
-          "Replicated": {
-            "Replicas": 1
-          }
-        },
-        "UpdateConfig": {
-          "Parallelism": 1
-        },
-        "EndpointSpec": {
-          "ExposedPorts": [{
-            "Protocol": "tcp",
-            "Port": 6379
-          }]
-        }
-      })
-      .then((s) => {
-        s.should.be.instanceof(Service)
-      })
-    })
-
-    it("should delete service", function () {
-      this.timeout(5000)
-
-      return service.remove()
-    })
-  })
-
-  describe("#tasks", function () {
-    let task
-
-    describe("#listTasks", function () {
-      it("should list tasks", function () {
-        this.timeout(5000)
-
-        return docker.task.list()
-          .then((tasks) => {
-            tasks.should.be.a('array')
-            if (tasks.length > 0) {
-              task = tasks[0]
-            }
-          })
-      })
-
-      if (task) {
-        it("should inspect task", function () {
-          return task.inspect(handler)
-            .then((t) => {
-              t.should.be.instanceof(Task)
-            })
-        })
+const createService = _ =>
+  docker.service.create({
+    "Name": "redis-" + Date.now(),
+    "TaskTemplate": {
+      "ContainerSpec": {
+        "Image": "redis"
+      },
+      "Resources": {
+        "Limits": {},
+        "Reservations": {}
+      },
+      "RestartPolicy": {},
+      "Placement": {}
+    },
+    "Mode": {
+      "Replicated": {
+        "Replicas": 1
       }
-    })
+    },
+    "UpdateConfig": {
+      "Parallelism": 1
+    },
+    "EndpointSpec": {
+      "ExposedPorts": [{
+        "Protocol": "tcp",
+        "Port": 6379
+      }]
+    }
   })
 
-  describe("#nodes", function () {
-    let node
-
-    describe("#listNodes", function () {
-      it("should list nodes", function () {
-        this.timeout(5000)
-
-        return docker.node.list()
-          .then((nodes) => {
-            nodes.should.be.an('array')
-            node = nodes[0]
-            node.should.be.instanceof(Node)
-          })
-      })
-
-      it("should inspect node", function () {
-        return node.status()
-          .then((n) => {
-            n.should.be.instanceof(Node)
-          })
-      })
-
-      it("should remove node", function () {
-        return node.remove()
-          .catch((err) => {
-            // error is [Error: (HTTP code 500) server error - rpc error: code = 9 desc = node xxxxxxxxxx is a cluster manager and is a member of the raft cluster. It must be demoted to worker before removal ] 
-            err.should.not.be.null
-            err.json.message.indexOf('code = 9').should.not.equal(-1)
-          })
-      })
-    })
+test.before(async t => {
+  const node = await docker.swarm.init({
+    "ListenAddr": "127.0.0.1:4500",
+    "AdvertiseAddr": "127.0.0.1:4500",
+    "ForceNewCluster": true,
+    "Spec": {
+      "AcceptancePolicy": {
+        "Policies": [{
+          "Role": "MANAGER",
+          "Autoaccept": false
+        }, {
+          "Role": "WORKER",
+          "Autoaccept": true
+        }]
+      },
+      "Orchestration": {},
+      "Raft": {},
+      "Dispatcher": {},
+      "CAConfig": {}
+    }
   })
+  t.is(node.constructor, Node)
+})
 
-  describe("#leaveSwarm", function () {
-    it("should leave swarm", function () {
-      this.timeout(5000)
+test.after('cleanup', t => {
+  t.notThrows(docker.swarm.leave({ 'force': true }))
+})
 
-      return docker.swarm.leave({
-          'force': true
-      })
-    })
-  })
+test('inspect', async t => {
+  const swarm = await docker.swarm.status()
+  t.is(swarm.constructor, Swarm)
+})
+
+test('create-service', async t => {
+  const service = await createService()
+  t.is(service.constructor, Service)
+})
+
+test('list-services', async t => {
+  const services = await docker.service.list()
+  t.is(services.constructor, Array)
+})
+
+test('inspect-service', async t => {
+  const service = await (await createService()).status()
+  t.is(service.constructor, Service)
+})
+
+test('update-service', async t => {
+  const service = await (await createService()).status()
+  const data = service.Spec
+  data.version = service.Version.Index
+  const res = await service.update(data)
+  t.is(res.constructor, Service)
+})
+
+test('delete-service', async t => {
+  const service = await (await createService()).status()
+  t.notThrows(service.remove())
+})
+      
+
+test('list-tasks', async t => {
+  const tasks = await docker.task.list()
+  t.is(tasks.constructor, Array)
+})
+  
+test('list-nodes', async t => {
+  const nodes = await docker.node.list()
+  t.is(nodes.constructor, Array)
+  t.is(nodes[0].constructor, Node)
+})
+
+test('inspect-node', async t => {
+  const nodes = await docker.node.list()
+  const node = await nodes[0].status()
+  t.is(node.constructor, Node)
+})
+
+test('remove-node', async t => {
+  const nodes = await docker.node.list()
+  const node = await nodes[0].status()
+  t.throws(node.remove())
 })

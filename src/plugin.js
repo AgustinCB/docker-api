@@ -44,6 +44,35 @@ class Plugin {
   }
 
   /**
+   * upgrade a plugin
+   * https://docs.docker.com/engine/api/v1.26/#operation/PluginUpgrade
+   * @param  {Object}   opts  Query params in the request (optional)
+   * @return {Promise}        Promise return the new plugin
+   */
+  upgrade (opts) {
+    [ opts, id ] = this.__processArguments(opts, id)
+
+    const call = {
+      path: `/plugins/${id}/upgrade?`,
+      method: 'POST',
+      options: opts,
+      statusCodes: {
+        204: true,
+        404: 'plugin not installed',
+        500: 'server error'
+      }
+    }
+
+    return new Promise((resolve, reject) => {
+      this.modem.dial(call, (err, conf) => {
+        if (err) return reject(err)
+        const plugin = new Plugin(this.modem, opts.name)
+        resolve(plugin)
+      })
+    })
+  }
+
+  /**
    * install a plugin
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/install-a-plugin
    * @param  {Object}   opts  Query params in the request (optional)

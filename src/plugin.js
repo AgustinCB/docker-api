@@ -73,6 +73,32 @@ class Plugin {
   }
 
   /**
+   * Create a plugin
+   * https://docs.docker.com/engine/api/v1.25/#operation/PluginCreate
+   * @param  {Object}   opts  Query params in the request (optional)
+   * @return {Promise}        Promise return the new plugin
+   */
+  create (opts) {
+    const call = {
+      path: '/plugins/create?',
+      method: 'POST',
+      options: opts,
+      statusCodes: {
+        204: true,
+        500: 'server error'
+      }
+    }
+
+    return new Promise((resolve, reject) => {
+      this.modem.dial(call, (err, conf) => {
+        if (err) return reject(err)
+        const plugin = new Plugin(this.modem, opts.name)
+        resolve(plugin)
+      })
+    })
+  }
+
+  /**
    * install a plugin
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/install-a-plugin
    * @param  {Object}   opts  Query params in the request (optional)
@@ -153,6 +179,66 @@ class Plugin {
       this.modem.dial(call, (err, res) => {
         if (err) return reject(err)
         resolve(res)
+      })
+    })
+  }
+
+  /**
+   * push a plugin
+   * https://docs.docker.com/engine/api/v1.26/#operation/PluginPush
+   * @param  {Object}   opts  Query params in the request (optional)
+   * @param  {String}   id    ID of the plugin, if it's not set, use the id of the object (optional)
+   * @return {Promise}        Promise return the plugin
+   */
+  push (opts, id) {
+    [ opts, id ] = this.__processArguments(opts, id)
+
+    const call = {
+      path: `/plugins/${id}/push?`,
+      method: 'POST',
+      options: opts,
+      statusCodes: {
+        200: true,
+        404: 'plugin not found',
+        500: 'server error'
+      }
+    }
+
+    return new Promise((resolve, reject) => {
+      this.modem.dial(call, (err, conf) => {
+        if (err) return reject(err)
+        const plugin = new Plugin(this.modem, id)
+        resolve(plugin)
+      })
+    })
+  }
+
+  /**
+   * Set a plugin configuration
+   * https://docs.docker.com/engine/api/v1.25/#operation/PluginSet
+   * @param  {Object}   opts  Query params in the request (optional)
+   * @param  {String}   id    ID of the plugin, if it's not set, use the id of the object (optional)
+   * @return {Promise}        Promise return the plugin
+   */
+  set (opts, id) {
+    [ opts, id ] = this.__processArguments(opts, id)
+
+    const call = {
+      path: `/plugins/${id}/set?`,
+      method: 'POST',
+      options: opts,
+      statusCodes: {
+        204: true,
+        404: 'plugin not found',
+        500: 'server error'
+      }
+    }
+
+    return new Promise((resolve, reject) => {
+      this.modem.dial(call, (err, conf) => {
+        if (err) return reject(err)
+        const plugin = new Plugin(this.modem, id)
+        resolve(plugin)
       })
     })
   }

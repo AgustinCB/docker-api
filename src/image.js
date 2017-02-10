@@ -131,6 +131,31 @@ class Image {
   }
 
   /**
+   * Prune images
+   * https://docs.docker.com/engine/api/v1.25/#operation/ImagePrune
+   * @param  {Object}   opts  Query params in the request (optional)
+   * @return {Promise}          Promise returning the container
+   */
+  prune (opts) {
+    const call = {
+      path: `/images/prune`,
+      method: 'POST',
+      options: opts,
+      statusCodes: {
+        200: true,
+        500: 'server error'
+      }
+    }
+
+    return new Promise((resolve, reject) => {
+      this.modem.dial(call, (err, res) => {
+        if (err) return reject(err)
+        resolve(res)
+      })
+    })
+  }
+
+  /**
    * History of the image
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/get-the-history-of-an-image
    * @param  {Object}   opts  Query params in the request (optional)

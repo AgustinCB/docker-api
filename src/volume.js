@@ -129,6 +129,31 @@ class Volume {
     })
   }
 
+  /**
+   * Prune volumes
+   * https://docs.docker.com/engine/api/v1.25/#operation/VolumePrune
+   * @param  {Object}   opts  Query params in the request (optional)
+   * @return {Promise}          Promise returning the container
+   */
+  prune (opts) {
+    const call = {
+      path: `/volumes/prune`,
+      method: 'POST',
+      options: opts,
+      statusCodes: {
+        200: true,
+        500: 'server error'
+      }
+    }
+
+    return new Promise((resolve, reject) => {
+      this.modem.dial(call, (err, res) => {
+        if (err) return reject(err)
+        resolve(res)
+      })
+    })
+  }
+
   __processArguments (opts, id) {
     if (typeof opts === "string" && !id) {
       id = opts

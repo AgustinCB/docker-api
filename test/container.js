@@ -22,6 +22,7 @@ const containerNames = new Map([
   [ 'export', 'docker_api_test_export' ],
   [ 'stats', 'docker_api_test_stats' ],
   [ 'resize', 'docker_api_test_resize' ],
+  [ 'prune', 'docker_api_test_prune' ],
   [ 'start', 'docker_api_test_start' ],
   [ 'stop', 'docker_api_test_stop' ],
   [ 'restart', 'docker_api_test_restart' ],
@@ -107,6 +108,11 @@ test('resize', async t => {
     w: process.stdout.columns
   })
   t.truthy(result.pipe)
+})
+
+test('prune', async t => {
+  const container = await createContainer('prune')
+  t.notThrows(container.prune())
 })
 
 test('start', async t => {

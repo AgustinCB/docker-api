@@ -581,6 +581,31 @@ class Container {
   }
 
   /**
+   * Prune a container
+   * https://docs.docker.com/engine/api/v1.25/#operation/ContainerPrune
+   * @param  {Object}   opts  Query params in the request (optional)
+   * @return {Promise}          Promise returning the container
+   */
+  prune (opts) {
+    const call = {
+      path: `/containers/prune`,
+      method: 'POST',
+      options: opts,
+      statusCodes: {
+        200: true,
+        500: 'server error'
+      }
+    }
+
+    return new Promise((resolve, reject) => {
+      this.modem.dial(call, (err, res) => {
+        if (err) return reject(err)
+        resolve(res)
+      })
+    })
+  }
+
+  /**
    * Start a container
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/start-a-container
    * @param  {Object}   opts  Query params in the request (optional)

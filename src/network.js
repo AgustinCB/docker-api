@@ -71,6 +71,31 @@ class Network {
   }
 
   /**
+   * Prune network
+   * https://docs.docker.com/engine/api/v1.25/#operation/NetworkPrune
+   * @param  {Object}   opts  Query params in the request (optional)
+   * @return {Promise}          Promise returning the container
+   */
+  prune (opts) {
+    const call = {
+      path: `/network/prune`,
+      method: 'POST',
+      options: opts,
+      statusCodes: {
+        200: true,
+        500: 'server error'
+      }
+    }
+
+    return new Promise((resolve, reject) => {
+      this.modem.dial(call, (err, res) => {
+        if (err) return reject(err)
+        resolve(res)
+      })
+    })
+  }
+
+  /**
    * Get low-level information on a network
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/inspect-network
    * The reason why this module isn't called inspect is because that interferes with the inspect utility of node.

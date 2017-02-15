@@ -255,7 +255,7 @@ test('put-archive', async t => {
   const container = await createContainer('put_archive', {
     Cmd: [ '/bin/bash', '-c', 'tail -f /var/log/dmesg' ], 
   })
-  const data = container.fs.put('./test/test.tar', {
+  const data = await container.fs.put('./test/test.tar', {
     path: '/root'
   })
   t.truthy(data)
@@ -270,15 +270,12 @@ test('inspect-archive', async t => {
 })
 
 test.after.always('cleanup', async t => {
-  var promises = []
-  containerNames.forEach(function (name) {
-    if (name === 'docker_api_test_rename_prev') return
-    promises.push(
-      docker.container.stop(name)
-        .then((container) => {
-          return container.delete({ force: true })
-        })
-    )
-  })
-  t.notThrows(Promise.all(promises).catch((err) => console.log(err)))
+  const promises = Array.from(containerNames.values()).map((name) =>
+    docker.container.stop(name)
+      .then((container) => {
+        return container.delete({ force: true })
+      })
+      .catch((err) => console.log(err))
+  )
+  t.notThrows(Promise.all(promises))
 })

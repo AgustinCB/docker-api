@@ -140,6 +140,7 @@ export class Docker {
       path: '/events?',
       method: 'GET',
       options: opts,
+      isStream: true,
       statusCodes: {
         200: true,
         500: 'server error'

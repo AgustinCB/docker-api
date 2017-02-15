@@ -244,3 +244,25 @@ return docker.image.create({}, { fromImage: 'ubuntu', tag: 'latest' })
   .then((events) => console.log(events))
   .catch((error) => console.log(error))
 ```
+
+### Fetch events from docker
+
+``` js
+const Docker = require('node-docker-api').Docker,
+  fs = require('fs')
+
+const promisifyStream = (stream) => new Promise((resolve, reject) => {
+  stream.on('data', (d) => console.log(data))
+  stream.on('end', resolve)
+  stream.on('error', reject)
+})
+
+let docker = new Docker({ socketPath: '/var/run/docker.sock' })
+
+docker.events({
+  since: ((new Date().getTime() / 1000) - 60).toFixed(0)
+})
+  .then((container) => container.events())
+  .then((stream) => promisifyStream(stream))
+  .catch((error) => console.log(error))
+```

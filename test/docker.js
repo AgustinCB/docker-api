@@ -30,3 +30,10 @@ test('auth', async t => {
     password: "AgustinIsAwesome"
   }))
 })
+
+test('events', async t => {
+  const data = await docker.events({
+    since: ((new Date().getTime() / 1000) - 60).toFixed(0)
+  })
+  t.truthy(data)
+})

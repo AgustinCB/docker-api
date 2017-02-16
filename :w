@@ -151,6 +151,7 @@ test('status-secret', async t => {
 		"Name": "app-key1.crt",
 		"Data": "VEhJUyBJUyBOT1QgQSBSRUFMIENFUlRJRklDQVRFCg=="
 	})
+	console.log(secret)
 	const secretStatus = await secret.status()
 
   t.is(secretStatus.constructor, Secret)

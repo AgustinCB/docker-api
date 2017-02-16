@@ -65,7 +65,7 @@ class Secret {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
         if (err) return reject(err)
-        const secret = new Secret(this.modem, conf.Name)
+        const secret = new Secret(this.modem, conf.ID)
         resolve(Object.assign(secret, conf))
       })
     })

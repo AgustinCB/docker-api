@@ -39,5 +39,9 @@ test('status', async t => {
   })
   const volumeStatus = await volume.status()
   t.is(volumeStatus.constructor, Volume)
-  volume.remove()
+  t.notThrows(volume.remove())
+})
+
+test.after('prune', async t => {
+  t.truthy(await docker.volume.prune())
 })

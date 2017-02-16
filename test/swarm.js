@@ -1,6 +1,7 @@
 import test from 'ava'
 import fs from 'fs'
 import Node from '../lib/node'
+import Secret from '../lib/secret'
 import Service from '../lib/service'
 import Swarm from '../lib/swarm'
 import Task from '../lib/task'
@@ -125,4 +126,33 @@ test('remove-node', async t => {
   const nodes = await docker.node.list()
   const node = await nodes[0].status()
   t.throws(node.remove())
+})
+
+test('list-secret', async t => {
+  const secrets = await docker.secret.list()
+  t.is(secrets.constructor, Array)
+})
+
+test('create-secret', async t => {
+  const secret = await docker.secret.create({
+		"Name": "app-key.crt",
+		"Labels": {
+			"foo": "bar"
+		},
+		"Data": "VEhJUyBJUyBOT1QgQSBSRUFMIENFUlRJRklDQVRFCg=="
+	})
+
+  t.is(secret.constructor, Secret)
+  t.notThrows(secret.remove())
+})
+
+test('status-secret', async t => {
+  const secret = await docker.secret.create({
+		"Name": "app-key1.crt",
+		"Data": "VEhJUyBJUyBOT1QgQSBSRUFMIENFUlRJRklDQVRFCg=="
+	})
+	const secretStatus = await secret.status()
+
+  t.is(secretStatus.constructor, Secret)
+  t.notThrows(secret.remove())
 })

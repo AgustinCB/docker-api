@@ -13,7 +13,7 @@ class Secret {
    * @param  {Modem}      modem     Modem to connect to the remote service
    * @param  {string}     id        Id of the secret (optional)
    */
-  constructor (modem, id) {
+  constructor (modem, id?) {
     this.modem = modem
     this.id = id
   }
@@ -69,7 +69,7 @@ class Secret {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
         if (err) return reject(err)
-        const secret = new Secret(this.modem, conf.Name)
+        const secret = new Secret(this.modem, conf.ID)
         resolve(Object.assign(secret, conf))
       })
     })

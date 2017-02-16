@@ -7,8 +7,9 @@ import Volume from './volume'
 import Network from './network'
 import Node from './node'
 import Plugin from './plugin'
-import Swarm from './swarm'
+import Secret from './secret'
 import Service from './service'
+import Swarm from './swarm'
 import Task from './task'
 
 /**
@@ -23,8 +24,9 @@ export class Docker {
   network: any
   node: any
   plugin: any
-  swarm: any
+  secret: any
   service: any
+  swarm: any
   task: any
 
   /**
@@ -40,8 +42,9 @@ export class Docker {
     this.network = new Network(this.modem)
     this.node = new Node(this.modem)
     this.plugin = new Plugin(this.modem)
-    this.swarm = new Swarm(this.modem)
+    this.secret = new Secret(this.modem)
     this.service = new Service(this.modem)
+    this.swarm = new Swarm(this.modem)
     this.task = new Task(this.modem)
   }
 

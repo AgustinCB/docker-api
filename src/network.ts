@@ -82,7 +82,7 @@ class Network {
    */
   prune (opts) {
     const call = {
-      path: `/network/prune`,
+      path: `/networks/prune`,
       method: 'POST',
       options: opts,
       statusCodes: {

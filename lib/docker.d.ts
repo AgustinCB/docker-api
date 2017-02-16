@@ -9,8 +9,9 @@ export declare class Docker {
     network: any;
     node: any;
     plugin: any;
-    swarm: any;
+    secret: any;
     service: any;
+    swarm: any;
     task: any;
     /**
      * Creates the Docker object

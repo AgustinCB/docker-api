@@ -9,7 +9,7 @@ declare class Secret {
      * @param  {Modem}      modem     Modem to connect to the remote service
      * @param  {string}     id        Id of the secret (optional)
      */
-    constructor(modem: any, id: any);
+    constructor(modem: any, id?: any);
     /**
      * Get the list of secrets
      * https://docs.docker.com/engine/api/v1.25/#operation/SecretList

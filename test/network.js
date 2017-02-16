@@ -33,3 +33,7 @@ test('status', async t => {
   t.is(networkStatus.constructor, Network)
   t.notThrows(network.remove())
 })
+
+test.after('prune', async t => {
+  t.truthy(await docker.network.prune())
+})

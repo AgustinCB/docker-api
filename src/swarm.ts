@@ -6,12 +6,16 @@ import Node from './node'
  * Class reprensenting a swarm
  */
 class Swarm {
+
+  modem: any;
+  id: any;
+
   /**
    * Creates a new swarm
    * @param  {Modem}      modem     Modem to connect to the remote service
    * @param  {string}     id        Id of the swarm (optional)
    */
-  constructor (modem, id) {
+  constructor (modem, id?) {
     this.modem = modem
     this.id = id
   }

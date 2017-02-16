@@ -4,12 +4,16 @@
  * Class representing an image
  */
 class Image {
+
+  modem: any;
+  id: any;
+
   /**
    * Creates a new image
    * @param  {Modem}  modem Modem to connect to the remote service
    * @param  {string} id    Container id (optional)
    */
-  constructor (modem, id) {
+  constructor (modem, id?) {
     this.modem = modem
     this.id = id
   }
@@ -107,7 +111,7 @@ class Image {
    * @param  {String}   id    ID of the image to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the image
    */
-  status (opts, id) {
+  status (opts?, id?) {
     [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
@@ -243,7 +247,7 @@ class Image {
         const image = new Image(this.modem, id)
         resolve(image)
       })
-    }).then((image) => {
+    }).then((image:any) => {
       return image.status()
     })
   }

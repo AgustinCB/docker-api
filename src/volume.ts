@@ -4,12 +4,16 @@
  * Class representing a volume
  */
 class Volume {
+
+  modem: any;
+  id: any;
+
   /**
    * Create a volume
    * @param  {Modem}      modem     Modem to connect to the remote service
    * @param  {string}     id        Id of the volume (optional)
    */
-  constructor (modem, id) {
+  constructor (modem, id?) {
     this.modem = modem
     this.id = id
   }

@@ -4,12 +4,16 @@
  * Class reprensenting a network
  */
 class Network {
+
+  modem: any;
+  id: any;
+
   /**
    * Creates a new network
    * @param  {Modem}      modem     Modem to connect to the remote service
    * @param  {string}     id        Id of the network (optional)
    */
-  constructor (modem, id) {
+  constructor (modem, id?) {
     this.modem = modem
     this.id = id
   }

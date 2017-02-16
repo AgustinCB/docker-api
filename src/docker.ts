@@ -1,6 +1,6 @@
 'use strict'
 
-import { default as Modem } from 'docker-modem'
+import Modem = require('docker-modem')
 import Container from './container'
 import Image from './image'
 import Volume from './volume'
@@ -15,6 +15,18 @@ import Task from './task'
  * Docker class with all methods 
  */
 export class Docker {
+
+  modem: any;
+  container: any;
+  image: any;
+  volume: any;
+  network: any;
+  node: any;
+  plugin: any;
+  swarm: any;
+  service: any;
+  task: any;
+
   /**
    * Creates the Docker object
    * @param {Object}  opts Docker options

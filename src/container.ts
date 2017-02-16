@@ -7,13 +7,19 @@ import Image from './image'
  */
 
 class Exec {
-  /** 
+
+  modem:any;
+  container: any;
+  id: any;
+
+  /**
    * Create an execution
    * @param  {Modem}      modem     Modem to connect to the remote service
    * @param  {Container}  container Container that owns the execution (optional)
    * @param  {string}     id        Id of the execution (optional)
    */
-  constructor (modem, container, id) {
+
+  constructor (modem, container, id?) {
     this.modem = modem
     this.container = container
     this.id = id
@@ -170,6 +176,10 @@ class Exec {
  * Class representing container filesystem
  */
 class ContainerFs {
+
+  modem:any;
+  container: any;
+
   /** 
    * Create an container filesystem object
    * @param  {Modem}      modem     Modem to connect to the remote service
@@ -292,12 +302,19 @@ class ContainerFs {
  * Class representing a container
  */
 class Container {
+
+  modem:any;
+  id: any;
+  fs:any;
+  exec: any;
+  Warnings: any;
+
   /** 
    * Create an container object
    * @param  {Modem}  modem Modem to connect to the remote service
    * @param  {string} id    Container id (optional)
    */
-  constructor (modem, id) {
+  constructor (modem, id?) {
     this.modem = modem
     this.id = id
     this.fs = new ContainerFs(modem, this)
@@ -994,7 +1011,7 @@ class Container {
     })
   }
 
-  __processArguments (opts, id) {
+  __processArguments (opts, id?) {
     if (typeof opts === "string" && !id) {
       id = opts
     }

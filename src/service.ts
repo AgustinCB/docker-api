@@ -4,12 +4,16 @@
  * Class representing a service
  */
 class Service {
+
+  modem: any;
+  id: any;
+
   /**
    * Create a service
    * @param  {Modem}      modem     Modem to connect to the remote service
    * @param  {string}     id        Id of the service (optional)
    */
-  constructor (modem, id) {
+  constructor (modem, id?) {
     this.modem = modem
     this.id = id
   }

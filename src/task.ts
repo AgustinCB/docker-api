@@ -4,12 +4,16 @@
  * Class representing a task
  */
 class Task {
+
+  modem: any;
+  id: any;
+
   /**
    * Create a task
    * @param  {Modem}      modem     Modem to connect to the remote service
    * @param  {string}     id        Id of the task (optional)
    */
-  constructor (modem, id) {
+  constructor (modem, id?) {
     this.modem = modem
     this.id = id
   }

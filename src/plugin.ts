@@ -4,12 +4,16 @@
  * Class reprensenting a plugin
  */
 class Plugin {
+
+  modem: any;
+  id: any;
+
   /**
    * Creates a new plugin
    * @param  {Modem}      modem     Modem to connect to the remote service
    * @param  {string}     id        Id of the plugin (optional)
    */
-  constructor (modem, id) {
+  constructor (modem, id?) {
     this.modem = modem
     this.id = id
   }
@@ -50,7 +54,8 @@ class Plugin {
    * @return {Promise}        Promise return the new plugin
    */
   upgrade (opts) {
-    [ opts, id ] = this.__processArguments(opts, id)
+    let id;
+    [ opts, id ] = this.__processArguments(opts)
 
     const call = {
       path: `/plugins/${id}/upgrade?`,
@@ -301,7 +306,7 @@ class Plugin {
     })
   }
 
-  __processArguments (opts, id) {
+  __processArguments (opts, id?) {
     if (typeof opts === "string" && !id) {
       id = opts
     }

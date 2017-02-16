@@ -1,13 +1,17 @@
 'use strict'
 
 /**
- * Class representing a node
+ * Class representing a secret
  */
-class Node {
+class Secret {
+
+  modem: any;
+  id: any;
+
   /**
-   * Create a node
+   * Create a secret
    * @param  {Modem}      modem     Modem to connect to the remote service
-   * @param  {string}     id        Id of the node (optional)
+   * @param  {string}     id        Id of the secret (optional)
    */
   constructor (modem, id) {
     this.modem = modem
@@ -15,14 +19,14 @@ class Node {
   }
 
   /**
-   * Get the list of nodes
-   * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/list-nodes
+   * Get the list of secrets
+   * https://docs.docker.com/engine/api/v1.25/#operation/SecretList
    * @param  {Object}   opts  Query params in the request (optional)
-   * @return {Promise}        Promise returning the result as a list of nodes
+   * @return {Promise}        Promise returning the result as a list of secrets
    */
   list (opts) {
     const call = {
-      path: '/nodes?',
+      path: '/secrets',
       method: 'GET',
       options: opts,
       statusCodes: {
@@ -34,32 +38,30 @@ class Node {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, result) => {
         if (err) return reject(err)
-        if (!result || !result.length) return resolve([])
-        resolve(result.map((conf) => {
-          const node = new Node(this.modem, conf.ID)
-          return Object.assign(node, conf)
+        if (!result.Secrets || !result.Secrets.length) return resolve([])
+        resolve(result.Secrets.map((conf) => {
+          const secret = new Secret(this.modem, conf.Name)
+          return Object.assign(secret, conf)
         }))
       })
     })
   }
 
   /**
-   * Update a node
-   * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/update-a-node
+   * Create a secret
+   * https://docs.docker.com/engine/api/v1.25/#operation/SecretCreate
    * @param  {Object}   opts  Query params in the request (optional)
-   * @param  {String}   id    ID of the node to inspect, if it's not set, use the id of the object (optional)
-   * @return {Promise}        Promise return the new node
+   * @return {Promise}        Promise return the new secret
    */
-  update (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id)
-
+  create (opts) {
     const call = {
-      path: `/nodes/${id}/update?`,
+      path: '/secrets/create?',
       method: 'POST',
       options: opts,
       statusCodes: {
-        200: true,
-        404: 'no such node',
+        201: true,
+        406: 'server error or node is not part of a swarm',
+        409: '409 name conflicts with an existing object',
         500: 'server error'
       }
     }
@@ -67,30 +69,31 @@ class Node {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
         if (err) return reject(err)
-        const node = new Node(this.modem, id)
-        resolve(Object.assign(node, conf))
+        const secret = new Secret(this.modem, conf.Name)
+        resolve(Object.assign(secret, conf))
       })
     })
   }
 
   /**
-   * Get low-level information on a node
-   * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/inspect-a-node
+   * Get low-level information on a secret
+   * https://docs.docker.com/engine/api/v1.25/#operation/SecretInspect
    * The reason why this module isn't called inspect is because that interferes with the inspect utility of node.
    * @param  {Object}   opts  Query params in the request (optional)
-   * @param  {String}   id    ID of the node to inspect, if it's not set, use the id of the object (optional)
-   * @return {Promise}        Promise return the node
+   * @param  {String}   id    ID of the secret to inspect, if it's not set, use the id of the object (optional)
+   * @return {Promise}        Promise return the secret
    */
   status (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
-      path: `/nodes/${id}?`,
+      path: `/secrets/${id}?`,
       method: 'GET',
       options: opts,
       statusCodes: {
         200: true,
-        404: 'no such node',
+        404: 'no such secret',
+        406: '406 node is not part of a swarm',
         500: 'server error'
       }
     }
@@ -98,28 +101,28 @@ class Node {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
         if (err) return reject(err)
-        const node = new Node(this.modem, id)
-        resolve(Object.assign(node, conf))
+        const secret = new Secret(this.modem, id)
+        resolve(Object.assign(secret, conf))
       })
     })
   }
 
   /**
-   * Remove a node
-   * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/remove-a-node
+   * Remove a secret
+   * https://docs.docker.com/engine/api/v1.25/#operation/SecretDelete
    * @param  {Object}   opts  Query params in the request (optional)
-   * @param  {String}   id    ID of the node to inspect, if it's not set, use the id of the object (optional)
+   * @param  {String}   id    ID of the secret to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the result
    */
   remove (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id)
     const call = {
-      path: `/nodes/${id}?`,
+      path: `/secrets/${id}?`,
       method: 'DELETE',
       options: opts,
       statusCodes: {
         204: true,
-        404: 'no such node',
+        404: 'no such secret',
         500: 'server error'
       }
     }
@@ -144,4 +147,4 @@ class Node {
   }
 }
 
-export default Node
+export default Secret

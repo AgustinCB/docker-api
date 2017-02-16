@@ -49,7 +49,7 @@ class Plugin {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the new plugin
    */
-  upgrade (opts) {
+  upgrade (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {

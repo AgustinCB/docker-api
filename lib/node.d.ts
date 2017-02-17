@@ -2,8 +2,8 @@
  * Class representing a node
  */
 declare class Node {
-    modem: any;
-    id: any;
+    private modem;
+    readonly id: string | undefined;
     /**
      * Create a node
      * @param  {Modem}      modem     Modem to connect to the remote service
@@ -42,6 +42,6 @@ declare class Node {
      * @return {Promise}        Promise return the result
      */
     remove(opts: any, id: any): Promise<{}>;
-    __processArguments(opts: any, id: any): any[];
+    private __processArguments(opts, id);
 }
 export default Node;

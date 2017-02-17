@@ -32,7 +32,9 @@
     "mocha": "^2.5.3",
     "nodemon": "^1.11.0",
     "tslint": "^4.4.2",
-    "typescript": "^2.1.6"
+    "typed-docker-modem": "git+https://github.com/typed-contrib/docker-modem.git",
+    "typescript": "^2.1.6",
+    "typings": "^2.1.0"
   },
   "dependencies": {
     "docker-modem": "^0.3.1",

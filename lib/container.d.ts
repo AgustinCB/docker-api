@@ -2,11 +2,11 @@
  * Class representing a container
  */
 declare class Container {
-    modem: any;
-    id: any;
-    fs: any;
-    exec: any;
-    Warnings: any;
+    private modem;
+    readonly id: string | undefined;
+    private fs;
+    private exec;
+    private Warnings;
     /**
      * Create an container object
      * @param  {Modem}  modem Modem to connect to the remote service
@@ -192,6 +192,6 @@ declare class Container {
      * @return {Promise}          Promise returning the container
      */
     commit(opts: any, id: any): Promise<{}>;
-    __processArguments(opts: any, id?: any): any[];
+    private __processArguments(opts, id?);
 }
 export default Container;

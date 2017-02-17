@@ -2,8 +2,8 @@
  * Class representing a secret
  */
 declare class Secret {
-    modem: any;
-    id: any;
+    private modem;
+    readonly id: string | undefined;
     /**
      * Create a secret
      * @param  {Modem}      modem     Modem to connect to the remote service
@@ -41,6 +41,6 @@ declare class Secret {
      * @return {Promise}        Promise return the result
      */
     remove(opts: any, id: any): Promise<{}>;
-    __processArguments(opts: any, id: any): any[];
+    private __processArguments(opts, id);
 }
 export default Secret;

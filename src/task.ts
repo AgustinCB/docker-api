@@ -1,12 +1,14 @@
 "use strict";
 
+import Modem = require("docker-modem");
+
 /**
  * Class representing a task
  */
 class Task {
 
-  modem: any;
-  id: any;
+  private modem: Modem;
+  public readonly id: string | undefined;
 
   /**
    * Create a task
@@ -24,7 +26,7 @@ class Task {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise returning the result as a list of tasks
    */
-  list (opts) {
+  public list (opts) {
     const call = {
       path: "/tasks?",
       method: "GET",
@@ -55,7 +57,7 @@ class Task {
    * @param  {String}   id    ID of the task to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the task
    */
-  status (opts, id) {
+  public status (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -78,7 +80,7 @@ class Task {
     });
   }
 
-  __processArguments (opts, id) {
+  private __processArguments (opts, id) {
     if (typeof opts === "string" && !id) {
       id = opts;
     }

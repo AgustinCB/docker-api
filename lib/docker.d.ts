@@ -2,16 +2,16 @@
  * Docker class with all methods
  */
 export declare class Docker {
-    modem: any;
-    container: any;
-    image: any;
-    volume: any;
-    network: any;
-    node: any;
-    plugin: any;
-    swarm: any;
-    service: any;
-    task: any;
+    private modem;
+    private container;
+    private image;
+    private volume;
+    private network;
+    private node;
+    private plugin;
+    private swarm;
+    private service;
+    private task;
     /**
      * Creates the Docker object
      * @param {Object}  opts Docker options

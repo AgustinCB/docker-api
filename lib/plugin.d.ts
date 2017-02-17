@@ -2,8 +2,8 @@
  * Class reprensenting a plugin
  */
 declare class Plugin {
-    modem: any;
-    id: any;
+    private modem;
+    readonly id: string | undefined;
     /**
      * Creates a new plugin
      * @param  {Modem}      modem     Modem to connect to the remote service
@@ -87,6 +87,6 @@ declare class Plugin {
      * @return {Promise}        Promise return the plugin
      */
     disable(opts: any, id: any): Promise<{}>;
-    __processArguments(opts: any, id?: any): any[];
+    private __processArguments(opts, id?);
 }
 export default Plugin;

@@ -1,16 +1,16 @@
 "use strict";
 
 import Image from "./image";
-
+import Modem from "docker-modem";
 /**
  * Class representing container execution
  */
 
 class Exec {
 
-  modem: any;
-  container: any;
-  id: any;
+  private modem: Modem;
+  private container: Container;
+  public readonly id: string | undefined;
 
   /**
    * Create an execution
@@ -19,7 +19,7 @@ class Exec {
    * @param  {string}     id        Id of the execution (optional)
    */
 
-  constructor (modem, container, id?) {
+  constructor (modem: Modem, container: Container, id?: string) {
     this.modem = modem;
     this.container = container;
     this.id = id;
@@ -32,7 +32,7 @@ class Exec {
    * @param  {String}   id    ID of the container to get info, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the new exec instance
    */
-  create (opts, id) {
+  public create (opts?: any, id?: string) {
     [ opts, id ] = this.__processContainerArguments(opts, id);
 
     const call = {
@@ -64,7 +64,7 @@ class Exec {
    * @param  {String}   id    ID of the exec instance to start, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the stream to the execution
    */
-  start (opts, id) {
+  public start (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -96,7 +96,7 @@ class Exec {
    * @param  {String}   id    ID of the exec instance to resize, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the result
    */
-  resize (opts, id) {
+  public resize (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -125,7 +125,7 @@ class Exec {
    * @param  {String}   id    ID of the exec instance to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the exec instance
    */
-  status (opts, id) {
+  public status (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -148,7 +148,7 @@ class Exec {
     });
   }
 
-  __processArguments (opts, id) {
+  private __processArguments (opts, id) {
     if (typeof opts === "string" && !id) {
       id = opts;
     }
@@ -161,7 +161,7 @@ class Exec {
     return [ opts, id ];
   }
 
-  __processContainerArguments (opts, id) {
+  private __processContainerArguments (opts, id) {
     if (typeof opts === "string" && !id) {
       id = opts;
     }
@@ -177,15 +177,15 @@ class Exec {
  */
 class ContainerFs {
 
-  modem: any;
-  container: any;
+  private modem: Modem;
+  private container: Container;
 
   /**
    * Create an container filesystem object
    * @param  {Modem}      modem     Modem to connect to the remote service
    * @param  {Container}  container Container that owns the filesystem (optional)
    */
-  constructor (modem, container) {
+  constructor (modem: Modem, container: Container) {
     this.modem = modem;
     this.container = container;
   }
@@ -197,7 +197,7 @@ class ContainerFs {
    * @param  {String}   id    ID of the container to get info, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise returning the info about the filesystem
    */
-  info (opts, id) {
+  public info (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -227,7 +227,7 @@ class ContainerFs {
    * @param  {String}   id    ID of the container to get an archive, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise returning the result as a stream to the tar file
    */
-  get (opts, id) {
+  public get (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -258,7 +258,7 @@ class ContainerFs {
    * @param  {String}   id    ID of the container to put the archive, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise returning the result
    */
-  put (file, opts, id) {
+  public put (file, opts, id) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -284,7 +284,7 @@ class ContainerFs {
     });
   }
 
-  __processArguments (opts, id) {
+  private __processArguments (opts, id) {
     if (typeof opts === "string" && !id) {
       id = opts;
     }
@@ -303,11 +303,11 @@ class ContainerFs {
  */
 class Container {
 
-  modem: any;
-  id: any;
-  fs: any;
-  exec: any;
-  Warnings: any;
+  private modem: Modem;
+  public readonly id: string | undefined;
+  private fs: ContainerFs;
+  private exec: Exec;
+  private Warnings: any;
 
   /**
    * Create an container object
@@ -327,7 +327,7 @@ class Container {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise returning the result as a list of containers
    */
-  list (opts) {
+  public list (opts) {
     const call = {
       path: "/containers/json?",
       method: "GET",
@@ -356,7 +356,7 @@ class Container {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the new container
    */
-  create (opts) {
+  public create (opts) {
     const call = {
       path: "/containers/create?",
       method: "POST",
@@ -388,7 +388,7 @@ class Container {
    * @param  {String}   id    ID of the container to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the container
    */
-  status (opts, id) {
+  public status (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -418,7 +418,7 @@ class Container {
    * @param  {String}   id    ID of the container to get top processes, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the list of processes
    */
-  top (opts, id) {
+  public top (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -447,7 +447,7 @@ class Container {
    * @param  {String}   id    ID of the container to get logs, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise returning the concatenated logs
    */
-  logs (opts, id) {
+  public logs (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -477,7 +477,7 @@ class Container {
    * @param  {String}   id    ID of the container to inspect changes, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise returning the changes
    */
-  changes (id) {
+  public changes (id) {
     [ , id ] = this.__processArguments(id);
 
     const call = {
@@ -506,7 +506,7 @@ class Container {
    * @param  {String}   id      ID of the container to export, if it's not set, use the id of the object (optional)
    * @return {Promise}          Promise returning the content of the tar file as a stream or as a string
    */
-  export (opts, id) {
+  public export (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -545,7 +545,7 @@ class Container {
    * @param  {String}   id      ID of the container to get stats, if it's not set, use the id of the object (optional)
    * @return {Promise}          Promise returning the stats, in a stream or string
    */
-  stats (opts, id) {
+  public stats (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -575,7 +575,7 @@ class Container {
    * @param  {String}   id      ID of the container to resize, if it's not set, use the id of the object (optional)
    * @return {Promise}          Promise returning the response
    */
-  resize (opts, id) {
+  public resize (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -603,7 +603,7 @@ class Container {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}          Promise returning the container
    */
-  prune (opts) {
+  public prune (opts) {
     const call = {
       path: `/containers/prune`,
       method: "POST",
@@ -629,7 +629,7 @@ class Container {
    * @param  {String}   id      ID of the container to start, if it's not set, use the id of the object (optional)
    * @return {Promise}          Promise returning the container
    */
-  start (opts, id) {
+  public start (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -659,7 +659,7 @@ class Container {
    * @param  {String}   id      ID of the container to stop, if it's not set, use the id of the object (optional)
    * @return {Promise}          Promise returning the container
    */
-  stop (opts, id) {
+  public stop (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -689,7 +689,7 @@ class Container {
    * @param  {String}   id      ID of the container to restart, if it's not set, use the id of the object (optional)
    * @return {Promise}          Promise returning the container
    */
-  restart (opts, id) {
+  public restart (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -718,7 +718,7 @@ class Container {
    * @param  {String}   id      ID of the container to kill, if it's not set, use the id of the object (optional)
    * @return {Promise}          Promise returning the container
    */
-  kill (opts, id) {
+  public kill (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -748,7 +748,7 @@ class Container {
    * @param  {String}   id      ID of the container to update, if it's not set, use the id of the object (optional)
    * @return {Promise}          Promise returning the container
    */
-  update (opts, id) {
+  public update (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -780,7 +780,7 @@ class Container {
    * @param  {String}   id      ID of the container to rename, if it's not set, use the id of the object (optional)
    * @return {Promise}          Promise returning the container
    */
-  rename (opts, id) {
+  public rename (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -809,7 +809,7 @@ class Container {
    * @param  {String}   id      ID of the container to pause, if it's not set, use the id of the object (optional)
    * @return {Promise}          Promise returning the container
    */
-  pause (id) {
+  public pause (id) {
     [ , id ] = this.__processArguments(id);
 
     const call = {
@@ -837,7 +837,7 @@ class Container {
    * @param  {String}   id      ID of the container to resume, if it's not set, use the id of the object (optional)
    * @return {Promise}          Promise returning the container
    */
-  unpause (id) {
+  public unpause (id) {
     [ , id ] = this.__processArguments(id);
 
     const call = {
@@ -866,7 +866,7 @@ class Container {
    * @param  {String}   id      ID of the container to attach, if it's not set, use the id of the object (optional)
    * @return {Promise}          Promise returning the container
    */
-  attach (opts, id) {
+  public attach (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -899,7 +899,7 @@ class Container {
    * @param  {String}   id      ID of the container to attach, if it's not set, use the id of the object (optional)
    * @return {Promise}          Promise returning the stream and the container
    */
-  wsattach (opts, id) {
+  public wsattach (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -928,7 +928,7 @@ class Container {
    * @param  {String}   id      ID of the container to wait, if it's not set, use the id of the object (optional)
    * @return {Promise}          Promise returning the exit code
    */
-  wait (id) {
+  public wait (id) {
     [ , id ] = this.__processArguments(id);
 
     const call = {
@@ -957,7 +957,7 @@ class Container {
    * @param  {String}   id      ID of the container to remove, if it's not set, use the id of the object (optional)
    * @return {Promise}          Promise returning nothing
    */
-  delete (opts, id) {
+  public delete (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -987,7 +987,7 @@ class Container {
    * @param  {String}   id      ID of the container to commit, if it's not set, use the id of the object (optional)
    * @return {Promise}          Promise returning the container
    */
-  commit (opts, id) {
+  public commit (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     opts.container = this.id;
@@ -1011,7 +1011,7 @@ class Container {
     });
   }
 
-  __processArguments (opts, id?) {
+  private __processArguments (opts, id?) {
     if (typeof opts === "string" && !id) {
       id = opts;
     }

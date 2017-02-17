@@ -2,8 +2,8 @@
  * Class representing a volume
  */
 declare class Volume {
-    modem: any;
-    id: any;
+    private modem;
+    readonly id: string | undefined;
     /**
      * Create a volume
      * @param  {Modem}      modem     Modem to connect to the remote service

@@ -1,12 +1,14 @@
 "use strict";
 
+import Modem = require("docker-modem");
+
 /**
  * Class representing a service
  */
 class Service {
 
-  modem: any;
-  id: any;
+  private modem: Modem;
+  public readonly id: string | undefined;
 
   /**
    * Create a service
@@ -24,7 +26,7 @@ class Service {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise returning the result as a list of services
    */
-  list (opts) {
+  public list (opts) {
     const call = {
       path: "/services?",
       method: "GET",
@@ -53,7 +55,7 @@ class Service {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the new service
    */
-  create (opts) {
+  public create (opts) {
     const call = {
       path: "/services/create?",
       method: "POST",
@@ -81,7 +83,7 @@ class Service {
    * @param  {String}   id    ID of the service to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the new service
    */
-  update (opts, id) {
+  public update (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -112,7 +114,7 @@ class Service {
    * @param  {String}   id    ID of the service to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the service
    */
-  status (opts, id) {
+  public status (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -142,7 +144,7 @@ class Service {
    * @param  {String}   id    ID of the service to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the result
    */
-  remove (opts, id) {
+  public remove (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id);
     const call = {
       path: `/services/${id}?`,
@@ -163,7 +165,7 @@ class Service {
     });
   }
 
-  __processArguments (opts, id) {
+  private __processArguments (opts, id) {
     if (typeof opts === "string" && !id) {
       id = opts;
     }

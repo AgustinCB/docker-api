@@ -1,12 +1,14 @@
 "use strict";
 
+import Modem = require("docker-modem");
+
 /**
  * Class representing a secret
  */
 class Secret {
 
-  modem: any;
-  id: any;
+  private modem: Modem;
+  public readonly id: string | undefined;
 
   /**
    * Create a secret
@@ -24,7 +26,7 @@ class Secret {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise returning the result as a list of secrets
    */
-  list (opts) {
+  public list (opts) {
     const call = {
       path: "/secrets",
       method: "GET",
@@ -53,7 +55,7 @@ class Secret {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the new secret
    */
-  create (opts) {
+  public create (opts) {
     const call = {
       path: "/secrets/create?",
       method: "POST",
@@ -83,7 +85,7 @@ class Secret {
    * @param  {String}   id    ID of the secret to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the secret
    */
-  status (opts, id) {
+  public status (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -114,7 +116,7 @@ class Secret {
    * @param  {String}   id    ID of the secret to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the result
    */
-  remove (opts, id) {
+  public remove (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id);
     const call = {
       path: `/secrets/${id}?`,
@@ -135,7 +137,7 @@ class Secret {
     });
   }
 
-  __processArguments (opts, id) {
+  private __processArguments (opts, id) {
     if (typeof opts === "string" && !id) {
       id = opts;
     }

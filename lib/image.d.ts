@@ -2,8 +2,8 @@
  * Class representing an image
  */
 declare class Image {
-    modem: any;
-    id: any;
+    private modem;
+    readonly id: string | undefined;
     /**
      * Creates a new image
      * @param  {Modem}  modem Modem to connect to the remote service
@@ -112,6 +112,6 @@ declare class Image {
      * @return {Promise}        Promise return the stream with the process
      */
     load(file: any, opts: any): Promise<{}>;
-    __processArguments(opts: any, id: any): any[];
+    private __processArguments(opts, id);
 }
 export default Image;

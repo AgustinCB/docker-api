@@ -1,14 +1,15 @@
 "use strict";
 
 import Node from "./node";
+import Modem = require("docker-modem");
 
 /**
  * Class reprensenting a swarm
  */
 class Swarm {
 
-  modem: any;
-  id: any;
+  private modem: Modem;
+  public readonly id: string | undefined;
 
   /**
    * Creates a new swarm
@@ -26,7 +27,7 @@ class Swarm {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the new node
    */
-  init (opts) {
+  public init (opts) {
     const call = {
       path: "/swarm/init?",
       method: "POST",
@@ -54,7 +55,7 @@ class Swarm {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the swarm
    */
-  status (opts) {
+  public status (opts) {
     const call = {
       path: `/swarm?`,
       method: "GET",
@@ -81,7 +82,7 @@ class Swarm {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the result
    */
-  join (opts) {
+  public join (opts) {
     const call = {
       path: `/swarm/join?`,
       method: "POST",
@@ -107,7 +108,7 @@ class Swarm {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the swarm
    */
-  leave (opts) {
+  public leave (opts) {
     const call = {
       path: `/swarm/leave?`,
       method: "POST",
@@ -132,7 +133,7 @@ class Swarm {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the swarm
    */
-  update (opts) {
+  public update (opts) {
     const call = {
       path: `/swarm/update?`,
       method: "POST",
@@ -152,7 +153,7 @@ class Swarm {
     });
   }
 
-  __processArguments (opts, id) {
+  private __processArguments (opts, id) {
     if (typeof opts === "string" && !id) {
       id = opts;
     }

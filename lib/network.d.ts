@@ -2,8 +2,8 @@
  * Class reprensenting a network
  */
 declare class Network {
-    modem: any;
-    id: any;
+    private modem;
+    readonly id: string | undefined;
     /**
      * Creates a new network
      * @param  {Modem}      modem     Modem to connect to the remote service
@@ -64,6 +64,6 @@ declare class Network {
      * @return {Promise}        Promise return the network
      */
     disconnect(opts: any, id: any): Promise<{}>;
-    __processArguments(opts: any, id: any): any[];
+    private __processArguments(opts, id);
 }
 export default Network;

@@ -2,8 +2,8 @@
  * Class representing a task
  */
 declare class Task {
-    modem: any;
-    id: any;
+    private modem;
+    readonly id: string | undefined;
     /**
      * Create a task
      * @param  {Modem}      modem     Modem to connect to the remote service
@@ -26,6 +26,6 @@ declare class Task {
      * @return {Promise}        Promise return the task
      */
     status(opts: any, id: any): Promise<{}>;
-    __processArguments(opts: any, id: any): any[];
+    private __processArguments(opts, id);
 }
 export default Task;

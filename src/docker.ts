@@ -16,16 +16,16 @@ import Task from "./task";
  */
 export class Docker {
 
-  modem: any;
-  container: any;
-  image: any;
-  volume: any;
-  network: any;
-  node: any;
-  plugin: any;
-  swarm: any;
-  service: any;
-  task: any;
+  private modem: Modem;
+  private container: Container;
+  private image: Image;
+  private volume: Volume;
+  private network: Network;
+  private node: Node;
+  private plugin: Plugin;
+  private swarm: Swarm;
+  private service: Service;
+  private task: Task;
 
   /**
    * Creates the Docker object
@@ -52,7 +52,7 @@ export class Docker {
    * @param  {Object}   opts  Auth options
    * @return {Promise}        Promise returning the result
    */
-  auth (opts) {
+  public auth (opts) {
     const call = {
       path: "/auth?",
       method: "POST",
@@ -77,7 +77,7 @@ export class Docker {
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/display-system-wide-information
    * @return {Promise}        Promise returning the result
    */
-  info () {
+  public info () {
     const call = {
       path: "/info?",
       method: "GET",
@@ -100,7 +100,7 @@ export class Docker {
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/show-the-docker-version-information
    * @return {Promise}        Promise returning the result
    */
-  version () {
+  public version () {
     const call = {
       path: "/version?",
       method: "GET",
@@ -123,7 +123,7 @@ export class Docker {
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/ping-the-docker-server
    * @return {Promise}        Promise returning the result
    */
-  ping () {
+  public ping () {
     const call = {
       path: "/_ping?",
       method: "GET",
@@ -147,7 +147,7 @@ export class Docker {
    * @param  {Object}   opts  Options to send with the request (optional)
    * @return {Promise}        Promise returning the result
    */
-  events (opts = {}) {
+  public events (opts = {}) {
     const call = {
       path: "/events?",
       method: "GET",

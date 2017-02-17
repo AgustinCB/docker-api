@@ -2,8 +2,8 @@
  * Class reprensenting a swarm
  */
 declare class Swarm {
-    modem: any;
-    id: any;
+    private modem;
+    readonly id: string | undefined;
     /**
      * Creates a new swarm
      * @param  {Modem}      modem     Modem to connect to the remote service
@@ -46,6 +46,6 @@ declare class Swarm {
      * @return {Promise}        Promise return the swarm
      */
     update(opts: any): Promise<{}>;
-    __processArguments(opts: any, id: any): any[];
+    private __processArguments(opts, id);
 }
 export default Swarm;

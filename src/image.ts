@@ -1,12 +1,14 @@
 "use strict";
 
+import Modem from "docker-modem";
+
 /**
  * Class representing an image
  */
 class Image {
 
-  modem: any;
-  id: any;
+  private modem: Modem;
+  public readonly id: string | undefined;
 
   /**
    * Creates a new image
@@ -24,7 +26,7 @@ class Image {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise returning the result as a list of images
    */
-  list (opts) {
+  public list (opts) {
     const call = {
       path: "/images/json?",
       method: "GET",
@@ -54,7 +56,7 @@ class Image {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the resulting stream
    */
-  build (file, opts) {
+  public build (file, opts) {
     const call = {
       path: "/build?",
       method: "POST",
@@ -82,7 +84,7 @@ class Image {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the resulting stream
    */
-  create (auth, opts) {
+  public create (auth, opts) {
     const call = {
       path: "/images/create?",
       method: "POST",
@@ -111,7 +113,7 @@ class Image {
    * @param  {String}   id    ID of the image to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the image
    */
-  status (opts?, id?) {
+  public status (opts?, id?) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -140,7 +142,7 @@ class Image {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}          Promise returning the container
    */
-  prune (opts) {
+  public prune (opts) {
     const call = {
       path: `/images/prune`,
       method: "POST",
@@ -166,7 +168,7 @@ class Image {
    * @param  {String}   id    ID of the image to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the events in the history
    */
-  history (opts, id) {
+  public history (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -196,7 +198,7 @@ class Image {
    * @param  {String}   id    ID of the image to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the resulting stream
    */
-  push (auth, opts, id) {
+  public push (auth, opts, id) {
     [ opts, id ] = this.__processArguments(opts, id);
     const call = {
       path: `/images/${id}/push?`,
@@ -226,7 +228,7 @@ class Image {
    * @param  {String}   id    ID of the image to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the image
    */
-  tag (opts, id) {
+  public tag (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id);
     const call = {
       path: `/images/${id}/tag?`,
@@ -259,7 +261,7 @@ class Image {
    * @param  {String}   id    ID of the image to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the result
    */
-  remove (opts, id) {
+  public remove (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id);
     const call = {
       path: `/images/${id}?`,
@@ -287,7 +289,7 @@ class Image {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the images
    */
-  search (opts) {
+  public search (opts) {
     const call = {
       path: `/images/search?`,
       method: "GET",
@@ -313,7 +315,7 @@ class Image {
    * @param  {String}   id    ID of the image to get, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the stream with the tarball
    */
-  get (opts, id) {
+  public get (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id);
     const call = {
       path: `/images/${id}/get?`,
@@ -340,7 +342,7 @@ class Image {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the stream with the tarball
    */
-  getAll (opts) {
+  public getAll (opts) {
     const call = {
       path: `/images/get?`,
       method: "GET",
@@ -367,7 +369,7 @@ class Image {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the stream with the process
    */
-  load (file, opts) {
+  public load (file, opts) {
     const call = {
       path: "/images/load?",
       method: "POST",
@@ -388,7 +390,7 @@ class Image {
     });
   }
 
-  __processArguments (opts, id) {
+  private __processArguments (opts, id) {
     if (typeof opts === "string" && !id) {
       id = opts;
     }

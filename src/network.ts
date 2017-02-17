@@ -1,12 +1,14 @@
 "use strict";
 
+import Modem from "docker-modem";
+
 /**
  * Class reprensenting a network
  */
 class Network {
 
-  modem: any;
-  id: any;
+  private modem: Modem;
+  public readonly id: string | undefined;
 
   /**
    * Creates a new network
@@ -24,7 +26,7 @@ class Network {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise returning the result as a list of networks
    */
-  list (opts) {
+  public list (opts) {
     const call = {
       path: "/networks?",
       method: "GET",
@@ -53,7 +55,7 @@ class Network {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the new network
    */
-  create (opts) {
+  public create (opts) {
     const call = {
       path: "/networks/create?",
       method: "POST",
@@ -80,7 +82,7 @@ class Network {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}          Promise returning the container
    */
-  prune (opts) {
+  public prune (opts) {
     const call = {
       path: `/network/prune`,
       method: "POST",
@@ -107,7 +109,7 @@ class Network {
    * @param  {String}   id    ID of the network to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the network
    */
-  status (opts, id) {
+  public status (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -137,7 +139,7 @@ class Network {
    * @param  {String}   id    ID of the network to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the result
    */
-  remove (opts, id) {
+  public remove (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id);
     const call = {
       path: `/networks/${id}?`,
@@ -165,7 +167,7 @@ class Network {
    * @param  {String}   id    ID of the network, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the network
    */
-  connect (opts, id) {
+  public connect (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -196,7 +198,7 @@ class Network {
    * @param  {String}   id    ID of the network, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the network
    */
-  disconnect (opts, id) {
+  public disconnect (opts, id) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -220,7 +222,7 @@ class Network {
     });
   }
 
-  __processArguments (opts, id) {
+  private __processArguments (opts, id) {
     if (typeof opts === "string" && !id) {
       id = opts;
     }

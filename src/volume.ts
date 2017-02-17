@@ -1,12 +1,14 @@
 "use strict";
 
+import Modem = require("docker-modem");
+
 /**
  * Class representing a volume
  */
 class Volume {
 
-  modem: any;
-  id: any;
+  private modem: Modem;
+  public readonly id: string | undefined;
 
   /**
    * Create a volume

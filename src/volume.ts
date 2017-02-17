@@ -1,21 +1,23 @@
-'use strict'
+"use strict";
+
+import Modem = require("docker-modem");
 
 /**
  * Class representing a volume
  */
 class Volume {
 
-  modem: any
-  id: any
+  private modem: Modem;
+  public readonly id: string | undefined;
 
   /**
    * Create a volume
    * @param  {Modem}      modem     Modem to connect to the remote service
    * @param  {string}     id        Id of the volume (optional)
    */
-  constructor (modem, id?) {
-    this.modem = modem
-    this.id = id
+  constructor (modem: Modem, id?: string) {
+    this.modem = modem;
+    this.id = id;
   }
 
   /**
@@ -24,27 +26,27 @@ class Volume {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise returning the result as a list of volumes
    */
-  list (opts) {
+  list (opts?: any) {
     const call = {
-      path: '/volumes',
-      method: 'GET',
+      path: "/volumes",
+      method: "GET",
       options: opts,
       statusCodes: {
         200: true,
-        500: 'server error'
+        500: "server error"
       }
-    }
+    };
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, result) => {
-        if (err) return reject(err)
-        if (!result.Volumes || !result.Volumes.length) return resolve([])
-        resolve(result.Volumes.map((conf) => {
-          const volume = new Volume(this.modem, conf.Name)
-          return Object.assign(volume, conf)
-        }))
-      })
-    })
+      this.modem.dial(call, (err, result: any) => {
+        if (err) return reject(err);
+        if (!result.Volumes || !result.Volumes.length) return resolve([]);
+        resolve(result.Volumes.map((conf: any) => {
+          const volume = new Volume(this.modem, conf.Name);
+          return Object.assign(volume, conf);
+        }));
+      });
+    });
   }
 
   /**
@@ -53,24 +55,24 @@ class Volume {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the new volume
    */
-  create (opts) {
+  create (opts?: any) {
     const call = {
-      path: '/volumes/create?',
-      method: 'POST',
+      path: "/volumes/create?",
+      method: "POST",
       options: opts,
       statusCodes: {
         201: true,
-        500: 'server error'
+        500: "server error"
       }
-    }
+    };
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, conf) => {
-        if (err) return reject(err)
-        const volume = new Volume(this.modem, conf.Name)
-        resolve(Object.assign(volume, conf))
-      })
-    })
+      this.modem.dial(call, (err, conf: any) => {
+        if (err) return reject(err);
+        const volume = new Volume(this.modem, conf.Name);
+        resolve(Object.assign(volume, conf));
+      });
+    });
   }
 
   /**
@@ -81,27 +83,27 @@ class Volume {
    * @param  {String}   id    ID of the volume to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the volume
    */
-  status (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id)
+  status (opts?: any, id?: string) {
+    [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
       path: `/volumes/${id}?`,
-      method: 'GET',
+      method: "GET",
       options: opts,
       statusCodes: {
         200: true,
-        404: 'no such volume',
-        500: 'server error'
+        404: "no such volume",
+        500: "server error"
       }
-    }
+    };
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
-        if (err) return reject(err)
-        const volume = new Volume(this.modem, id)
-        resolve(Object.assign(volume, conf))
-      })
-    })
+        if (err) return reject(err);
+        const volume = new Volume(this.modem, id);
+        resolve(Object.assign(volume, conf));
+      });
+    });
   }
 
   /**
@@ -111,26 +113,26 @@ class Volume {
    * @param  {String}   id    ID of the volume to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the result
    */
-  remove (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id)
+  remove (opts?: any, id?: string) {
+    [ opts, id ] = this.__processArguments(opts, id);
     const call = {
       path: `/volumes/${id}?`,
-      method: 'DELETE',
+      method: "DELETE",
       options: opts,
       statusCodes: {
         204: true,
-        404: 'no such volume',
-        409: 'conflict',
-        500: 'server error'
+        404: "no such volume",
+        409: "conflict",
+        500: "server error"
       }
-    }
+    };
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, res) => {
-        if (err) return reject(err)
-        resolve(res)
-      })
-    })
+        if (err) return reject(err);
+        resolve(res);
+      });
+    });
   }
 
   /**
@@ -139,35 +141,35 @@ class Volume {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}          Promise returning the container
    */
-  prune (opts) {
+  prune (opts?: any) {
     const call = {
       path: `/volumes/prune`,
-      method: 'POST',
+      method: "POST",
       options: opts,
       statusCodes: {
         200: true,
-        500: 'server error'
+        500: "server error"
       }
-    }
+    };
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, res) => {
-        if (err) return reject(err)
-        resolve(res)
-      })
-    })
+        if (err) return reject(err);
+        resolve(res);
+      });
+    });
   }
 
-  __processArguments (opts, id) {
-    if (typeof opts === 'string' && !id) {
-      id = opts
+  private __processArguments (opts?: any, id?: string): [any, string|undefined] {
+    if (typeof opts === "string" && !id) {
+      id = opts;
     }
     if (!id && this.id) {
-      id = this.id
+      id = this.id;
     }
-    if (!opts) opts = {}
-    return [ opts, id ]
+    if (!opts) opts = {};
+    return [ opts, id ];
   }
 }
 
-export default Volume
+export default Volume;

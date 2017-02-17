@@ -1,23 +1,24 @@
-'use strict'
+"use strict";
 
-import Node from './node'
+import Node from "./node";
+import Modem = require("docker-modem");
 
 /**
  * Class reprensenting a swarm
  */
 class Swarm {
 
-  modem: any
-  id: any
+  private modem: Modem;
+  public readonly id: string | undefined;
 
   /**
    * Creates a new swarm
    * @param  {Modem}      modem     Modem to connect to the remote service
    * @param  {string}     id        Id of the swarm (optional)
    */
-  constructor (modem, id?) {
-    this.modem = modem
-    this.id = id
+  constructor (modem: Modem, id?: string) {
+    this.modem = modem;
+    this.id = id;
   }
 
   /**
@@ -26,25 +27,25 @@ class Swarm {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the new node
    */
-  init (opts) {
+  public init (opts?: any) {
     const call = {
-      path: '/swarm/init?',
-      method: 'POST',
+      path: "/swarm/init?",
+      method: "POST",
       options: opts,
       statusCodes: {
         200: true,
-        400: 'bad parameter',
-        406: 'node is already part of a swarm'
+        400: "bad parameter",
+        406: "node is already part of a swarm"
       }
-    }
+    };
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, nodeId) => {
-        if (err) return reject(err)
-        const node = new Node(this.modem, nodeId)
-        resolve(node)
-      })
-    })
+      this.modem.dial(call, (err, nodeId: string) => {
+        if (err) return reject(err);
+        const node = new Node(this.modem, nodeId);
+        resolve(node);
+      });
+    });
   }
 
   /**
@@ -54,25 +55,25 @@ class Swarm {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the swarm
    */
-  status (opts) {
+  public status (opts?: any) {
     const call = {
       path: `/swarm?`,
-      method: 'GET',
+      method: "GET",
       options: opts,
       statusCodes: {
         200: true,
-        404: 'no such swarm',
-        500: 'server error'
+        404: "no such swarm",
+        500: "server error"
       }
-    }
+    };
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, conf) => {
-        if (err) return reject(err)
-        const swarm = new Swarm(this.modem, conf.ID)
-        resolve(Object.assign(swarm, conf))
-      })
-    })
+      this.modem.dial(call, (err, conf: any) => {
+        if (err) return reject(err);
+        const swarm = new Swarm(this.modem, conf.ID);
+        resolve(Object.assign(swarm, conf));
+      });
+    });
   }
 
   /**
@@ -81,24 +82,24 @@ class Swarm {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the result
    */
-  join (opts) {
+  public join (opts?: any) {
     const call = {
       path: `/swarm/join?`,
-      method: 'POST',
+      method: "POST",
       options: opts,
       statusCodes: {
         200: true,
-        400: 'bad parameter',
-        406: 'node is already part of a swarm'
+        400: "bad parameter",
+        406: "node is already part of a swarm"
       }
-    }
+    };
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, res) => {
-        if (err) return reject(err)
-        resolve(res)
-      })
-    })
+        if (err) return reject(err);
+        resolve(res);
+      });
+    });
   }
 
   /**
@@ -107,23 +108,23 @@ class Swarm {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the swarm
    */
-  leave (opts) {
+  public leave (opts?: any) {
     const call = {
       path: `/swarm/leave?`,
-      method: 'POST',
+      method: "POST",
       options: opts,
       statusCodes: {
         200: true,
-        406: 'node is not part of a swarm'
+        406: "node is not part of a swarm"
       }
-    }
+    };
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, res) => {
-        if (err) return reject(err)
-        resolve(res)
-      })
-    })
+        if (err) return reject(err);
+        resolve(res);
+      });
+    });
   }
 
   /**
@@ -132,36 +133,36 @@ class Swarm {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the swarm
    */
-  update (opts) {
+  public update (opts?: any) {
     const call = {
       path: `/swarm/update?`,
-      method: 'POST',
+      method: "POST",
       options: opts,
       statusCodes: {
         200: true,
-        400: 'bad parameter',
-        406: 'node is already part of a swarm'
+        400: "bad parameter",
+        406: "node is already part of a swarm"
       }
-    }
+    };
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, res) => {
-        if (err) return reject(err)
-        resolve(res)
-      })
-    })
+        if (err) return reject(err);
+        resolve(res);
+      });
+    });
   }
 
-  __processArguments (opts, id) {
-    if (typeof opts === 'string' && !id) {
-      id = opts
+  private __processArguments (opts?: any, id?: string): [any, string|undefined] {
+    if (typeof opts === "string" && !id) {
+      id = opts;
     }
     if (!id && this.id) {
-      id = this.id
+      id = this.id;
     }
-    if (!opts) opts = {}
-    return [ opts, id ]
+    if (!opts) opts = {};
+    return [ opts, id ];
   }
 }
 
-export default Swarm
+export default Swarm;

@@ -1,29 +1,31 @@
+/// <reference types="docker-modem" />
+import Modem = require("docker-modem");
 /**
  * Class representing a volume
  */
 declare class Volume {
-    modem: any;
-    id: any;
+    private modem;
+    readonly id: string | undefined;
     /**
      * Create a volume
      * @param  {Modem}      modem     Modem to connect to the remote service
      * @param  {string}     id        Id of the volume (optional)
      */
-    constructor(modem: any, id?: any);
+    constructor(modem: Modem, id?: string);
     /**
      * Get the list of volumes
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/list-volumes
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise returning the result as a list of volumes
      */
-    list(opts: any): Promise<{}>;
+    list(opts?: any): Promise<{}>;
     /**
      * Create a volume
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/create-a-volume
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the new volume
      */
-    create(opts: any): Promise<{}>;
+    create(opts?: any): Promise<{}>;
     /**
      * Get low-level information on a volume
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/inspect-a-volume
@@ -32,7 +34,7 @@ declare class Volume {
      * @param  {String}   id    ID of the volume to inspect, if it's not set, use the id of the object (optional)
      * @return {Promise}        Promise return the volume
      */
-    status(opts: any, id: any): Promise<{}>;
+    status(opts?: any, id?: string): Promise<{}>;
     /**
      * Remove a volume from the filesystem
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/remove-a-volume
@@ -40,14 +42,14 @@ declare class Volume {
      * @param  {String}   id    ID of the volume to inspect, if it's not set, use the id of the object (optional)
      * @return {Promise}        Promise return the result
      */
-    remove(opts: any, id: any): Promise<{}>;
+    remove(opts?: any, id?: string): Promise<{}>;
     /**
      * Prune volumes
      * https://docs.docker.com/engine/api/v1.25/#operation/VolumePrune
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}          Promise returning the container
      */
-    prune(opts: any): Promise<{}>;
-    __processArguments(opts: any, id: any): any[];
+    prune(opts?: any): Promise<{}>;
+    private __processArguments(opts?, id?);
 }
 export default Volume;

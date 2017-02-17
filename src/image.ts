@@ -1,17 +1,21 @@
-'use strict'
+"use strict";
 
 /**
  * Class representing an image
  */
 class Image {
+
+  modem: any;
+  id: any;
+
   /**
    * Creates a new image
    * @param  {Modem}  modem Modem to connect to the remote service
    * @param  {string} id    Container id (optional)
    */
-  constructor (modem, id) {
-    this.modem = modem
-    this.id = id
+  constructor (modem, id?) {
+    this.modem = modem;
+    this.id = id;
   }
 
   /**
@@ -22,25 +26,25 @@ class Image {
    */
   list (opts) {
     const call = {
-      path: '/images/json?',
-      method: 'GET',
+      path: "/images/json?",
+      method: "GET",
       options: opts,
       statusCodes: {
         200: true,
-        400: 'bad request',
-        500: 'server error'
+        400: "bad request",
+        500: "server error"
       }
-    }
+    };
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, images) => {
-        if (err) return reject(err)
+        if (err) return reject(err);
         resolve(images.map((conf) => {
-          const image = new Image(this.modem, conf.Id)
-          return Object.assign(image, conf)
-        }))
-      })
-    })
+          const image = new Image(this.modem, conf.Id);
+          return Object.assign(image, conf);
+        }));
+      });
+    });
   }
 
   /**
@@ -52,23 +56,23 @@ class Image {
    */
   build (file, opts) {
     const call = {
-      path: '/build?',
-      method: 'POST',
+      path: "/build?",
+      method: "POST",
       options: opts,
       file: file,
       isStream: true,
       statusCodes: {
         200: true,
-        500: 'server error'
+        500: "server error"
       }
-    }
+    };
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, stream) => {
-        if (err) return reject(err)
-        resolve(stream)
-      })
-    })
+        if (err) return reject(err);
+        resolve(stream);
+      });
+    });
   }
 
   /**
@@ -80,23 +84,23 @@ class Image {
    */
   create (auth, opts) {
     const call = {
-      path: '/images/create?',
-      method: 'POST',
+      path: "/images/create?",
+      method: "POST",
       options: opts,
       isStream: true,
       authconfig: auth,
       statusCodes: {
         200: true,
-        500: 'server error'
+        500: "server error"
       }
-    }
+    };
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, stream) => {
-        if (err) return reject(err)
-        resolve(stream)
-      })
-    })
+        if (err) return reject(err);
+        resolve(stream);
+      });
+    });
   }
 
   /**
@@ -107,27 +111,27 @@ class Image {
    * @param  {String}   id    ID of the image to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the image
    */
-  status (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id)
+  status (opts?, id?) {
+    [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
       path: `/images/${id}/json?`,
-      method: 'GET',
+      method: "GET",
       options: opts,
       statusCodes: {
         200: true,
-        404: 'no such image',
-        500: 'server error'
+        404: "no such image",
+        500: "server error"
       }
-    }
+    };
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
-        if (err) return reject(err)
-        const image = new Image(this.modem, id)
-        resolve(Object.assign(image, conf))
-      })
-    })
+        if (err) return reject(err);
+        const image = new Image(this.modem, id);
+        resolve(Object.assign(image, conf));
+      });
+    });
   }
 
   /**
@@ -139,20 +143,20 @@ class Image {
   prune (opts) {
     const call = {
       path: `/images/prune`,
-      method: 'POST',
+      method: "POST",
       options: opts,
       statusCodes: {
         200: true,
-        500: 'server error'
+        500: "server error"
       }
-    }
+    };
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, res) => {
-        if (err) return reject(err)
-        resolve(res)
-      })
-    })
+        if (err) return reject(err);
+        resolve(res);
+      });
+    });
   }
 
   /**
@@ -163,25 +167,25 @@ class Image {
    * @return {Promise}        Promise return the events in the history
    */
   history (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id)
+    [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
       path: `/images/${id}/history?`,
-      method: 'GET',
+      method: "GET",
       options: opts,
       statusCodes: {
         200: true,
-        404: 'no such image',
-        500: 'server error'
+        404: "no such image",
+        500: "server error"
       }
-    }
+    };
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, events) => {
-        if (err) return reject(err)
-        resolve(events)
-      })
-    })
+        if (err) return reject(err);
+        resolve(events);
+      });
+    });
   }
 
   /**
@@ -193,26 +197,26 @@ class Image {
    * @return {Promise}        Promise return the resulting stream
    */
   push (auth, opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id)
+    [ opts, id ] = this.__processArguments(opts, id);
     const call = {
       path: `/images/${id}/push?`,
-      method: 'POST',
+      method: "POST",
       options: opts,
       isStream: true,
       authconfig: auth,
       statusCodes: {
         200: true,
-        404: 'no such image',
-        500: 'server error'
+        404: "no such image",
+        500: "server error"
       }
-    }
+    };
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, stream) => {
-        if (err) return reject(err)
-        resolve(stream)
-      })
-    })
+        if (err) return reject(err);
+        resolve(stream);
+      });
+    });
   }
 
   /**
@@ -223,29 +227,29 @@ class Image {
    * @return {Promise}        Promise return the image
    */
   tag (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id)
+    [ opts, id ] = this.__processArguments(opts, id);
     const call = {
       path: `/images/${id}/tag?`,
-      method: 'POST',
+      method: "POST",
       options: opts,
       statusCodes: {
         201: true,
-        400: 'bad parameter',
-        404: 'no such image',
-        409: 'conflict',
-        500: 'server error'
+        400: "bad parameter",
+        404: "no such image",
+        409: "conflict",
+        500: "server error"
       }
-    }
+    };
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, res) => {
-        if (err) return reject(err)
-        const image = new Image(this.modem, id)
-        resolve(image)
-      })
-    }).then((image) => {
-      return image.status()
-    })
+        if (err) return reject(err);
+        const image = new Image(this.modem, id);
+        resolve(image);
+      });
+    }).then((image: any) => {
+      return image.status();
+    });
   }
 
   /**
@@ -256,25 +260,25 @@ class Image {
    * @return {Promise}        Promise return the result
    */
   remove (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id)
+    [ opts, id ] = this.__processArguments(opts, id);
     const call = {
       path: `/images/${id}?`,
-      method: 'DELETE',
+      method: "DELETE",
       options: opts,
       statusCodes: {
         200: true,
-        404: 'no such image',
-        409: 'conflict',
-        500: 'server error'
+        404: "no such image",
+        409: "conflict",
+        500: "server error"
       }
-    }
+    };
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, res) => {
-        if (err) return reject(err)
-        resolve(res)
-      })
-    })
+        if (err) return reject(err);
+        resolve(res);
+      });
+    });
   }
 
   /**
@@ -286,20 +290,20 @@ class Image {
   search (opts) {
     const call = {
       path: `/images/search?`,
-      method: 'GET',
+      method: "GET",
       options: opts,
       statusCodes: {
         200: true,
-        500: 'server error'
+        500: "server error"
       }
-    }
+    };
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, images) => {
-        if (err) return reject(err)
-        resolve(images)
-      })
-    })
+        if (err) return reject(err);
+        resolve(images);
+      });
+    });
   }
 
   /**
@@ -310,24 +314,24 @@ class Image {
    * @return {Promise}        Promise return the stream with the tarball
    */
   get (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id)
+    [ opts, id ] = this.__processArguments(opts, id);
     const call = {
       path: `/images/${id}/get?`,
-      method: 'GET',
+      method: "GET",
       options: opts,
       isStream: true,
       statusCodes: {
         200: true,
-        500: 'server error'
+        500: "server error"
       }
-    }
+    };
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, stream) => {
-        if (err) return reject(err)
-        resolve(stream)
-      })
-    })
+        if (err) return reject(err);
+        resolve(stream);
+      });
+    });
   }
 
   /**
@@ -339,21 +343,21 @@ class Image {
   getAll (opts) {
     const call = {
       path: `/images/get?`,
-      method: 'GET',
+      method: "GET",
       options: opts,
       isStream: true,
       statusCodes: {
         200: true,
-        500: 'server error'
+        500: "server error"
       }
-    }
+    };
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, stream) => {
-        if (err) return reject(err)
-        resolve(stream)
-      })
-    })
+        if (err) return reject(err);
+        resolve(stream);
+      });
+    });
   }
 
   /**
@@ -365,35 +369,35 @@ class Image {
    */
   load (file, opts) {
     const call = {
-      path: '/images/load?',
-      method: 'POST',
+      path: "/images/load?",
+      method: "POST",
       options: opts,
       file: file,
       isStream: true,
       statusCodes: {
         200: true,
-        500: 'server error'
+        500: "server error"
       }
-    }
+    };
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, stream) => {
-        if (err) return reject(err)
-        resolve(stream)
-      })
-    })
+        if (err) return reject(err);
+        resolve(stream);
+      });
+    });
   }
 
   __processArguments (opts, id) {
     if (typeof opts === "string" && !id) {
-      id = opts
+      id = opts;
     }
     if (!id && this.id) {
-      id = this.id
+      id = this.id;
     }
-    if (!opts) opts = {}
-    return [ opts, id ]
+    if (!opts) opts = {};
+    return [ opts, id ];
   }
 }
 
-export default Image
+export default Image;

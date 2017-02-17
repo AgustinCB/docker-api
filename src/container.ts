@@ -207,7 +207,8 @@ class ContainerFs {
       options: opts,
       statusCodes: {
         200: true,
-        404: 'bad request',
+        400: 'bad request',
+        404: 'no such path',
         500: 'server error'
       }
     }

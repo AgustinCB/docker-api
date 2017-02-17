@@ -1,18 +1,18 @@
-'use strict'
+"use strict";
 
-import Modem = require('docker-modem')
-import Container from './container'
-import Image from './image'
-import Volume from './volume'
-import Network from './network'
-import Node from './node'
-import Plugin from './plugin'
-import Swarm from './swarm'
-import Service from './service'
-import Task from './task'
+import Modem = require("docker-modem");
+import Container from "./container";
+import Image from "./image";
+import Volume from "./volume";
+import Network from "./network";
+import Node from "./node";
+import Plugin from "./plugin";
+import Swarm from "./swarm";
+import Service from "./service";
+import Task from "./task";
 
-/** 
- * Docker class with all methods 
+/**
+ * Docker class with all methods
  */
 export class Docker {
 
@@ -32,17 +32,17 @@ export class Docker {
    * @param {Object}  opts Docker options
    */
   constructor (opts) {
-    this.modem = new Modem(opts)
+    this.modem = new Modem(opts);
 
-    this.container = new Container(this.modem)
-    this.image = new Image(this.modem)
-    this.volume = new Volume(this.modem)
-    this.network = new Network(this.modem)
-    this.node = new Node(this.modem)
-    this.plugin = new Plugin(this.modem)
-    this.swarm = new Swarm(this.modem)
-    this.service = new Service(this.modem)
-    this.task = new Task(this.modem)
+    this.container = new Container(this.modem);
+    this.image = new Image(this.modem);
+    this.volume = new Volume(this.modem);
+    this.network = new Network(this.modem);
+    this.node = new Node(this.modem);
+    this.plugin = new Plugin(this.modem);
+    this.swarm = new Swarm(this.modem);
+    this.service = new Service(this.modem);
+    this.task = new Task(this.modem);
   }
 
   /**
@@ -54,22 +54,22 @@ export class Docker {
    */
   auth (opts) {
     const call = {
-      path: '/auth?',
-      method: 'POST',
+      path: "/auth?",
+      method: "POST",
       options: opts,
       statusCodes: {
         200: true,
         204: true,
-        500: 'server error'
+        500: "server error"
       }
-    }
+    };
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, data) => {
-        if (err) return reject(err)
-        resolve(data)
-      })
-    })
+        if (err) return reject(err);
+        resolve(data);
+      });
+    });
   }
 
   /**
@@ -79,20 +79,20 @@ export class Docker {
    */
   info () {
     const call = {
-      path: '/info?',
-      method: 'GET',
+      path: "/info?",
+      method: "GET",
       statusCodes: {
         200: true,
-        500: 'server error'
+        500: "server error"
       }
-    }
+    };
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, data) => {
-        if (err) return reject(err)
-        resolve(data)
-      })
-    })
+        if (err) return reject(err);
+        resolve(data);
+      });
+    });
   }
 
   /**
@@ -102,20 +102,20 @@ export class Docker {
    */
   version () {
     const call = {
-      path: '/version?',
-      method: 'GET',
+      path: "/version?",
+      method: "GET",
       statusCodes: {
         200: true,
-        500: 'server error'
+        500: "server error"
       }
-    }
+    };
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, data) => {
-        if (err) return reject(err)
-        resolve(data)
-      })
-    })
+        if (err) return reject(err);
+        resolve(data);
+      });
+    });
   }
 
   /**
@@ -125,20 +125,20 @@ export class Docker {
    */
   ping () {
     const call = {
-      path: '/_ping?',
-      method: 'GET',
+      path: "/_ping?",
+      method: "GET",
       statusCodes: {
         200: true,
-        500: 'server error'
+        500: "server error"
       }
-    }
+    };
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, data) => {
-        if (err) return reject(err)
-        resolve(data)
-      })
-    })
+        if (err) return reject(err);
+        resolve(data);
+      });
+    });
   }
 
   /**
@@ -149,21 +149,21 @@ export class Docker {
    */
   events (opts = {}) {
     const call = {
-      path: '/events?',
-      method: 'GET',
+      path: "/events?",
+      method: "GET",
       options: opts,
       isStream: true,
       statusCodes: {
         200: true,
-        500: 'server error'
+        500: "server error"
       }
-    }
+    };
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, data) => {
-        if (err) return reject(err)
-        resolve(data)
-      })
-    })
+        if (err) return reject(err);
+        resolve(data);
+      });
+    });
   }
 }

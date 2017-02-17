@@ -56,7 +56,7 @@ class Image {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the resulting stream
    */
-  public build (file: string, opts?:any) {
+  public build (file: string, opts?: any) {
     const call = {
       path: "/build?",
       method: "POST",
@@ -168,7 +168,7 @@ class Image {
    * @param  {String}   id    ID of the image to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the events in the history
    */
-  public history (opts?:any, id?: string) {
+  public history (opts?: any, id?: string) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -198,7 +198,7 @@ class Image {
    * @param  {String}   id    ID of the image to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the resulting stream
    */
-  public push (auth?:any, opts?:any, id?: string) {
+  public push (auth?: any, opts?: any, id?: string) {
     [ opts, id ] = this.__processArguments(opts, id);
     const call = {
       path: `/images/${id}/push?`,
@@ -228,7 +228,7 @@ class Image {
    * @param  {String}   id    ID of the image to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the image
    */
-  public tag (opts?:any, id?: string) {
+  public tag (opts?: any, id?: string) {
     [ opts, id ] = this.__processArguments(opts, id);
     const call = {
       path: `/images/${id}/tag?`,
@@ -261,7 +261,7 @@ class Image {
    * @param  {String}   id    ID of the image to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the result
    */
-  public remove (opts?:any, id?: string) {
+  public remove (opts?: any, id?: string) {
     [ opts, id ] = this.__processArguments(opts, id);
     const call = {
       path: `/images/${id}?`,
@@ -315,7 +315,7 @@ class Image {
    * @param  {String}   id    ID of the image to get, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the stream with the tarball
    */
-  public get (opts?:any, id?: string) {
+  public get (opts?: any, id?: string) {
     [ opts, id ] = this.__processArguments(opts, id);
     const call = {
       path: `/images/${id}/get?`,
@@ -342,7 +342,7 @@ class Image {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the stream with the tarball
    */
-  public getAll (opts?:any) {
+  public getAll (opts?: any) {
     const call = {
       path: `/images/get?`,
       method: "GET",
@@ -369,7 +369,7 @@ class Image {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the stream with the process
    */
-  public load (file: string, opts?:any) {
+  public load (file: string, opts?: any) {
     const call = {
       path: "/images/load?",
       method: "POST",

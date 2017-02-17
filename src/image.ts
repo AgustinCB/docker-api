@@ -1,6 +1,6 @@
 "use strict";
 
-import Modem from "docker-modem";
+import Modem = require("docker-modem");
 
 /**
  * Class representing an image
@@ -15,7 +15,7 @@ class Image {
    * @param  {Modem}  modem Modem to connect to the remote service
    * @param  {string} id    Container id (optional)
    */
-  constructor (modem, id?) {
+  constructor (modem: Modem, id?: string) {
     this.modem = modem;
     this.id = id;
   }
@@ -26,7 +26,7 @@ class Image {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise returning the result as a list of images
    */
-  public list (opts) {
+  public list (opts?: any) {
     const call = {
       path: "/images/json?",
       method: "GET",
@@ -39,7 +39,7 @@ class Image {
     };
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, images) => {
+      this.modem.dial(call, (err, images: any[]) => {
         if (err) return reject(err);
         resolve(images.map((conf) => {
           const image = new Image(this.modem, conf.Id);
@@ -56,7 +56,7 @@ class Image {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the resulting stream
    */
-  public build (file, opts) {
+  public build (file: string, opts?:any) {
     const call = {
       path: "/build?",
       method: "POST",
@@ -84,7 +84,7 @@ class Image {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the resulting stream
    */
-  public create (auth, opts) {
+  public create (auth?: any, opts?: any) {
     const call = {
       path: "/images/create?",
       method: "POST",
@@ -113,7 +113,7 @@ class Image {
    * @param  {String}   id    ID of the image to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the image
    */
-  public status (opts?, id?) {
+  public status (opts?: any, id?: string) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -142,7 +142,7 @@ class Image {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}          Promise returning the container
    */
-  public prune (opts) {
+  public prune (opts?: any) {
     const call = {
       path: `/images/prune`,
       method: "POST",
@@ -168,7 +168,7 @@ class Image {
    * @param  {String}   id    ID of the image to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the events in the history
    */
-  public history (opts, id) {
+  public history (opts?:any, id?: string) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -198,7 +198,7 @@ class Image {
    * @param  {String}   id    ID of the image to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the resulting stream
    */
-  public push (auth, opts, id) {
+  public push (auth?:any, opts?:any, id?: string) {
     [ opts, id ] = this.__processArguments(opts, id);
     const call = {
       path: `/images/${id}/push?`,
@@ -228,7 +228,7 @@ class Image {
    * @param  {String}   id    ID of the image to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the image
    */
-  public tag (opts, id) {
+  public tag (opts?:any, id?: string) {
     [ opts, id ] = this.__processArguments(opts, id);
     const call = {
       path: `/images/${id}/tag?`,
@@ -261,7 +261,7 @@ class Image {
    * @param  {String}   id    ID of the image to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the result
    */
-  public remove (opts, id) {
+  public remove (opts?:any, id?: string) {
     [ opts, id ] = this.__processArguments(opts, id);
     const call = {
       path: `/images/${id}?`,
@@ -289,7 +289,7 @@ class Image {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the images
    */
-  public search (opts) {
+  public search (opts?: any) {
     const call = {
       path: `/images/search?`,
       method: "GET",
@@ -315,7 +315,7 @@ class Image {
    * @param  {String}   id    ID of the image to get, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the stream with the tarball
    */
-  public get (opts, id) {
+  public get (opts?:any, id?: string) {
     [ opts, id ] = this.__processArguments(opts, id);
     const call = {
       path: `/images/${id}/get?`,
@@ -342,7 +342,7 @@ class Image {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the stream with the tarball
    */
-  public getAll (opts) {
+  public getAll (opts?:any) {
     const call = {
       path: `/images/get?`,
       method: "GET",
@@ -369,7 +369,7 @@ class Image {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the stream with the process
    */
-  public load (file, opts) {
+  public load (file: string, opts?:any) {
     const call = {
       path: "/images/load?",
       method: "POST",
@@ -390,7 +390,7 @@ class Image {
     });
   }
 
-  private __processArguments (opts, id) {
+  private __processArguments (opts?: any, id?: string): [any, string|undefined] {
     if (typeof opts === "string" && !id) {
       id = opts;
     }

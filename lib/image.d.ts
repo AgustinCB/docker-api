@@ -1,3 +1,5 @@
+/// <reference types="docker-modem" />
+import Modem = require("docker-modem");
 /**
  * Class representing an image
  */
@@ -9,14 +11,14 @@ declare class Image {
      * @param  {Modem}  modem Modem to connect to the remote service
      * @param  {string} id    Container id (optional)
      */
-    constructor(modem: any, id?: any);
+    constructor(modem: Modem, id?: string);
     /**
      * Get the list of images
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/list-images
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise returning the result as a list of images
      */
-    list(opts: any): Promise<{}>;
+    list(opts?: any): Promise<{}>;
     /**
      * Build image from dockerfile
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/build-image-from-a-dockerfile
@@ -24,7 +26,7 @@ declare class Image {
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the resulting stream
      */
-    build(file: any, opts: any): Promise<{}>;
+    build(file: string, opts?: any): Promise<{}>;
     /**
      * Create an image
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/create-an-image
@@ -32,7 +34,7 @@ declare class Image {
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the resulting stream
      */
-    create(auth: any, opts: any): Promise<{}>;
+    create(auth?: any, opts?: any): Promise<{}>;
     /**
      * Get low-level information on an image
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/inspect-an-image
@@ -41,14 +43,14 @@ declare class Image {
      * @param  {String}   id    ID of the image to inspect, if it's not set, use the id of the object (optional)
      * @return {Promise}        Promise return the image
      */
-    status(opts?: any, id?: any): Promise<{}>;
+    status(opts?: any, id?: string): Promise<{}>;
     /**
      * Prune images
      * https://docs.docker.com/engine/api/v1.25/#operation/ImagePrune
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}          Promise returning the container
      */
-    prune(opts: any): Promise<{}>;
+    prune(opts?: any): Promise<{}>;
     /**
      * History of the image
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/get-the-history-of-an-image
@@ -56,7 +58,7 @@ declare class Image {
      * @param  {String}   id    ID of the image to inspect, if it's not set, use the id of the object (optional)
      * @return {Promise}        Promise return the events in the history
      */
-    history(opts: any, id: any): Promise<{}>;
+    history(opts?: any, id?: string): Promise<{}>;
     /**
      * Push an image to the registry
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/push-an-image-on-the-registry
@@ -65,7 +67,7 @@ declare class Image {
      * @param  {String}   id    ID of the image to inspect, if it's not set, use the id of the object (optional)
      * @return {Promise}        Promise return the resulting stream
      */
-    push(auth: any, opts: any, id: any): Promise<{}>;
+    push(auth?: any, opts?: any, id?: string): Promise<{}>;
     /**
      * Tag the image into the registry
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/tag-an-image-into-a-repository
@@ -73,7 +75,7 @@ declare class Image {
      * @param  {String}   id    ID of the image to inspect, if it's not set, use the id of the object (optional)
      * @return {Promise}        Promise return the image
      */
-    tag(opts: any, id: any): Promise<any>;
+    tag(opts?: any, id?: string): Promise<any>;
     /**
      * Remove an image from the filesystem
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/remove-an-image
@@ -81,14 +83,14 @@ declare class Image {
      * @param  {String}   id    ID of the image to inspect, if it's not set, use the id of the object (optional)
      * @return {Promise}        Promise return the result
      */
-    remove(opts: any, id: any): Promise<{}>;
+    remove(opts?: any, id?: string): Promise<{}>;
     /**
      * Search an image on Docker Hub
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/search-images
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the images
      */
-    search(opts: any): Promise<{}>;
+    search(opts?: any): Promise<{}>;
     /**
      * Get an image in a tarball
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/get-a-tarball-containing-all-images-in-a-repository
@@ -96,14 +98,14 @@ declare class Image {
      * @param  {String}   id    ID of the image to get, if it's not set, use the id of the object (optional)
      * @return {Promise}        Promise return the stream with the tarball
      */
-    get(opts: any, id: any): Promise<{}>;
+    get(opts?: any, id?: string): Promise<{}>;
     /**
      * Get all images in a tarball
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/get-a-tarball-containing-all-images
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the stream with the tarball
      */
-    getAll(opts: any): Promise<{}>;
+    getAll(opts?: any): Promise<{}>;
     /**
      * Load image from tarball
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/load-a-tarball-with-a-set-of-images-and-tags-into-docker
@@ -111,7 +113,7 @@ declare class Image {
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the stream with the process
      */
-    load(file: any, opts: any): Promise<{}>;
-    private __processArguments(opts, id);
+    load(file: string, opts?: any): Promise<{}>;
+    private __processArguments(opts?, id?);
 }
 export default Image;

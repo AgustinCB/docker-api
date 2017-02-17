@@ -16,7 +16,7 @@ export declare class Docker {
      * Creates the Docker object
      * @param {Object}  opts Docker options
      */
-    constructor(opts: any);
+    constructor(opts?: any);
     /**
      * Validate credentials for a registry and get identity token,
      * if available, for accessing the registry without password
@@ -24,7 +24,7 @@ export declare class Docker {
      * @param  {Object}   opts  Auth options
      * @return {Promise}        Promise returning the result
      */
-    auth(opts: any): Promise<{}>;
+    auth(opts?: any): Promise<{}>;
     /**
      * Get system wide information about docker
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/display-system-wide-information
@@ -49,5 +49,5 @@ export declare class Docker {
      * @param  {Object}   opts  Options to send with the request (optional)
      * @return {Promise}        Promise returning the result
      */
-    events(opts?: {}): Promise<{}>;
+    events(opts?: any): Promise<{}>;
 }

@@ -15,7 +15,7 @@ class Task {
    * @param  {Modem}      modem     Modem to connect to the remote service
    * @param  {string}     id        Id of the task (optional)
    */
-  constructor (modem, id?) {
+  constructor (modem: Modem, id?: string) {
     this.modem = modem;
     this.id = id;
   }
@@ -26,7 +26,7 @@ class Task {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise returning the result as a list of tasks
    */
-  public list (opts) {
+  public list (opts?: any) {
     const call = {
       path: "/tasks?",
       method: "GET",
@@ -38,10 +38,10 @@ class Task {
     };
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, result) => {
+      this.modem.dial(call, (err, result: any) => {
         if (err) return reject(err);
         if (!result.Tasks || !result.Tasks.length) return resolve([]);
-        resolve(result.Tasks.map((conf) => {
+        resolve(result.Tasks.map((conf: any) => {
           const task = new Task(this.modem, conf.ID);
           return Object.assign(task, conf);
         }));
@@ -57,7 +57,7 @@ class Task {
    * @param  {String}   id    ID of the task to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the task
    */
-  public status (opts, id) {
+  public status (opts?: any, id?: string) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -80,7 +80,7 @@ class Task {
     });
   }
 
-  private __processArguments (opts, id) {
+  private __processArguments (opts?: any, id?: string): [any, string|undefined] {
     if (typeof opts === "string" && !id) {
       id = opts;
     }

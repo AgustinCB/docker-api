@@ -15,7 +15,7 @@ class Plugin {
    * @param  {Modem}      modem     Modem to connect to the remote service
    * @param  {string}     id        Id of the plugin (optional)
    */
-  constructor (modem, id?) {
+  constructor (modem: Modem, id?: string) {
     this.modem = modem;
     this.id = id;
   }
@@ -26,7 +26,7 @@ class Plugin {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise returning the result as a list of plugins
    */
-  public list (opts) {
+  public list (opts?: any) {
     const call = {
       path: "/plugins?",
       method: "GET",
@@ -38,10 +38,10 @@ class Plugin {
     };
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, plugins) => {
+      this.modem.dial(call, (err, plugins: any[]|undefined) => {
         if (err) return reject(err);
         if (!plugins || !plugins.length) return resolve([]);
-        resolve(plugins.map((conf) => {
+        resolve(plugins.map((conf: any) => {
           const plugin = new Plugin(this.modem, conf.Id);
           return Object.assign(plugin, conf);
         }));
@@ -55,7 +55,7 @@ class Plugin {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the new plugin
    */
-  public upgrade (opts) {
+  public upgrade (opts?: any) {
     let id;
     [ opts, id ] = this.__processArguments(opts);
 
@@ -85,7 +85,7 @@ class Plugin {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the new plugin
    */
-  public create (opts) {
+  public create (opts?: any) {
     const call = {
       path: "/plugins/create?",
       method: "POST",
@@ -111,7 +111,7 @@ class Plugin {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the new plugin
    */
-  public install (opts) {
+  public install (opts?: any) {
     const call = {
       path: "/plugins/pull?",
       method: "POST",
@@ -139,7 +139,7 @@ class Plugin {
    * @param  {String}   id    ID of the plugin to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the plugin
    */
-  public status (opts, id) {
+  public status (opts?: any, id?: string) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -169,7 +169,7 @@ class Plugin {
    * @param  {String}   id    ID of the plugin to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the result
    */
-  public remove (opts, id) {
+  public remove (opts?: any, id?: string) {
     [ opts, id ] = this.__processArguments(opts, id);
     const call = {
       path: `/plugins/${id}?`,
@@ -197,7 +197,7 @@ class Plugin {
    * @param  {String}   id    ID of the plugin, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the plugin
    */
-  public push (opts, id) {
+  public push (opts?: any, id?: string) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -227,7 +227,7 @@ class Plugin {
    * @param  {String}   id    ID of the plugin, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the plugin
    */
-  public set (opts, id) {
+  public set (opts?: any, id?: string) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -257,7 +257,7 @@ class Plugin {
    * @param  {String}   id    ID of the plugin, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the plugin
    */
-  public enable (opts, id) {
+  public enable (opts?: any, id?: string) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -286,7 +286,7 @@ class Plugin {
    * @param  {String}   id    ID of the plugin, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the plugin
    */
-  public disable (opts, id) {
+  public disable (opts?: any, id?: string) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -308,7 +308,7 @@ class Plugin {
     });
   }
 
-  private __processArguments (opts, id?) {
+  private __processArguments (opts?: any, id?: string): [any, string|undefined] {
     if (typeof opts === "string" && !id) {
       id = opts;
     }

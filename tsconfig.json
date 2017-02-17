@@ -4,7 +4,9 @@
         "target": "es6",
         "sourceMap": true,
         "declaration": true,
-        "removeComments": false
-	},
-"include": ["src/**/*.ts"]
+        "removeComments": false,
+        "noImplicitAny": true,
+        "typeRoots": ["./typings", "./node_modules/@types"]
+    },
+    "include": ["src/**/*.ts"]
 }

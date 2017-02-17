@@ -15,7 +15,7 @@ class Volume {
    * @param  {Modem}      modem     Modem to connect to the remote service
    * @param  {string}     id        Id of the volume (optional)
    */
-  constructor (modem, id?) {
+  constructor (modem: Modem, id?: string) {
     this.modem = modem;
     this.id = id;
   }
@@ -26,7 +26,7 @@ class Volume {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise returning the result as a list of volumes
    */
-  list (opts) {
+  list (opts?: any) {
     const call = {
       path: "/volumes",
       method: "GET",
@@ -38,10 +38,10 @@ class Volume {
     };
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, result) => {
+      this.modem.dial(call, (err, result: any) => {
         if (err) return reject(err);
         if (!result.Volumes || !result.Volumes.length) return resolve([]);
-        resolve(result.Volumes.map((conf) => {
+        resolve(result.Volumes.map((conf: any) => {
           const volume = new Volume(this.modem, conf.Name);
           return Object.assign(volume, conf);
         }));
@@ -55,7 +55,7 @@ class Volume {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the new volume
    */
-  create (opts) {
+  create (opts?: any) {
     const call = {
       path: "/volumes/create?",
       method: "POST",
@@ -67,7 +67,7 @@ class Volume {
     };
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, conf) => {
+      this.modem.dial(call, (err, conf: any) => {
         if (err) return reject(err);
         const volume = new Volume(this.modem, conf.Name);
         resolve(Object.assign(volume, conf));
@@ -83,7 +83,7 @@ class Volume {
    * @param  {String}   id    ID of the volume to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the volume
    */
-  status (opts, id) {
+  status (opts?: any, id?: string) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -113,7 +113,7 @@ class Volume {
    * @param  {String}   id    ID of the volume to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the result
    */
-  remove (opts, id) {
+  remove (opts?: any, id?: string) {
     [ opts, id ] = this.__processArguments(opts, id);
     const call = {
       path: `/volumes/${id}?`,
@@ -141,7 +141,7 @@ class Volume {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}          Promise returning the container
    */
-  prune (opts) {
+  prune (opts?: any) {
     const call = {
       path: `/volumes/prune`,
       method: "POST",
@@ -160,7 +160,7 @@ class Volume {
     });
   }
 
-  __processArguments (opts, id) {
+  private __processArguments (opts?: any, id?: string): [any, string|undefined] {
     if (typeof opts === "string" && !id) {
       id = opts;
     }

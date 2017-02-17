@@ -1,3 +1,5 @@
+/// <reference types="docker-modem" />
+import Modem = require("docker-modem");
 /**
  * Class reprensenting a plugin
  */
@@ -9,35 +11,35 @@ declare class Plugin {
      * @param  {Modem}      modem     Modem to connect to the remote service
      * @param  {string}     id        Id of the plugin (optional)
      */
-    constructor(modem: any, id?: any);
+    constructor(modem: Modem, id?: string);
     /**
      * Get the list of plugins
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/list-plugins
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise returning the result as a list of plugins
      */
-    list(opts: any): Promise<{}>;
+    list(opts?: any): Promise<{}>;
     /**
      * upgrade a plugin
      * https://docs.docker.com/engine/api/v1.26/#operation/PluginUpgrade
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the new plugin
      */
-    upgrade(opts: any): Promise<{}>;
+    upgrade(opts?: any): Promise<{}>;
     /**
      * Create a plugin
      * https://docs.docker.com/engine/api/v1.25/#operation/PluginCreate
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the new plugin
      */
-    create(opts: any): Promise<{}>;
+    create(opts?: any): Promise<{}>;
     /**
      * install a plugin
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/install-a-plugin
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the new plugin
      */
-    install(opts: any): Promise<{}>;
+    install(opts?: any): Promise<{}>;
     /**
      * Get low-level information on a plugin
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/inspect-a-plugin
@@ -46,7 +48,7 @@ declare class Plugin {
      * @param  {String}   id    ID of the plugin to inspect, if it's not set, use the id of the object (optional)
      * @return {Promise}        Promise return the plugin
      */
-    status(opts: any, id: any): Promise<{}>;
+    status(opts?: any, id?: string): Promise<{}>;
     /**
      * Remove a plugin
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/remove-a-plugin
@@ -54,7 +56,7 @@ declare class Plugin {
      * @param  {String}   id    ID of the plugin to inspect, if it's not set, use the id of the object (optional)
      * @return {Promise}        Promise return the result
      */
-    remove(opts: any, id: any): Promise<{}>;
+    remove(opts?: any, id?: string): Promise<{}>;
     /**
      * push a plugin
      * https://docs.docker.com/engine/api/v1.26/#operation/PluginPush
@@ -62,7 +64,7 @@ declare class Plugin {
      * @param  {String}   id    ID of the plugin, if it's not set, use the id of the object (optional)
      * @return {Promise}        Promise return the plugin
      */
-    push(opts: any, id: any): Promise<{}>;
+    push(opts?: any, id?: string): Promise<{}>;
     /**
      * Set a plugin configuration
      * https://docs.docker.com/engine/api/v1.25/#operation/PluginSet
@@ -70,7 +72,7 @@ declare class Plugin {
      * @param  {String}   id    ID of the plugin, if it's not set, use the id of the object (optional)
      * @return {Promise}        Promise return the plugin
      */
-    set(opts: any, id: any): Promise<{}>;
+    set(opts?: any, id?: string): Promise<{}>;
     /**
      * Enable a plugin
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/enable-a-plugin
@@ -78,7 +80,7 @@ declare class Plugin {
      * @param  {String}   id    ID of the plugin, if it's not set, use the id of the object (optional)
      * @return {Promise}        Promise return the plugin
      */
-    enable(opts: any, id: any): Promise<{}>;
+    enable(opts?: any, id?: string): Promise<{}>;
     /**
      * Disable a plugin
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/disable-a-plugin
@@ -86,7 +88,7 @@ declare class Plugin {
      * @param  {String}   id    ID of the plugin, if it's not set, use the id of the object (optional)
      * @return {Promise}        Promise return the plugin
      */
-    disable(opts: any, id: any): Promise<{}>;
-    private __processArguments(opts, id?);
+    disable(opts?: any, id?: string): Promise<{}>;
+    private __processArguments(opts?, id?);
 }
 export default Plugin;

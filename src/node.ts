@@ -15,7 +15,7 @@ class Node {
    * @param  {Modem}      modem     Modem to connect to the remote service
    * @param  {string}     id        Id of the node (optional)
    */
-  constructor (modem, id?) {
+  constructor (modem: Modem, id?: string) {
     this.modem = modem;
     this.id = id;
   }
@@ -26,7 +26,7 @@ class Node {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise returning the result as a list of nodes
    */
-  public list (opts) {
+  public list (opts?: any) {
     const call = {
       path: "/nodes?",
       method: "GET",
@@ -38,10 +38,10 @@ class Node {
     };
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, result) => {
+      this.modem.dial(call, (err, result: any[]|undefined) => {
         if (err) return reject(err);
         if (!result || !result.length) return resolve([]);
-        resolve(result.map((conf) => {
+        resolve(result.map((conf: any) => {
           const node = new Node(this.modem, conf.ID);
           return Object.assign(node, conf);
         }));
@@ -56,7 +56,7 @@ class Node {
    * @param  {String}   id    ID of the node to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the new node
    */
-  public update (opts, id) {
+  public update (opts?: any, id?: string) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -87,7 +87,7 @@ class Node {
    * @param  {String}   id    ID of the node to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the node
    */
-  public status (opts, id) {
+  public status (opts?: any, id?: string) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -117,7 +117,7 @@ class Node {
    * @param  {String}   id    ID of the node to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the result
    */
-  public remove (opts, id) {
+  public remove (opts?: any, id?: string) {
     [ opts, id ] = this.__processArguments(opts, id);
     const call = {
       path: `/nodes/${id}?`,
@@ -138,7 +138,7 @@ class Node {
     });
   }
 
-  private __processArguments (opts, id) {
+  private __processArguments (opts?: any, id?: string): [any, string|undefined] {
     if (typeof opts === "string" && !id) {
       id = opts;
     }

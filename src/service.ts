@@ -15,7 +15,7 @@ class Service {
    * @param  {Modem}      modem     Modem to connect to the remote service
    * @param  {string}     id        Id of the service (optional)
    */
-  constructor (modem, id?) {
+  constructor (modem: Modem, id?: string) {
     this.modem = modem;
     this.id = id;
   }
@@ -26,7 +26,7 @@ class Service {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise returning the result as a list of services
    */
-  public list (opts) {
+  public list (opts?: any) {
     const call = {
       path: "/services?",
       method: "GET",
@@ -38,10 +38,10 @@ class Service {
     };
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, result) => {
+      this.modem.dial(call, (err, result: any) => {
         if (err) return reject(err);
         if (!result.Services || !result.Services.length) return resolve([]);
-        resolve(result.Services.map((conf) => {
+        resolve(result.Services.map((conf: any) => {
           const service = new Service(this.modem, conf.ID);
           return Object.assign(service, conf);
         }));
@@ -55,7 +55,7 @@ class Service {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the new service
    */
-  public create (opts) {
+  public create (opts?: any) {
     const call = {
       path: "/services/create?",
       method: "POST",
@@ -68,7 +68,7 @@ class Service {
     };
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, conf) => {
+      this.modem.dial(call, (err, conf: any) => {
         if (err) return reject(err);
         const service = new Service(this.modem, conf.ID);
         resolve(Object.assign(service, conf));
@@ -83,7 +83,7 @@ class Service {
    * @param  {String}   id    ID of the service to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the new service
    */
-  public update (opts, id) {
+  public update (opts: any, id?: string) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -114,7 +114,7 @@ class Service {
    * @param  {String}   id    ID of the service to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the service
    */
-  public status (opts, id) {
+  public status (opts: any, id?: string) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -144,7 +144,7 @@ class Service {
    * @param  {String}   id    ID of the service to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the result
    */
-  public remove (opts, id) {
+  public remove (opts: any, id?: string) {
     [ opts, id ] = this.__processArguments(opts, id);
     const call = {
       path: `/services/${id}?`,
@@ -165,7 +165,7 @@ class Service {
     });
   }
 
-  private __processArguments (opts, id) {
+  private __processArguments (opts: any, id?: string): [any, string|undefined] {
     if (typeof opts === "string" && !id) {
       id = opts;
     }

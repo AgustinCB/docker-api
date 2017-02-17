@@ -1,6 +1,6 @@
 "use strict";
 
-import Modem from "docker-modem";
+import Modem = require("docker-modem");
 
 /**
  * Class reprensenting a network
@@ -15,7 +15,7 @@ class Network {
    * @param  {Modem}      modem     Modem to connect to the remote service
    * @param  {string}     id        Id of the network (optional)
    */
-  constructor (modem, id?) {
+  constructor (modem: Modem, id?: string) {
     this.modem = modem;
     this.id = id;
   }
@@ -26,7 +26,7 @@ class Network {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise returning the result as a list of networks
    */
-  public list (opts) {
+  public list (opts?: any) {
     const call = {
       path: "/networks?",
       method: "GET",
@@ -38,7 +38,7 @@ class Network {
     };
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, networks) => {
+      this.modem.dial(call, (err, networks: any[]|undefined) => {
         if (err) return reject(err);
         if (!networks || !networks.length) return resolve([]);
         resolve(networks.map((conf) => {
@@ -55,7 +55,7 @@ class Network {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the new network
    */
-  public create (opts) {
+  public create (opts?: any) {
     const call = {
       path: "/networks/create?",
       method: "POST",
@@ -68,7 +68,7 @@ class Network {
     };
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, conf) => {
+      this.modem.dial(call, (err, conf: any) => {
         if (err) return reject(err);
         const network = new Network(this.modem, conf.Id);
         resolve(Object.assign(network, conf));
@@ -82,7 +82,7 @@ class Network {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}          Promise returning the container
    */
-  public prune (opts) {
+  public prune (opts?: any) {
     const call = {
       path: `/network/prune`,
       method: "POST",
@@ -109,7 +109,7 @@ class Network {
    * @param  {String}   id    ID of the network to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the network
    */
-  public status (opts, id) {
+  public status (opts?: any, id?: string) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -139,7 +139,7 @@ class Network {
    * @param  {String}   id    ID of the network to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the result
    */
-  public remove (opts, id) {
+  public remove (opts?: any, id?: string) {
     [ opts, id ] = this.__processArguments(opts, id);
     const call = {
       path: `/networks/${id}?`,
@@ -167,7 +167,7 @@ class Network {
    * @param  {String}   id    ID of the network, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the network
    */
-  public connect (opts, id) {
+  public connect (opts?: any, id?: string) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -198,7 +198,7 @@ class Network {
    * @param  {String}   id    ID of the network, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the network
    */
-  public disconnect (opts, id) {
+  public disconnect (opts?: any, id?: string) {
     [ opts, id ] = this.__processArguments(opts, id);
 
     const call = {
@@ -222,7 +222,7 @@ class Network {
     });
   }
 
-  private __processArguments (opts, id) {
+  private __processArguments (opts?: any, id?: string): [any, string|undefined] {
     if (typeof opts === "string" && !id) {
       id = opts;
     }

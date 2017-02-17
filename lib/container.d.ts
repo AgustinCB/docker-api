@@ -1,3 +1,5 @@
+/// <reference types="docker-modem" />
+import Modem = require("docker-modem");
 /**
  * Class representing a container
  */
@@ -12,21 +14,21 @@ declare class Container {
      * @param  {Modem}  modem Modem to connect to the remote service
      * @param  {string} id    Container id (optional)
      */
-    constructor(modem: any, id?: any);
+    constructor(modem: Modem, id?: string);
     /**
      * Get the list of containers
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/list-containers
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise returning the result as a list of containers
      */
-    list(opts: any): Promise<{}>;
+    list(opts?: any): Promise<{}>;
     /**
      * Create a container
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/create-a-container
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the new container
      */
-    create(opts: any): Promise<{}>;
+    create(opts?: any): Promise<{}>;
     /**
      * Get low-level information on a container
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/inspect-a-container
@@ -35,7 +37,7 @@ declare class Container {
      * @param  {String}   id    ID of the container to inspect, if it's not set, use the id of the object (optional)
      * @return {Promise}        Promise return the container
      */
-    status(opts: any, id: any): Promise<{}>;
+    status(opts?: any, id?: string): Promise<{}>;
     /**
      * Get list of processes (ps) inside a container. Not supported in Windows.
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/list-processes-running-inside-a-container
@@ -43,7 +45,7 @@ declare class Container {
      * @param  {String}   id    ID of the container to get top processes, if it's not set, use the id of the object (optional)
      * @return {Promise}        Promise return the list of processes
      */
-    top(opts: any, id: any): Promise<{}>;
+    top(opts?: any, id?: string): Promise<{}>;
     /**
      * Get stdout and stderr logs from a container
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/get-container-logs
@@ -51,14 +53,14 @@ declare class Container {
      * @param  {String}   id    ID of the container to get logs, if it's not set, use the id of the object (optional)
      * @return {Promise}        Promise returning the concatenated logs
      */
-    logs(opts: any, id: any): Promise<{}>;
+    logs(opts?: any, id?: string): Promise<{}>;
     /**
      * Get changes on a container's filesystem
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/inspect-changes-on-a-container-s-filesystem
      * @param  {String}   id    ID of the container to inspect changes, if it's not set, use the id of the object (optional)
      * @return {Promise}        Promise returning the changes
      */
-    changes(id: any): Promise<{}>;
+    changes(id?: string): Promise<{}>;
     /**
      * Export the content of a container
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/export-a-container
@@ -66,7 +68,7 @@ declare class Container {
      * @param  {String}   id      ID of the container to export, if it's not set, use the id of the object (optional)
      * @return {Promise}          Promise returning the content of the tar file as a stream or as a string
      */
-    export(opts: any, id: any): Promise<{}>;
+    export(opts?: any, id?: string): Promise<{}>;
     /**
      * Get the stats of a container, either by a live stream or the current state
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/export-a-container
@@ -74,7 +76,7 @@ declare class Container {
      * @param  {String}   id      ID of the container to get stats, if it's not set, use the id of the object (optional)
      * @return {Promise}          Promise returning the stats, in a stream or string
      */
-    stats(opts: any, id: any): Promise<{}>;
+    stats(opts?: any, id?: string): Promise<{}>;
     /**
      * Resize the TTY for a container. You must restart the container to make the resize take effect.
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/resize-a-container-tty
@@ -82,14 +84,14 @@ declare class Container {
      * @param  {String}   id      ID of the container to resize, if it's not set, use the id of the object (optional)
      * @return {Promise}          Promise returning the response
      */
-    resize(opts: any, id: any): Promise<{}>;
+    resize(opts?: any, id?: string): Promise<{}>;
     /**
      * Prune a container
      * https://docs.docker.com/engine/api/v1.25/#operation/ContainerPrune
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}          Promise returning the container
      */
-    prune(opts: any): Promise<{}>;
+    prune(opts?: any): Promise<{}>;
     /**
      * Start a container
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/start-a-container
@@ -97,7 +99,7 @@ declare class Container {
      * @param  {String}   id      ID of the container to start, if it's not set, use the id of the object (optional)
      * @return {Promise}          Promise returning the container
      */
-    start(opts: any, id: any): Promise<{}>;
+    start(opts?: any, id?: string): Promise<{}>;
     /**
      * Stop a container
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/stop-a-container
@@ -105,7 +107,7 @@ declare class Container {
      * @param  {String}   id      ID of the container to stop, if it's not set, use the id of the object (optional)
      * @return {Promise}          Promise returning the container
      */
-    stop(opts: any, id: any): Promise<{}>;
+    stop(opts?: any, id?: string): Promise<{}>;
     /**
      * Restart a container
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/restart-a-container
@@ -113,7 +115,7 @@ declare class Container {
      * @param  {String}   id      ID of the container to restart, if it's not set, use the id of the object (optional)
      * @return {Promise}          Promise returning the container
      */
-    restart(opts: any, id: any): Promise<{}>;
+    restart(opts?: any, id?: string): Promise<{}>;
     /**
      * Kill a container
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/kill-a-container
@@ -121,7 +123,7 @@ declare class Container {
      * @param  {String}   id      ID of the container to kill, if it's not set, use the id of the object (optional)
      * @return {Promise}          Promise returning the container
      */
-    kill(opts: any, id: any): Promise<{}>;
+    kill(opts?: any, id?: string): Promise<{}>;
     /**
      * Update configuration a container.
      * Docs says you can do it for more than one, but doesn't exaplin how, so let's leave it in only one
@@ -130,7 +132,7 @@ declare class Container {
      * @param  {String}   id      ID of the container to update, if it's not set, use the id of the object (optional)
      * @return {Promise}          Promise returning the container
      */
-    update(opts: any, id: any): Promise<{}>;
+    update(opts?: any, id?: string): Promise<{}>;
     /**
      * Rename a container.
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/rename-a-container
@@ -138,21 +140,21 @@ declare class Container {
      * @param  {String}   id      ID of the container to rename, if it's not set, use the id of the object (optional)
      * @return {Promise}          Promise returning the container
      */
-    rename(opts: any, id: any): Promise<{}>;
+    rename(opts?: any, id?: string): Promise<{}>;
     /**
      * Pause a container.
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/pause-a-container
      * @param  {String}   id      ID of the container to pause, if it's not set, use the id of the object (optional)
      * @return {Promise}          Promise returning the container
      */
-    pause(id: any): Promise<{}>;
+    pause(id?: string): Promise<{}>;
     /**
      * Unpause a container.
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/unpause-a-container
      * @param  {String}   id      ID of the container to resume, if it's not set, use the id of the object (optional)
      * @return {Promise}          Promise returning the container
      */
-    unpause(id: any): Promise<{}>;
+    unpause(id?: string): Promise<{}>;
     /**
      * Attach to a container.
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/attach-to-a-container
@@ -160,7 +162,7 @@ declare class Container {
      * @param  {String}   id      ID of the container to attach, if it's not set, use the id of the object (optional)
      * @return {Promise}          Promise returning the container
      */
-    attach(opts: any, id: any): Promise<{}>;
+    attach(opts?: any, id?: string): Promise<{}>;
     /**
      * Attach to a container using websocket.
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/attach-to-a-container-websocket
@@ -168,14 +170,14 @@ declare class Container {
      * @param  {String}   id      ID of the container to attach, if it's not set, use the id of the object (optional)
      * @return {Promise}          Promise returning the stream and the container
      */
-    wsattach(opts: any, id: any): Promise<{}>;
+    wsattach(opts?: any, id?: string): Promise<{}>;
     /**
      * Block until a container stops, returning exit code
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/wait-a-container
      * @param  {String}   id      ID of the container to wait, if it's not set, use the id of the object (optional)
      * @return {Promise}          Promise returning the exit code
      */
-    wait(id: any): Promise<{}>;
+    wait(id?: string): Promise<{}>;
     /**
      * Remove a container.
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/remove-a-container
@@ -183,7 +185,7 @@ declare class Container {
      * @param  {String}   id      ID of the container to remove, if it's not set, use the id of the object (optional)
      * @return {Promise}          Promise returning nothing
      */
-    delete(opts: any, id: any): Promise<{}>;
+    delete(opts?: any, id?: string): Promise<{}>;
     /**
      * Commit container into an image
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/create-a-new-image-from-a-container-s-changes
@@ -191,7 +193,7 @@ declare class Container {
      * @param  {String}   id      ID of the container to commit, if it's not set, use the id of the object (optional)
      * @return {Promise}          Promise returning the container
      */
-    commit(opts: any, id: any): Promise<{}>;
-    private __processArguments(opts, id?);
+    commit(opts?: any, id?: string): Promise<{}>;
+    private __processArguments(opts?, id?);
 }
 export default Container;

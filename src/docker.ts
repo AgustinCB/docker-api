@@ -31,9 +31,8 @@ export class Docker {
    * Creates the Docker object
    * @param {Object}  opts Docker options
    */
-  constructor (opts) {
+  constructor (opts?: any) {
     this.modem = new Modem(opts);
-
     this.container = new Container(this.modem);
     this.image = new Image(this.modem);
     this.volume = new Volume(this.modem);
@@ -52,7 +51,7 @@ export class Docker {
    * @param  {Object}   opts  Auth options
    * @return {Promise}        Promise returning the result
    */
-  public auth (opts) {
+  public auth (opts?: any) {
     const call = {
       path: "/auth?",
       method: "POST",
@@ -147,7 +146,7 @@ export class Docker {
    * @param  {Object}   opts  Options to send with the request (optional)
    * @return {Promise}        Promise returning the result
    */
-  public events (opts = {}) {
+  public events (opts: any = {}) {
     const call = {
       path: "/events?",
       method: "GET",

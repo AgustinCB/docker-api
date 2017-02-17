@@ -1,3 +1,5 @@
+/// <reference types="docker-modem" />
+import Modem = require("docker-modem");
 /**
  * Class representing a secret
  */
@@ -9,21 +11,21 @@ declare class Secret {
      * @param  {Modem}      modem     Modem to connect to the remote service
      * @param  {string}     id        Id of the secret (optional)
      */
-    constructor(modem: any, id: any);
+    constructor(modem: Modem, id?: string);
     /**
      * Get the list of secrets
      * https://docs.docker.com/engine/api/v1.25/#operation/SecretList
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise returning the result as a list of secrets
      */
-    list(opts: any): Promise<{}>;
+    list(opts?: any): Promise<{}>;
     /**
      * Create a secret
      * https://docs.docker.com/engine/api/v1.25/#operation/SecretCreate
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the new secret
      */
-    create(opts: any): Promise<{}>;
+    create(opts?: any): Promise<{}>;
     /**
      * Get low-level information on a secret
      * https://docs.docker.com/engine/api/v1.25/#operation/SecretInspect
@@ -32,7 +34,7 @@ declare class Secret {
      * @param  {String}   id    ID of the secret to inspect, if it's not set, use the id of the object (optional)
      * @return {Promise}        Promise return the secret
      */
-    status(opts: any, id: any): Promise<{}>;
+    status(opts?: any, id?: string): Promise<{}>;
     /**
      * Remove a secret
      * https://docs.docker.com/engine/api/v1.25/#operation/SecretDelete
@@ -40,7 +42,7 @@ declare class Secret {
      * @param  {String}   id    ID of the secret to inspect, if it's not set, use the id of the object (optional)
      * @return {Promise}        Promise return the result
      */
-    remove(opts: any, id: any): Promise<{}>;
-    private __processArguments(opts, id);
+    remove(opts?: any, id?: string): Promise<{}>;
+    private __processArguments(opts?, id?);
 }
 export default Secret;

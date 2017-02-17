@@ -1,3 +1,5 @@
+/// <reference types="docker-modem" />
+import Modem = require("docker-modem");
 /**
  * Class representing a service
  */
@@ -9,21 +11,21 @@ declare class Service {
      * @param  {Modem}      modem     Modem to connect to the remote service
      * @param  {string}     id        Id of the service (optional)
      */
-    constructor(modem: any, id?: any);
+    constructor(modem: Modem, id?: string);
     /**
      * Get the list of services
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/list-services
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise returning the result as a list of services
      */
-    list(opts: any): Promise<{}>;
+    list(opts?: any): Promise<{}>;
     /**
      * Create a service
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/create-a-service
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the new service
      */
-    create(opts: any): Promise<{}>;
+    create(opts?: any): Promise<{}>;
     /**
      * Update a service
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/update-a-service
@@ -31,7 +33,7 @@ declare class Service {
      * @param  {String}   id    ID of the service to inspect, if it's not set, use the id of the object (optional)
      * @return {Promise}        Promise return the new service
      */
-    update(opts: any, id: any): Promise<{}>;
+    update(opts: any, id?: string): Promise<{}>;
     /**
      * Get low-level information on a service
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/inspect-one-or-more-services
@@ -40,7 +42,7 @@ declare class Service {
      * @param  {String}   id    ID of the service to inspect, if it's not set, use the id of the object (optional)
      * @return {Promise}        Promise return the service
      */
-    status(opts: any, id: any): Promise<{}>;
+    status(opts: any, id?: string): Promise<{}>;
     /**
      * Remove a service
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/remove-a-service
@@ -48,7 +50,7 @@ declare class Service {
      * @param  {String}   id    ID of the service to inspect, if it's not set, use the id of the object (optional)
      * @return {Promise}        Promise return the result
      */
-    remove(opts: any, id: any): Promise<{}>;
-    private __processArguments(opts, id);
+    remove(opts: any, id?: string): Promise<{}>;
+    private __processArguments(opts, id?);
 }
 export default Service;

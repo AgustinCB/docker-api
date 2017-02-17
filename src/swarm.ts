@@ -16,7 +16,7 @@ class Swarm {
    * @param  {Modem}      modem     Modem to connect to the remote service
    * @param  {string}     id        Id of the swarm (optional)
    */
-  constructor (modem, id?) {
+  constructor (modem: Modem, id?: string) {
     this.modem = modem;
     this.id = id;
   }
@@ -27,7 +27,7 @@ class Swarm {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the new node
    */
-  public init (opts) {
+  public init (opts?: any) {
     const call = {
       path: "/swarm/init?",
       method: "POST",
@@ -40,7 +40,7 @@ class Swarm {
     };
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, nodeId) => {
+      this.modem.dial(call, (err, nodeId: string) => {
         if (err) return reject(err);
         const node = new Node(this.modem, nodeId);
         resolve(node);
@@ -55,7 +55,7 @@ class Swarm {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the swarm
    */
-  public status (opts) {
+  public status (opts?: any) {
     const call = {
       path: `/swarm?`,
       method: "GET",
@@ -68,7 +68,7 @@ class Swarm {
     };
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, conf) => {
+      this.modem.dial(call, (err, conf: any) => {
         if (err) return reject(err);
         const swarm = new Swarm(this.modem, conf.ID);
         resolve(Object.assign(swarm, conf));
@@ -82,7 +82,7 @@ class Swarm {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the result
    */
-  public join (opts) {
+  public join (opts?: any) {
     const call = {
       path: `/swarm/join?`,
       method: "POST",
@@ -108,7 +108,7 @@ class Swarm {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the swarm
    */
-  public leave (opts) {
+  public leave (opts?: any) {
     const call = {
       path: `/swarm/leave?`,
       method: "POST",
@@ -133,7 +133,7 @@ class Swarm {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the swarm
    */
-  public update (opts) {
+  public update (opts?: any) {
     const call = {
       path: `/swarm/update?`,
       method: "POST",
@@ -153,7 +153,7 @@ class Swarm {
     });
   }
 
-  private __processArguments (opts, id) {
+  private __processArguments (opts?: any, id?: string): [any, string|undefined] {
     if (typeof opts === "string" && !id) {
       id = opts;
     }

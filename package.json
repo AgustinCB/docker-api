@@ -26,15 +26,14 @@
   },
   "homepage": "https://github.com/AgustinCB/docker-api#readme",
   "devDependencies": {
+    "@types/node": "^7.0.5",
     "ava": "^0.17.0",
     "chai": "^3.5.0",
     "jsdox": "^0.4.10",
     "mocha": "^2.5.3",
     "nodemon": "^1.11.0",
     "tslint": "^4.4.2",
-    "typed-docker-modem": "git+https://github.com/typed-contrib/docker-modem.git",
-    "typescript": "^2.1.6",
-    "typings": "^2.1.0"
+    "typescript": "^2.1.6"
   },
   "dependencies": {
     "docker-modem": "^0.3.1",

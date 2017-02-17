@@ -1,12 +1,12 @@
-"use strict";
+'use strict'
 
 /**
  * Class reprensenting a plugin
  */
 class Plugin {
 
-  modem: any;
-  id: any;
+  modem: any
+  id: any
 
   /**
    * Creates a new plugin
@@ -14,8 +14,8 @@ class Plugin {
    * @param  {string}     id        Id of the plugin (optional)
    */
   constructor (modem, id?) {
-    this.modem = modem;
-    this.id = id;
+    this.modem = modem
+    this.id = id
   }
 
   /**
@@ -26,25 +26,25 @@ class Plugin {
    */
   list (opts) {
     const call = {
-      path: "/plugins?",
-      method: "GET",
+      path: '/plugins?',
+      method: 'GET',
       options: opts,
       statusCodes: {
         200: true,
-        500: "server error"
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, plugins) => {
-        if (err) return reject(err);
-        if (!plugins || !plugins.length) return resolve([]);
+        if (err) return reject(err)
+        if (!plugins || !plugins.length) return resolve([])
         resolve(plugins.map((conf) => {
-          const plugin = new Plugin(this.modem, conf.Id);
-          return Object.assign(plugin, conf);
-        }));
-      });
-    });
+          const plugin = new Plugin(this.modem, conf.Id)
+          return Object.assign(plugin, conf)
+        }))
+      })
+    })
   }
 
   /**
@@ -54,27 +54,27 @@ class Plugin {
    * @return {Promise}        Promise return the new plugin
    */
   upgrade (opts) {
-    let id;
-    [ opts, id ] = this.__processArguments(opts);
+    let id
+    [ opts, id ] = this.__processArguments(opts)
 
     const call = {
       path: `/plugins/${id}/upgrade?`,
-      method: "POST",
+      method: 'POST',
       options: opts,
       statusCodes: {
         204: true,
-        404: "plugin not installed",
-        500: "server error"
+        404: 'plugin not installed',
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
-        if (err) return reject(err);
-        const plugin = new Plugin(this.modem, opts.name);
-        resolve(plugin);
-      });
-    });
+        if (err) return reject(err)
+        const plugin = new Plugin(this.modem, opts.name)
+        resolve(plugin)
+      })
+    })
   }
 
   /**
@@ -85,22 +85,22 @@ class Plugin {
    */
   create (opts) {
     const call = {
-      path: "/plugins/create?",
-      method: "POST",
+      path: '/plugins/create?',
+      method: 'POST',
       options: opts,
       statusCodes: {
         204: true,
-        500: "server error"
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
-        if (err) return reject(err);
-        const plugin = new Plugin(this.modem, opts.name);
-        resolve(plugin);
-      });
-    });
+        if (err) return reject(err)
+        const plugin = new Plugin(this.modem, opts.name)
+        resolve(plugin)
+      })
+    })
   }
 
   /**
@@ -111,22 +111,22 @@ class Plugin {
    */
   install (opts) {
     const call = {
-      path: "/plugins/pull?",
-      method: "POST",
+      path: '/plugins/pull?',
+      method: 'POST',
       options: opts,
       statusCodes: {
         200: true,
-        500: "server error"
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
-        if (err) return reject(err);
-        const plugin = new Plugin(this.modem, opts.name);
-        resolve(plugin);
-      });
-    });
+        if (err) return reject(err)
+        const plugin = new Plugin(this.modem, opts.name)
+        resolve(plugin)
+      })
+    })
   }
 
   /**
@@ -138,26 +138,26 @@ class Plugin {
    * @return {Promise}        Promise return the plugin
    */
   status (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id);
+    [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
       path: `/plugins/${id}?`,
-      method: "GET",
+      method: 'GET',
       options: opts,
       statusCodes: {
         200: true,
-        404: "no such plugin",
-        500: "server error"
+        404: 'no such plugin',
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
-        if (err) return reject(err);
-        const plugin = new Plugin(this.modem, id);
-        resolve(Object.assign(plugin, conf));
-      });
-    });
+        if (err) return reject(err)
+        const plugin = new Plugin(this.modem, id)
+        resolve(Object.assign(plugin, conf))
+      })
+    })
   }
 
   /**
@@ -168,24 +168,24 @@ class Plugin {
    * @return {Promise}        Promise return the result
    */
   remove (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id);
+    [ opts, id ] = this.__processArguments(opts, id)
     const call = {
       path: `/plugins/${id}?`,
-      method: "DELETE",
+      method: 'DELETE',
       options: opts,
       statusCodes: {
         200: true,
-        404: "no such plugin",
-        500: "server error"
+        404: 'no such plugin',
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, res) => {
-        if (err) return reject(err);
-        resolve(res);
-      });
-    });
+        if (err) return reject(err)
+        resolve(res)
+      })
+    })
   }
 
   /**
@@ -196,26 +196,26 @@ class Plugin {
    * @return {Promise}        Promise return the plugin
    */
   push (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id);
+    [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
       path: `/plugins/${id}/push?`,
-      method: "POST",
+      method: 'POST',
       options: opts,
       statusCodes: {
         200: true,
-        404: "plugin not found",
-        500: "server error"
+        404: 'plugin not found',
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
-        if (err) return reject(err);
-        const plugin = new Plugin(this.modem, id);
-        resolve(plugin);
-      });
-    });
+        if (err) return reject(err)
+        const plugin = new Plugin(this.modem, id)
+        resolve(plugin)
+      })
+    })
   }
 
   /**
@@ -226,26 +226,26 @@ class Plugin {
    * @return {Promise}        Promise return the plugin
    */
   set (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id);
+    [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
       path: `/plugins/${id}/set?`,
-      method: "POST",
+      method: 'POST',
       options: opts,
       statusCodes: {
         204: true,
-        404: "plugin not found",
-        500: "server error"
+        404: 'plugin not found',
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
-        if (err) return reject(err);
-        const plugin = new Plugin(this.modem, id);
-        resolve(plugin);
-      });
-    });
+        if (err) return reject(err)
+        const plugin = new Plugin(this.modem, id)
+        resolve(plugin)
+      })
+    })
   }
 
   /**
@@ -256,25 +256,25 @@ class Plugin {
    * @return {Promise}        Promise return the plugin
    */
   enable (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id);
+    [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
       path: `/plugins/${id}/enable?`,
-      method: "POST",
+      method: 'POST',
       options: opts,
       statusCodes: {
         200: true,
-        500: "server error"
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
-        if (err) return reject(err);
-        const plugin = new Plugin(this.modem, id);
-        resolve(plugin);
-      });
-    });
+        if (err) return reject(err)
+        const plugin = new Plugin(this.modem, id)
+        resolve(plugin)
+      })
+    })
   }
 
   /**
@@ -285,37 +285,37 @@ class Plugin {
    * @return {Promise}        Promise return the plugin
    */
   disable (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id);
+    [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
       path: `/plugins/${id}/disable?`,
-      method: "POST",
+      method: 'POST',
       options: opts,
       statusCodes: {
         200: true,
-        500: "server error"
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
-        if (err) return reject(err);
-        const plugin = new Plugin(this.modem, id);
-        resolve(plugin);
-      });
-    });
+        if (err) return reject(err)
+        const plugin = new Plugin(this.modem, id)
+        resolve(plugin)
+      })
+    })
   }
 
   __processArguments (opts, id?) {
-    if (typeof opts === "string" && !id) {
-      id = opts;
+    if (typeof opts === 'string' && !id) {
+      id = opts
     }
     if (!id && this.id) {
-      id = this.id;
+      id = this.id
     }
-    if (!opts) opts = {};
-    return [ opts, id ];
+    if (!opts) opts = {}
+    return [ opts, id ]
   }
 }
 
-export default Plugin;
+export default Plugin

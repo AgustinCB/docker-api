@@ -1,12 +1,12 @@
-"use strict";
+'use strict'
 
 /**
  * Class reprensenting a network
  */
 class Network {
 
-  modem: any;
-  id: any;
+  modem: any
+  id: any
 
   /**
    * Creates a new network
@@ -14,8 +14,8 @@ class Network {
    * @param  {string}     id        Id of the network (optional)
    */
   constructor (modem, id?) {
-    this.modem = modem;
-    this.id = id;
+    this.modem = modem
+    this.id = id
   }
 
   /**
@@ -26,25 +26,25 @@ class Network {
    */
   list (opts) {
     const call = {
-      path: "/networks?",
-      method: "GET",
+      path: '/networks?',
+      method: 'GET',
       options: opts,
       statusCodes: {
         200: true,
-        500: "server error"
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, networks) => {
-        if (err) return reject(err);
-        if (!networks || !networks.length) return resolve([]);
+        if (err) return reject(err)
+        if (!networks || !networks.length) return resolve([])
         resolve(networks.map((conf) => {
-          const network = new Network(this.modem, conf.Id);
-          return Object.assign(network, conf);
-        }));
-      });
-    });
+          const network = new Network(this.modem, conf.Id)
+          return Object.assign(network, conf)
+        }))
+      })
+    })
   }
 
   /**
@@ -55,23 +55,23 @@ class Network {
    */
   create (opts) {
     const call = {
-      path: "/networks/create?",
-      method: "POST",
+      path: '/networks/create?',
+      method: 'POST',
       options: opts,
       statusCodes: {
         201: true,
-        404: "plugin not found",
-        500: "server error"
+        404: 'plugin not found',
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
-        if (err) return reject(err);
-        const network = new Network(this.modem, conf.Id);
-        resolve(Object.assign(network, conf));
-      });
-    });
+        if (err) return reject(err)
+        const network = new Network(this.modem, conf.Id)
+        resolve(Object.assign(network, conf))
+      })
+    })
   }
 
   /**
@@ -83,20 +83,20 @@ class Network {
   prune (opts) {
     const call = {
       path: `/network/prune`,
-      method: "POST",
+      method: 'POST',
       options: opts,
       statusCodes: {
         200: true,
-        500: "server error"
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, res) => {
-        if (err) return reject(err);
-        resolve(res);
-      });
-    });
+        if (err) return reject(err)
+        resolve(res)
+      })
+    })
   }
 
   /**
@@ -108,26 +108,26 @@ class Network {
    * @return {Promise}        Promise return the network
    */
   status (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id);
+    [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
       path: `/networks/${id}?`,
-      method: "GET",
+      method: 'GET',
       options: opts,
       statusCodes: {
         200: true,
-        404: "no such network",
-        500: "server error"
+        404: 'no such network',
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
-        if (err) return reject(err);
-        const network = new Network(this.modem, id);
-        resolve(Object.assign(network, conf));
-      });
-    });
+        if (err) return reject(err)
+        const network = new Network(this.modem, id)
+        resolve(Object.assign(network, conf))
+      })
+    })
   }
 
   /**
@@ -138,24 +138,24 @@ class Network {
    * @return {Promise}        Promise return the result
    */
   remove (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id);
+    [ opts, id ] = this.__processArguments(opts, id)
     const call = {
       path: `/networks/${id}?`,
-      method: "DELETE",
+      method: 'DELETE',
       options: opts,
       statusCodes: {
         204: true,
-        404: "no such network",
-        500: "server error"
+        404: 'no such network',
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, res) => {
-        if (err) return reject(err);
-        resolve(res);
-      });
-    });
+        if (err) return reject(err)
+        resolve(res)
+      })
+    })
   }
 
   /**
@@ -166,27 +166,27 @@ class Network {
    * @return {Promise}        Promise return the network
    */
   connect (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id);
+    [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
       path: `/networks/${id}/connect?`,
-      method: "POST",
+      method: 'POST',
       options: opts,
       statusCodes: {
         200: true,
-        403: "operation not supported for swarm scoped network",
-        404: "network or container not found",
-        500: "server error"
+        403: 'operation not supported for swarm scoped network',
+        404: 'network or container not found',
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
-        if (err) return reject(err);
-        const network = new Network(this.modem, id);
-        resolve(network);
-      });
-    });
+        if (err) return reject(err)
+        const network = new Network(this.modem, id)
+        resolve(network)
+      })
+    })
   }
 
   /**
@@ -197,39 +197,39 @@ class Network {
    * @return {Promise}        Promise return the network
    */
   disconnect (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id);
+    [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
       path: `/networks/${id}/disconnect?`,
-      method: "POST",
+      method: 'POST',
       options: opts,
       statusCodes: {
         200: true,
-        403: "operation not supported for swarm scoped network",
-        404: "network or container not found",
-        500: "server error"
+        403: 'operation not supported for swarm scoped network',
+        404: 'network or container not found',
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
-        if (err) return reject(err);
-        const network = new Network(this.modem, id);
-        resolve(network);
-      });
-    });
+        if (err) return reject(err)
+        const network = new Network(this.modem, id)
+        resolve(network)
+      })
+    })
   }
 
   __processArguments (opts, id) {
-    if (typeof opts === "string" && !id) {
-      id = opts;
+    if (typeof opts === 'string' && !id) {
+      id = opts
     }
     if (!id && this.id) {
-      id = this.id;
+      id = this.id
     }
-    if (!opts) opts = {};
-    return [ opts, id ];
+    if (!opts) opts = {}
+    return [ opts, id ]
   }
 }
 
-export default Network;
+export default Network

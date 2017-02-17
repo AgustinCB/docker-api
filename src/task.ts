@@ -1,12 +1,12 @@
-"use strict";
+'use strict'
 
 /**
  * Class representing a task
  */
 class Task {
 
-  modem: any;
-  id: any;
+  modem: any
+  id: any
 
   /**
    * Create a task
@@ -14,8 +14,8 @@ class Task {
    * @param  {string}     id        Id of the task (optional)
    */
   constructor (modem, id?) {
-    this.modem = modem;
-    this.id = id;
+    this.modem = modem
+    this.id = id
   }
 
   /**
@@ -26,25 +26,25 @@ class Task {
    */
   list (opts) {
     const call = {
-      path: "/tasks?",
-      method: "GET",
+      path: '/tasks?',
+      method: 'GET',
       options: opts,
       statusCodes: {
         200: true,
-        500: "server error"
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, result) => {
-        if (err) return reject(err);
-        if (!result.Tasks || !result.Tasks.length) return resolve([]);
+        if (err) return reject(err)
+        if (!result.Tasks || !result.Tasks.length) return resolve([])
         resolve(result.Tasks.map((conf) => {
-          const task = new Task(this.modem, conf.ID);
-          return Object.assign(task, conf);
-        }));
-      });
-    });
+          const task = new Task(this.modem, conf.ID)
+          return Object.assign(task, conf)
+        }))
+      })
+    })
   }
 
   /**
@@ -56,38 +56,38 @@ class Task {
    * @return {Promise}        Promise return the task
    */
   status (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id);
+    [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
       path: `/tasks/${id}?`,
-      method: "GET",
+      method: 'GET',
       options: opts,
       statusCodes: {
         200: true,
-        404: "no such task",
-        500: "server error"
+        404: 'no such task',
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
-        if (err) return reject(err);
-        const task = new Task(this.modem, id);
-        resolve(Object.assign(task, conf));
-      });
-    });
+        if (err) return reject(err)
+        const task = new Task(this.modem, id)
+        resolve(Object.assign(task, conf))
+      })
+    })
   }
 
   __processArguments (opts, id) {
-    if (typeof opts === "string" && !id) {
-      id = opts;
+    if (typeof opts === 'string' && !id) {
+      id = opts
     }
     if (!id && this.id) {
-      id = this.id;
+      id = this.id
     }
-    if (!opts) opts = {};
-    return [ opts, id ];
+    if (!opts) opts = {}
+    return [ opts, id ]
   }
 }
 
-export default Task;
+export default Task

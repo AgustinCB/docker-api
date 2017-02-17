@@ -1,6 +1,6 @@
-"use strict";
+'use strict'
 
-import Image from "./image";
+import Image from './image'
 
 /**
  * Class representing container execution
@@ -8,9 +8,9 @@ import Image from "./image";
 
 class Exec {
 
-  modem: any;
-  container: any;
-  id: any;
+  modem: any
+  container: any
+  id: any
 
   /**
    * Create an execution
@@ -20,9 +20,9 @@ class Exec {
    */
 
   constructor (modem, container, id?) {
-    this.modem = modem;
-    this.container = container;
-    this.id = id;
+    this.modem = modem
+    this.container = container
+    this.id = id
   }
 
   /**
@@ -33,28 +33,28 @@ class Exec {
    * @return {Promise}        Promise return the new exec instance
    */
   create (opts, id) {
-    [ opts, id ] = this.__processContainerArguments(opts, id);
+    [ opts, id ] = this.__processContainerArguments(opts, id)
 
     const call = {
       path: `/containers/${id}/exec?`,
-      method: "POST",
+      method: 'POST',
       options: opts,
       statusCodes: {
         200: true,
         201: true,
-        404: "no such container",
-        409: "container is paused",
-        500: "server error"
+        404: 'no such container',
+        409: 'container is paused',
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
-        if (err) return reject(err);
-        const exec = new Exec(this.modem, this.container, conf.Id);
-        resolve(Object.assign(exec, conf));
-      });
-    });
+        if (err) return reject(err)
+        const exec = new Exec(this.modem, this.container, conf.Id)
+        resolve(Object.assign(exec, conf))
+      })
+    })
   }
 
   /**
@@ -65,28 +65,28 @@ class Exec {
    * @return {Promise}        Promise return the stream to the execution
    */
   start (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id);
+    [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
       path: `/exec/${id}/start?`,
-      method: "POST",
+      method: 'POST',
       options: opts,
       isStream: true,
       hijack: opts.hijack,
       openStdin: opts.stdin,
       statusCodes: {
         200: true,
-        404: "no such exec instance",
-        409: "container is paused"
+        404: 'no such exec instance',
+        409: 'container is paused'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, stream) => {
-        if (err) return reject(err);
-        resolve(stream);
-      });
-    });
+        if (err) return reject(err)
+        resolve(stream)
+      })
+    })
   }
 
   /**
@@ -97,24 +97,24 @@ class Exec {
    * @return {Promise}        Promise return the result
    */
   resize (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id);
+    [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
       path: `/exec/${id}/resize?`,
-      method: "POST",
+      method: 'POST',
       options: opts,
       statusCodes: {
         201: true,
-        404: "no such exec instance"
+        404: 'no such exec instance'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, res) => {
-        if (err) return reject(err);
-        resolve(res);
-      });
-    });
+        if (err) return reject(err)
+        resolve(res)
+      })
+    })
   }
 
   /**
@@ -126,49 +126,49 @@ class Exec {
    * @return {Promise}        Promise return the exec instance
    */
   status (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id);
+    [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
       path: `/exec/${id}/json?`,
-      method: "GET",
+      method: 'GET',
       options: opts,
       statusCodes: {
         200: true,
-        404: "no such exec instance",
-        500: "server error"
+        404: 'no such exec instance',
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
-        if (err) return reject(err);
-        const exec = new Exec(this.modem, this.container, conf.Id);
-        resolve(Object.assign(exec, conf));
-      });
-    });
+        if (err) return reject(err)
+        const exec = new Exec(this.modem, this.container, conf.Id)
+        resolve(Object.assign(exec, conf))
+      })
+    })
   }
 
   __processArguments (opts, id) {
-    if (typeof opts === "string" && !id) {
-      id = opts;
+    if (typeof opts === 'string' && !id) {
+      id = opts
     }
     if (!id && this.id) {
-      id = this.id;
+      id = this.id
     }
     if (!opts) {
-      opts = {};
+      opts = {}
     }
-    return [ opts, id ];
+    return [ opts, id ]
   }
 
   __processContainerArguments (opts, id) {
-    if (typeof opts === "string" && !id) {
-      id = opts;
+    if (typeof opts === 'string' && !id) {
+      id = opts
     }
     if (!id && this.container.id) {
-      id = this.container.id;
+      id = this.container.id
     }
-    return [ opts, id ];
+    return [ opts, id ]
   }
 }
 
@@ -177,8 +177,8 @@ class Exec {
  */
 class ContainerFs {
 
-  modem: any;
-  container: any;
+  modem: any
+  container: any
 
   /**
    * Create an container filesystem object
@@ -186,8 +186,8 @@ class ContainerFs {
    * @param  {Container}  container Container that owns the filesystem (optional)
    */
   constructor (modem, container) {
-    this.modem = modem;
-    this.container = container;
+    this.modem = modem
+    this.container = container
   }
 
   /**
@@ -198,26 +198,26 @@ class ContainerFs {
    * @return {Promise}        Promise returning the info about the filesystem
    */
   info (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id);
+    [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
       path: `/containers/${id}/archive?`,
-      method: "HEAD",
+      method: 'HEAD',
       isStream: true,
       options: opts,
       statusCodes: {
         200: true,
-        404: "bad request",
-        500: "server error"
+        404: 'bad request',
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, info) => {
-        if (err) return reject(err);
-        resolve(info);
-      });
-    });
+        if (err) return reject(err)
+        resolve(info)
+      })
+    })
   }
 
   /**
@@ -228,27 +228,27 @@ class ContainerFs {
    * @return {Promise}        Promise returning the result as a stream to the tar file
    */
   get (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id);
+    [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
       path: `/containers/${id}/archive?path=${opts.path}&`,
-      method: "GET",
+      method: 'GET',
       isStream: true,
       options: opts,
       statusCodes: {
         200: true,
-        400: "bad request",
-        404: "no such container",
-        500: "server error"
+        400: 'bad request',
+        404: 'no such container',
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, stream) => {
-        if (err) return reject(err);
-        resolve(stream);
-      });
-    });
+        if (err) return reject(err)
+        resolve(stream)
+      })
+    })
   }
 
   /**
@@ -259,42 +259,42 @@ class ContainerFs {
    * @return {Promise}        Promise returning the result
    */
   put (file, opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id);
+    [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
       path: `/containers/${id}/archive?`,
-      method: "PUT",
+      method: 'PUT',
       options: opts,
       isStream: true,
       file: file,
       statusCodes: {
         200: true,
-        400: "bad request",
-        403: "permission denied",
-        404: "no such container",
-        500: "server error"
+        400: 'bad request',
+        403: 'permission denied',
+        404: 'no such container',
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, res) => {
-        if (err) return reject(err);
-        resolve(res);
-      });
-    });
+        if (err) return reject(err)
+        resolve(res)
+      })
+    })
   }
 
   __processArguments (opts, id) {
-    if (typeof opts === "string" && !id) {
-      id = opts;
+    if (typeof opts === 'string' && !id) {
+      id = opts
     }
     if (!id && this.container.id) {
-      id = this.container.id;
+      id = this.container.id
     }
     if (!opts) {
-      opts = {};
+      opts = {}
     }
-    return [ opts, id ];
+    return [ opts, id ]
   }
 }
 
@@ -303,11 +303,11 @@ class ContainerFs {
  */
 class Container {
 
-  modem: any;
-  id: any;
-  fs: any;
-  exec: any;
-  Warnings: any;
+  modem: any
+  id: any
+  fs: any
+  exec: any
+  Warnings: any
 
   /**
    * Create an container object
@@ -315,10 +315,10 @@ class Container {
    * @param  {string} id    Container id (optional)
    */
   constructor (modem, id?) {
-    this.modem = modem;
-    this.id = id;
-    this.fs = new ContainerFs(modem, this);
-    this.exec = new Exec(modem, this);
+    this.modem = modem
+    this.id = id
+    this.fs = new ContainerFs(modem, this)
+    this.exec = new Exec(modem, this)
   }
 
   /**
@@ -329,25 +329,25 @@ class Container {
    */
   list (opts) {
     const call = {
-      path: "/containers/json?",
-      method: "GET",
+      path: '/containers/json?',
+      method: 'GET',
       options: opts,
       statusCodes: {
         200: true,
-        400: "bad request",
-        500: "server error"
+        400: 'bad request',
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, containers) => {
-        if (err) return reject(err);
+        if (err) return reject(err)
         resolve(containers.map((conf) => {
-          const container = new Container(this.modem, conf.Id);
-          return Object.assign(container, conf);
-        }));
-      });
-    });
+          const container = new Container(this.modem, conf.Id)
+          return Object.assign(container, conf)
+        }))
+      })
+    })
   }
 
   /**
@@ -358,26 +358,26 @@ class Container {
    */
   create (opts) {
     const call = {
-      path: "/containers/create?",
-      method: "POST",
+      path: '/containers/create?',
+      method: 'POST',
       options: opts,
       statusCodes: {
         200: true,
         201: true,
-        400: "bad request",
-        404: "no such image",
-        406: "impossible to attach",
-        500: "server error"
+        400: 'bad request',
+        404: 'no such image',
+        406: 'impossible to attach',
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
-        if (err) return reject(err);
-        const container = new Container(this.modem, conf.Id);
-        resolve(Object.assign(container, conf));
-      });
-    });
+        if (err) return reject(err)
+        const container = new Container(this.modem, conf.Id)
+        resolve(Object.assign(container, conf))
+      })
+    })
   }
 
   /**
@@ -389,26 +389,26 @@ class Container {
    * @return {Promise}        Promise return the container
    */
   status (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id);
+    [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
       path: `/containers/${id}/json?`,
-      method: "GET",
+      method: 'GET',
       options: opts,
       statusCodes: {
         200: true,
-        404: "no such container",
-        500: "server error"
+        404: 'no such container',
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
-        if (err) return reject(err);
-        const container = new Container(this.modem, id);
-        resolve(Object.assign(container, conf));
-      });
-    });
+        if (err) return reject(err)
+        const container = new Container(this.modem, id)
+        resolve(Object.assign(container, conf))
+      })
+    })
   }
 
   /**
@@ -419,25 +419,25 @@ class Container {
    * @return {Promise}        Promise return the list of processes
    */
   top (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id);
+    [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
       path: `/containers/${id}/top?`,
-      method: "GET",
+      method: 'GET',
       options: opts,
       statusCodes: {
         200: true,
-        404: "no such container",
-        500: "server error"
+        404: 'no such container',
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, processes) => {
-        if (err) return reject(err);
-        resolve(processes);
-      });
-    });
+        if (err) return reject(err)
+        resolve(processes)
+      })
+    })
   }
 
   /**
@@ -448,27 +448,27 @@ class Container {
    * @return {Promise}        Promise returning the concatenated logs
    */
   logs (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id);
+    [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
       path: `/containers/${id}/logs?`,
-      method: "GET",
+      method: 'GET',
       options: opts,
       isStream: true,
       statusCodes: {
         101: true,
         200: true,
-        404: "no such container",
-        500: "server error"
+        404: 'no such container',
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, logs) => {
-        if (err) return reject(err);
-        resolve(logs);
-      });
-    });
+        if (err) return reject(err)
+        resolve(logs)
+      })
+    })
   }
 
   /**
@@ -478,25 +478,25 @@ class Container {
    * @return {Promise}        Promise returning the changes
    */
   changes (id) {
-    [ , id ] = this.__processArguments(id);
+    [ , id ] = this.__processArguments(id)
 
     const call = {
       path: `/containers/${id}/changes?`,
-      method: "GET",
+      method: 'GET',
       options: {},
       statusCodes: {
         200: true,
-        404: "no such container",
-        500: "server error"
+        404: 'no such container',
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, changes) => {
-        if (err) return reject(err);
-        resolve(changes);
-      });
-    });
+        if (err) return reject(err)
+        resolve(changes)
+      })
+    })
   }
 
   /**
@@ -507,35 +507,35 @@ class Container {
    * @return {Promise}          Promise returning the content of the tar file as a stream or as a string
    */
   export (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id);
+    [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
       path: `/containers/${id}/export?`,
-      method: "GET",
+      method: 'GET',
       options: opts,
       isStream: !!opts.stream,
       statusCodes: {
         200: true,
-        404: "no such container",
-        500: "server error"
+        404: 'no such container',
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, tarStream) => {
-        if (err) return reject(err);
-        if (!opts.stream) return resolve(tarStream);
+        if (err) return reject(err)
+        if (!opts.stream) return resolve(tarStream)
 
-        const res = [];
-        tarStream.on("data", (chunk) => {
-          res.push(chunk.toString());
-        });
+        const res = []
+        tarStream.on('data', (chunk) => {
+          res.push(chunk.toString())
+        })
 
-        tarStream.on("end", () => {
-          resolve(res.join(""));
-        });
-      });
-    });
+        tarStream.on('end', () => {
+          resolve(res.join(''))
+        })
+      })
+    })
   }
 
   /**
@@ -546,26 +546,26 @@ class Container {
    * @return {Promise}          Promise returning the stats, in a stream or string
    */
   stats (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id);
+    [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
       path: `/containers/${id}/stats?`,
-      method: "GET",
+      method: 'GET',
       options: opts,
       isStream: true,
       statusCodes: {
         200: true,
-        404: "no such container",
-        500: "server error"
+        404: 'no such container',
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, stats) => {
-        if (err) return reject(err);
-        resolve(stats);
-      });
-    });
+        if (err) return reject(err)
+        resolve(stats)
+      })
+    })
   }
 
   /**
@@ -576,25 +576,25 @@ class Container {
    * @return {Promise}          Promise returning the response
    */
   resize (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id);
+    [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
       path: `/containers/${id}/resize?`,
-      method: "GET",
+      method: 'GET',
       options: opts,
       statusCodes: {
         200: true,
-        404: "no such container",
-        500: "server error"
+        404: 'no such container',
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, res) => {
-        if (err) return reject(err);
-        resolve(res);
-      });
-    });
+        if (err) return reject(err)
+        resolve(res)
+      })
+    })
   }
 
   /**
@@ -606,20 +606,20 @@ class Container {
   prune (opts) {
     const call = {
       path: `/containers/prune`,
-      method: "POST",
+      method: 'POST',
       options: opts,
       statusCodes: {
         200: true,
-        500: "server error"
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, res) => {
-        if (err) return reject(err);
-        resolve(res);
-      });
-    });
+        if (err) return reject(err)
+        resolve(res)
+      })
+    })
   }
 
   /**
@@ -630,26 +630,26 @@ class Container {
    * @return {Promise}          Promise returning the container
    */
   start (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id);
+    [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
       path: `/containers/${id}/start?`,
-      method: "POST",
+      method: 'POST',
       options: opts,
       statusCodes: {
         204: true,
         304: true,
-        404: "no such container",
-        500: "server error"
+        404: 'no such container',
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err) => {
-        if (err) return reject(err);
-        resolve(this.id ? this : (new Container(this.modem, id)));
-      });
-    });
+        if (err) return reject(err)
+        resolve(this.id ? this : (new Container(this.modem, id)))
+      })
+    })
   }
 
   /**
@@ -660,26 +660,26 @@ class Container {
    * @return {Promise}          Promise returning the container
    */
   stop (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id);
+    [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
       path: `/containers/${id}/stop?`,
-      method: "POST",
+      method: 'POST',
       options: opts,
       statusCodes: {
         204: true,
         304: true,
-        404: "no such container",
-        500: "server error"
+        404: 'no such container',
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err) => {
-        if (err) return reject(err);
-        resolve(this.id ? this : new Container(this.modem, id));
-      });
-    });
+        if (err) return reject(err)
+        resolve(this.id ? this : new Container(this.modem, id))
+      })
+    })
   }
 
   /**
@@ -690,25 +690,25 @@ class Container {
    * @return {Promise}          Promise returning the container
    */
   restart (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id);
+    [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
       path: `/containers/${id}/restart?`,
-      method: "POST",
+      method: 'POST',
       options: opts,
       statusCodes: {
         204: true,
-        404: "no such container",
-        500: "server error"
+        404: 'no such container',
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err) => {
-        if (err) return reject(err);
-        resolve(this.id ? this : new Container(this.modem, id));
-      });
-    });
+        if (err) return reject(err)
+        resolve(this.id ? this : new Container(this.modem, id))
+      })
+    })
   }
 
   /**
@@ -719,25 +719,25 @@ class Container {
    * @return {Promise}          Promise returning the container
    */
   kill (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id);
+    [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
       path: `/containers/${id}/kill?`,
-      method: "POST",
+      method: 'POST',
       options: opts,
       statusCodes: {
         204: true,
-        404: "no such container",
-        500: "server error"
+        404: 'no such container',
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err) => {
-        if (err) return reject(err);
-        resolve(this.id ? this : new Container(this.modem, id));
-      });
-    });
+        if (err) return reject(err)
+        resolve(this.id ? this : new Container(this.modem, id))
+      })
+    })
   }
 
   /**
@@ -749,28 +749,28 @@ class Container {
    * @return {Promise}          Promise returning the container
    */
   update (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id);
+    [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
       path: `/containers/${id}/update?`,
-      method: "POST",
+      method: 'POST',
       options: opts,
       statusCodes: {
         200: true,
-        400: "bad request",
-        404: "no such container",
-        500: "server error"
+        400: 'bad request',
+        404: 'no such container',
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, warnings) => {
-        const container = this.id ? this : new Container(this.modem, id);
-        container.Warnings = warnings;
-        if (err) return reject(err);
-        resolve(container);
-      });
-    });
+        const container = this.id ? this : new Container(this.modem, id)
+        container.Warnings = warnings
+        if (err) return reject(err)
+        resolve(container)
+      })
+    })
   }
 
   /**
@@ -781,26 +781,26 @@ class Container {
    * @return {Promise}          Promise returning the container
    */
   rename (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id);
+    [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
       path: `/containers/${id}/rename?`,
-      method: "POST",
+      method: 'POST',
       options: opts,
       statusCodes: {
         204: true,
-        404: "no such container",
-        409: "name already taken",
-        500: "server error"
+        404: 'no such container',
+        409: 'name already taken',
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err) => {
-        if (err) return reject(err);
-        resolve(this.id ? this : new Container(this.modem, id));
-      });
-    });
+        if (err) return reject(err)
+        resolve(this.id ? this : new Container(this.modem, id))
+      })
+    })
   }
 
   /**
@@ -810,25 +810,25 @@ class Container {
    * @return {Promise}          Promise returning the container
    */
   pause (id) {
-    [ , id ] = this.__processArguments(id);
+    [ , id ] = this.__processArguments(id)
 
     const call = {
       path: `/containers/${id}/pause?`,
-      method: "POST",
+      method: 'POST',
       options: {},
       statusCodes: {
         204: true,
-        404: "no such container",
-        500: "server error"
+        404: 'no such container',
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err) => {
-        if (err) return reject(err);
-        resolve(this.id ? this : new Container(this.modem, id));
-      });
-    });
+        if (err) return reject(err)
+        resolve(this.id ? this : new Container(this.modem, id))
+      })
+    })
   }
 
   /**
@@ -838,25 +838,25 @@ class Container {
    * @return {Promise}          Promise returning the container
    */
   unpause (id) {
-    [ , id ] = this.__processArguments(id);
+    [ , id ] = this.__processArguments(id)
 
     const call = {
       path: `/containers/${id}/unpause?`,
-      method: "POST",
+      method: 'POST',
       options: {},
       statusCodes: {
         204: true,
-        404: "no such container",
-        500: "server error"
+        404: 'no such container',
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err) => {
-        if (err) return reject(err);
-        resolve(this.id ? this : new Container(this.modem, id));
-      });
-    });
+        if (err) return reject(err)
+        resolve(this.id ? this : new Container(this.modem, id))
+      })
+    })
   }
 
   /**
@@ -867,29 +867,29 @@ class Container {
    * @return {Promise}          Promise returning the container
    */
   attach (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id);
+    [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
       path: `/containers/${id}/attach?`,
-      method: "POST",
+      method: 'POST',
       isStream: true,
       openStdin: opts.stdin,
       options: opts,
       statusCodes: {
         101: true,
         200: true,
-        400: "bad request",
-        404: "no such container",
-        500: "server error"
+        400: 'bad request',
+        404: 'no such container',
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, stream) => {
-        if (err) return reject(err);
-        resolve([ stream, this.id ? this : new Container(this.modem, id) ]);
-      });
-    });
+        if (err) return reject(err)
+        resolve([ stream, this.id ? this : new Container(this.modem, id) ])
+      })
+    })
   }
 
   /**
@@ -900,26 +900,26 @@ class Container {
    * @return {Promise}          Promise returning the stream and the container
    */
   wsattach (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id);
+    [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
       path: `/containers/${id}/attach/ws?`,
-      method: "GET",
+      method: 'GET',
       options: opts,
       statusCodes: {
         200: true,
-        400: "bad request",
-        404: "no such container",
-        500: "server error"
+        400: 'bad request',
+        404: 'no such container',
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, stream) => {
-        if (err) return reject(err);
-        resolve([ stream, this.id ? this : new Container(this.modem, id) ]);
-      });
-    });
+        if (err) return reject(err)
+        resolve([ stream, this.id ? this : new Container(this.modem, id) ])
+      })
+    })
   }
 
   /**
@@ -929,25 +929,25 @@ class Container {
    * @return {Promise}          Promise returning the exit code
    */
   wait (id) {
-    [ , id ] = this.__processArguments(id);
+    [ , id ] = this.__processArguments(id)
 
     const call = {
       path: `/containers/${id}/wait?`,
-      method: "POST",
+      method: 'POST',
       options: {},
       statusCodes: {
         200: true,
-        404: "no such container",
-        500: "server error"
+        404: 'no such container',
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, code) => {
-        if (err) return reject(err);
-        resolve(code);
-      });
-    });
+        if (err) return reject(err)
+        resolve(code)
+      })
+    })
   }
 
   /**
@@ -958,26 +958,26 @@ class Container {
    * @return {Promise}          Promise returning nothing
    */
   delete (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id);
+    [ opts, id ] = this.__processArguments(opts, id)
 
     const call = {
       path: `/containers/${id}?`,
-      method: "DELETE",
+      method: 'DELETE',
       options: opts,
       statusCodes: {
         204: true,
-        400: "bad request",
-        404: "no such container",
-        500: "server error"
+        400: 'bad request',
+        404: 'no such container',
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err) => {
-        if (err) return reject(err);
-        resolve();
-      });
-    });
+        if (err) return reject(err)
+        resolve()
+      })
+    })
   }
 
   /**
@@ -988,41 +988,41 @@ class Container {
    * @return {Promise}          Promise returning the container
    */
   commit (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id);
+    [ opts, id ] = this.__processArguments(opts, id)
 
-    opts.container = this.id;
+    opts.container = this.id
 
     const call = {
       path: `/commit?`,
-      method: "POST",
+      method: 'POST',
       options: opts,
       statusCodes: {
         201: true,
-        404: "no such container",
-        500: "server error"
+        404: 'no such container',
+        500: 'server error'
       }
-    };
+    }
 
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, res) => {
-        if (err) return reject(err);
-        resolve(new Image(this.modem, res.Id.replace("sha256:", "")));
-      });
-    });
+        if (err) return reject(err)
+        resolve(new Image(this.modem, res.Id.replace('sha256:', '')))
+      })
+    })
   }
 
   __processArguments (opts, id?) {
-    if (typeof opts === "string" && !id) {
-      id = opts;
+    if (typeof opts === 'string' && !id) {
+      id = opts
     }
     if (!id && this.id) {
-      id = this.id;
+      id = this.id
     }
     if (!opts) {
-      opts = {};
+      opts = {}
     }
-    return [ opts, id ];
+    return [ opts, id ]
   }
 }
 
-export default Container;
+export default Container

@@ -1,10 +1,10 @@
 import test from 'ava'
 import fs from 'fs'
-import Node from '../lib/node'
-import Secret from '../lib/secret'
-import Service from '../lib/service'
+import { Node } from '../lib/node'
+import { Secret } from '../lib/secret'
+import { Service } from '../lib/service'
 import Swarm from '../lib/swarm'
-import Task from '../lib/task'
+import { Task } from '../lib/task'
 import { Docker } from '../lib/docker'
 
 const socket = process.env.DOCKER_SOCKET || '/var/run/docker.sock'
@@ -68,7 +68,7 @@ test.before(async t => {
 })
 
 test.after('cleanup', t => {
-  t.notThrows(docker.swarm.leave({ 'force': true }))
+  docker.swarm.leave({ 'force': true })
 })
 
 test('inspect', async t => {
@@ -93,8 +93,8 @@ test('inspect-service', async t => {
 
 test('update-service', async t => {
   const service = await (await createService()).status()
-  const data = service.Spec
-  data.version = service.Version.Index
+  const data = service.data.Spec
+  data.version = service.data.Version.Index
   const res = await service.update(data)
   t.is(res.constructor, Service)
 })

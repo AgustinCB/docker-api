@@ -1,21 +1,75 @@
 'use strict'
 
+import Modem = require('docker-modem')
+
 /**
  * Class representing a task
  */
-class Task {
-
-  modem: any
-  id: any
+export class Task {
+  modem: Modem
+  id: String
+  data: Object = {}
 
   /**
    * Create a task
    * @param  {Modem}      modem     Modem to connect to the remote service
    * @param  {string}     id        Id of the task (optional)
    */
-  constructor (modem, id?) {
+  constructor (modem: Modem, id: String) {
     this.modem = modem
     this.id = id
+  }
+
+  /**
+   * Get low-level information on a task
+   * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/inspect-a-task
+   * The reason why this module isn't called inspect is because that interferes with the inspect utility of task.
+   * @param  {Object}   opts  Query params in the request (optional)
+   * @param  {String}   id    ID of the task to inspect, if it's not set, use the id of the object (optional)
+   * @return {Promise}        Promise return the task
+   */
+  status (opts?: Object) {
+    const call = {
+      path: `/tasks/${this.id}?`,
+      method: 'GET',
+      options: opts,
+      statusCodes: {
+        200: true,
+        404: 'no such task',
+        500: 'server error'
+      }
+    }
+
+    return new Promise((resolve, reject) => {
+      this.modem.dial(call, (err, conf) => {
+        if (err) return reject(err)
+        const task = new Task(this.modem, this.id)
+        task.data = conf
+        resolve(task)
+      })
+    })
+  }
+}
+
+export default class {
+  modem: Modem
+
+  /**
+   * Create a task
+   * @param  {Modem}      modem     Modem to connect to the remote service
+   * @param  {string}     id        Id of the task (optional)
+   */
+  constructor (modem: Modem) {
+    this.modem = modem
+  }
+
+  /**
+   * Get a Task object
+   * @param  {id}         string    ID of the secret
+   * @return {Task}
+   */
+  get (id: String): Task {
+    return new Task(this.modem, id)
   }
 
   /**
@@ -24,7 +78,7 @@ class Task {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise returning the result as a list of tasks
    */
-  list (opts) {
+  list (opts?: Object): Promise<Array<Task>> {
     const call = {
       path: '/tasks?',
       method: 'GET',
@@ -41,53 +95,10 @@ class Task {
         if (!result.Tasks || !result.Tasks.length) return resolve([])
         resolve(result.Tasks.map((conf) => {
           const task = new Task(this.modem, conf.ID)
-          return Object.assign(task, conf)
+          task.data = conf
+          return task
         }))
       })
     })
   }
-
-  /**
-   * Get low-level information on a task
-   * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/inspect-a-task
-   * The reason why this module isn't called inspect is because that interferes with the inspect utility of task.
-   * @param  {Object}   opts  Query params in the request (optional)
-   * @param  {String}   id    ID of the task to inspect, if it's not set, use the id of the object (optional)
-   * @return {Promise}        Promise return the task
-   */
-  status (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id)
-
-    const call = {
-      path: `/tasks/${id}?`,
-      method: 'GET',
-      options: opts,
-      statusCodes: {
-        200: true,
-        404: 'no such task',
-        500: 'server error'
-      }
-    }
-
-    return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, conf) => {
-        if (err) return reject(err)
-        const task = new Task(this.modem, id)
-        resolve(Object.assign(task, conf))
-      })
-    })
-  }
-
-  __processArguments (opts, id) {
-    if (typeof opts === 'string' && !id) {
-      id = opts
-    }
-    if (!id && this.id) {
-      id = this.id
-    }
-    if (!opts) opts = {}
-    return [ opts, id ]
-  }
 }
-
-export default Task

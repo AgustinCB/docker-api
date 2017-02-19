@@ -1,6 +1,6 @@
 import test from 'ava'
 import fs from 'fs'
-import Network from '../lib/network'
+import { Network } from '../lib/network'
 import { Docker } from '../lib/docker'
 
 const socket = process.env.DOCKER_SOCKET || '/var/run/docker.sock'

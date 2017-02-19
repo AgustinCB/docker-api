@@ -1,106 +1,24 @@
 'use strict'
 
+import Modem = require('docker-modem')
+import fs = require('fs')
+
 /**
  * Class representing an image
  */
-class Image {
-
-  modem: any
-  id: any
+export class Image {
+  modem: Modem
+  id: String
+  data: Object = {}
 
   /**
    * Creates a new image
    * @param  {Modem}  modem Modem to connect to the remote service
-   * @param  {string} id    Container id (optional)
+   * @param  {string} id    Container id
    */
-  constructor (modem, id?) {
+  constructor (modem: Modem, id: String) {
     this.modem = modem
     this.id = id
-  }
-
-  /**
-   * Get the list of images
-   * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/list-images
-   * @param  {Object}   opts  Query params in the request (optional)
-   * @return {Promise}        Promise returning the result as a list of images
-   */
-  list (opts) {
-    const call = {
-      path: '/images/json?',
-      method: 'GET',
-      options: opts,
-      statusCodes: {
-        200: true,
-        400: 'bad request',
-        500: 'server error'
-      }
-    }
-
-    return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, images) => {
-        if (err) return reject(err)
-        resolve(images.map((conf) => {
-          const image = new Image(this.modem, conf.Id)
-          return Object.assign(image, conf)
-        }))
-      })
-    })
-  }
-
-  /**
-   * Build image from dockerfile
-   * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/build-image-from-a-dockerfile
-   * @file   {File}     file  Dockerfile to build
-   * @param  {Object}   opts  Query params in the request (optional)
-   * @return {Promise}        Promise return the resulting stream
-   */
-  build (file, opts) {
-    const call = {
-      path: '/build?',
-      method: 'POST',
-      options: opts,
-      file: file,
-      isStream: true,
-      statusCodes: {
-        200: true,
-        500: 'server error'
-      }
-    }
-
-    return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, stream) => {
-        if (err) return reject(err)
-        resolve(stream)
-      })
-    })
-  }
-
-  /**
-   * Create an image
-   * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/create-an-image
-   * @param  {Object}   auth  Authentication (optional)
-   * @param  {Object}   opts  Query params in the request (optional)
-   * @return {Promise}        Promise return the resulting stream
-   */
-  create (auth, opts) {
-    const call = {
-      path: '/images/create?',
-      method: 'POST',
-      options: opts,
-      isStream: true,
-      authconfig: auth,
-      statusCodes: {
-        200: true,
-        500: 'server error'
-      }
-    }
-
-    return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, stream) => {
-        if (err) return reject(err)
-        resolve(stream)
-      })
-    })
   }
 
   /**
@@ -108,14 +26,11 @@ class Image {
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/inspect-an-image
    * The reason why this module isn't called inspect is because that interferes with the inspect utility of node.
    * @param  {Object}   opts  Query params in the request (optional)
-   * @param  {String}   id    ID of the image to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the image
    */
-  status (opts?, id?) {
-    [ opts, id ] = this.__processArguments(opts, id)
-
+  status (opts?: Object): Promise<Image> {
     const call = {
-      path: `/images/${id}/json?`,
+      path: `/images/${this.id}/json?`,
       method: 'GET',
       options: opts,
       statusCodes: {
@@ -128,33 +43,9 @@ class Image {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
         if (err) return reject(err)
-        const image = new Image(this.modem, id)
-        resolve(Object.assign(image, conf))
-      })
-    })
-  }
-
-  /**
-   * Prune images
-   * https://docs.docker.com/engine/api/v1.25/#operation/ImagePrune
-   * @param  {Object}   opts  Query params in the request (optional)
-   * @return {Promise}          Promise returning the container
-   */
-  prune (opts) {
-    const call = {
-      path: `/images/prune`,
-      method: 'POST',
-      options: opts,
-      statusCodes: {
-        200: true,
-        500: 'server error'
-      }
-    }
-
-    return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, res) => {
-        if (err) return reject(err)
-        resolve(res)
+        const image = new Image(this.modem, this.id)
+        image.data = conf
+        resolve(image)
       })
     })
   }
@@ -166,11 +57,9 @@ class Image {
    * @param  {String}   id    ID of the image to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the events in the history
    */
-  history (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id)
-
+  history (opts?: Object): Promise<Array<Object>> {
     const call = {
-      path: `/images/${id}/history?`,
+      path: `/images/${this.id}/history?`,
       method: 'GET',
       options: opts,
       statusCodes: {
@@ -181,7 +70,7 @@ class Image {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, events) => {
+      this.modem.dial(call, (err, events: Array<Object>) => {
         if (err) return reject(err)
         resolve(events)
       })
@@ -193,13 +82,11 @@ class Image {
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/push-an-image-on-the-registry
    * @param  {Object}   auth  Authentication (optional)
    * @param  {Object}   opts  Query params in the request (optional)
-   * @param  {String}   id    ID of the image to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the resulting stream
    */
-  push (auth, opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id)
+  push (auth?: Object, opts?: Object): Promise<Object> {
     const call = {
-      path: `/images/${id}/push?`,
+      path: `/images/${this.id}/push?`,
       method: 'POST',
       options: opts,
       isStream: true,
@@ -212,7 +99,7 @@ class Image {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, stream) => {
+      this.modem.dial(call, (err, stream: Object) => {
         if (err) return reject(err)
         resolve(stream)
       })
@@ -223,13 +110,11 @@ class Image {
    * Tag the image into the registry
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/tag-an-image-into-a-repository
    * @param  {Object}   opts  Query params in the request (optional)
-   * @param  {String}   id    ID of the image to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the image
    */
-  tag (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id)
+  tag (opts?: Object): Promise<Image> {
     const call = {
-      path: `/images/${id}/tag?`,
+      path: `/images/${this.id}/tag?`,
       method: 'POST',
       options: opts,
       statusCodes: {
@@ -244,25 +129,21 @@ class Image {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, res) => {
         if (err) return reject(err)
-        const image = new Image(this.modem, id)
+        const image = new Image(this.modem, this.id)
         resolve(image)
       })
-    }).then((image: any) => {
-      return image.status()
-    })
+    }).then((image: Image) => image.status())
   }
 
   /**
    * Remove an image from the filesystem
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/remove-an-image
    * @param  {Object}   opts  Query params in the request (optional)
-   * @param  {String}   id    ID of the image to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the result
    */
-  remove (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id)
+  remove (opts?: Object): Promise<Array<Object>> {
     const call = {
-      path: `/images/${id}?`,
+      path: `/images/${this.id}?`,
       method: 'DELETE',
       options: opts,
       statusCodes: {
@@ -274,11 +155,54 @@ class Image {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, res) => {
+      this.modem.dial(call, (err, res: Array<Object>) => {
         if (err) return reject(err)
         resolve(res)
       })
     })
+  }
+
+  /**
+   * Get an image in a tarball
+   * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/get-a-tarball-containing-all-images-in-a-repository
+   * @param  {Object}   opts  Query params in the request (optional)
+   * @return {Promise}        Promise return the stream with the tarball
+   */
+  get (opts?: Object): Promise<Object> {
+    const call = {
+      path: `/images/${this.id}/get?`,
+      method: 'GET',
+      options: opts,
+      isStream: true,
+      statusCodes: {
+        200: true,
+        500: 'server error'
+      }
+    }
+
+    return new Promise((resolve, reject) => {
+      this.modem.dial(call, (err, stream: Object) => {
+        if (err) return reject(err)
+        resolve(stream)
+      })
+    })
+  }
+}
+
+export default class {
+  modem: Modem
+
+  constructor(modem: Modem) {
+    this.modem = modem
+  }
+
+  /**
+   * Get a Image object
+   * @param  {id}         string    ID of the secret
+   * @return {Image}
+   */
+  get (id: String): Image {
+    return new Image(this.modem, id)
   }
 
   /**
@@ -287,7 +211,7 @@ class Image {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the images
    */
-  search (opts) {
+  search (opts?: Object): Promise<Array<Object>> {
     const call = {
       path: `/images/search?`,
       method: 'GET',
@@ -307,18 +231,48 @@ class Image {
   }
 
   /**
-   * Get an image in a tarball
-   * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/get-a-tarball-containing-all-images-in-a-repository
+   * Get the list of images
+   * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/list-images
    * @param  {Object}   opts  Query params in the request (optional)
-   * @param  {String}   id    ID of the image to get, if it's not set, use the id of the object (optional)
-   * @return {Promise}        Promise return the stream with the tarball
+   * @return {Promise}        Promise returning the result as a list of images
    */
-  get (opts, id) {
-    [ opts, id ] = this.__processArguments(opts, id)
+  list (opts?: Object): Promise<Array<Image>> {
     const call = {
-      path: `/images/${id}/get?`,
+      path: '/images/json?',
       method: 'GET',
       options: opts,
+      statusCodes: {
+        200: true,
+        400: 'bad request',
+        500: 'server error'
+      }
+    }
+
+    return new Promise((resolve, reject) => {
+      this.modem.dial(call, (err, images) => {
+        if (err) return reject(err)
+        resolve(images.map((conf) => {
+          const image = new Image(this.modem, conf.Id)
+          image.data = conf
+          return image
+        }))
+      })
+    })
+  }
+
+  /**
+   * Build image from dockerfile
+   * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/build-image-from-a-dockerfile
+   * @file   {File}     file  Dockerfile to build
+   * @param  {Object}   opts  Query params in the request (optional)
+   * @return {Promise}        Promise return the resulting stream
+   */
+  build (file: fs.ReadStream, opts?: Object): Promise<Object> {
+    const call = {
+      path: '/build?',
+      method: 'POST',
+      options: opts,
+      file: file,
       isStream: true,
       statusCodes: {
         200: true,
@@ -327,7 +281,35 @@ class Image {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, stream) => {
+      this.modem.dial(call, (err, stream: Object) => {
+        if (err) return reject(err)
+        resolve(stream)
+      })
+    })
+  }
+
+  /**
+   * Create an image
+   * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/create-an-image
+   * @param  {Object}   auth  Authentication (optional)
+   * @param  {Object}   opts  Query params in the request (optional)
+   * @return {Promise}        Promise return the resulting stream
+   */
+  create (auth: Object, opts?: Object): Promise<Object> {
+    const call = {
+      path: '/images/create?',
+      method: 'POST',
+      options: opts,
+      isStream: true,
+      authconfig: auth,
+      statusCodes: {
+        200: true,
+        500: 'server error'
+      }
+    }
+
+    return new Promise((resolve, reject) => {
+      this.modem.dial(call, (err, stream: Object) => {
         if (err) return reject(err)
         resolve(stream)
       })
@@ -340,7 +322,7 @@ class Image {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the stream with the tarball
    */
-  getAll (opts) {
+  getAll (opts?: Object): Promise<Object> {
     const call = {
       path: `/images/get?`,
       method: 'GET',
@@ -353,7 +335,7 @@ class Image {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, stream) => {
+      this.modem.dial(call, (err, stream: Object) => {
         if (err) return reject(err)
         resolve(stream)
       })
@@ -367,7 +349,7 @@ class Image {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the stream with the process
    */
-  load (file, opts) {
+  load (file: fs.ReadStream, opts?: Object): Promise<Object> {
     const call = {
       path: '/images/load?',
       method: 'POST',
@@ -381,23 +363,35 @@ class Image {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, stream) => {
+      this.modem.dial(call, (err, stream: Object) => {
         if (err) return reject(err)
         resolve(stream)
       })
     })
   }
 
-  __processArguments (opts, id) {
-    if (typeof opts === 'string' && !id) {
-      id = opts
+  /**
+   * Prune images
+   * https://docs.docker.com/engine/api/v1.25/#operation/ImagePrune
+   * @param  {Object}   opts  Query params in the request (optional)
+   * @return {Promise}          Promise returning the container
+   */
+  prune (opts?: Object): Promise<String> {
+    const call = {
+      path: `/images/prune`,
+      method: 'POST',
+      options: opts,
+      statusCodes: {
+        200: true,
+        500: 'server error'
+      }
     }
-    if (!id && this.id) {
-      id = this.id
-    }
-    if (!opts) opts = {}
-    return [ opts, id ]
+
+    return new Promise((resolve, reject) => {
+      this.modem.dial(call, (err, res: String) => {
+        if (err) return reject(err)
+        resolve(res)
+      })
+    })
   }
 }
-
-export default Image

@@ -1,7 +1,7 @@
 import test from 'ava'
 import fs from 'fs'
-import Container from '../lib/container'
-import Image from '../lib/image'
+import { Container } from '../lib/container'
+import { Image } from '../lib/image'
 import {default as MemoryStream} from 'memorystream'
 import { Docker } from '../lib/docker'
 
@@ -112,7 +112,7 @@ test('resize', async t => {
 
 test('prune', async t => {
   const container = await createContainer('prune')
-  t.notThrows(container.prune())
+  t.notThrows(docker.container.prune())
 })
 
 test('start', async t => {
@@ -130,7 +130,7 @@ test('stop', async t => {
   await container.start()
   await container.stop()
   const containerStatus = await container.status()
-  t.is(containerStatus.State.Status, 'exited')
+  t.is(containerStatus.data.State.Status, 'exited')
 })
 
 test('restart', async t => {
@@ -140,7 +140,7 @@ test('restart', async t => {
   await container.start()
   await container.restart()
   const containerStatus = await container.status()
-  t.is(containerStatus.State.Status, 'running')
+  t.is(containerStatus.data.State.Status, 'running')
 })
 
 test('kill', async t => {
@@ -150,7 +150,7 @@ test('kill', async t => {
   await container.start()
   await container.kill()
   const containerStatus = await container.status()
-  t.is(containerStatus.State.Status, 'exited')
+  t.is(containerStatus.data.State.Status, 'exited')
 })
 
 test('update', async t => {
@@ -159,7 +159,7 @@ test('update', async t => {
   })
   await container.update({ 'CpuShares': 512 })
   const containerStatus = await container.status()
-  t.is(containerStatus.HostConfig.CpuShares, 512)
+  t.is(containerStatus.data.HostConfig.CpuShares, 512)
 })
 
 test('rename', async t => {
@@ -168,7 +168,7 @@ test('rename', async t => {
   })
   await container.rename({ 'name': containerNames.get('rename') })
   const containerStatus = await container.status()
-  t.is(containerStatus.Name, '/' + containerNames.get('rename'))
+  t.is(containerStatus.data.Name, '/' + containerNames.get('rename'))
 })
 
 test('pause', async t => {
@@ -178,10 +178,10 @@ test('pause', async t => {
   await container.start()
   await container.pause()
   const containerStatus = await container.status()
-  t.is(containerStatus.State.Status, 'paused')
+  t.is(containerStatus.data.State.Status, 'paused')
   await container.unpause()
   const containerStatus2 = await container.status()
-  t.is(containerStatus2.State.Status, 'running')
+  t.is(containerStatus2.data.State.Status, 'running')
 })
 
 test('commit', async t => {
@@ -271,7 +271,7 @@ test('inspect-archive', async t => {
 
 test.after.always('cleanup', async t => {
   const promises = Array.from(containerNames.values()).map((name) =>
-    docker.container.stop(name)
+    docker.container.get(name).stop()
       .then((container) => {
         return container.delete({ force: true })
       })

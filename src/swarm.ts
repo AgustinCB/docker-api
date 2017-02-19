@@ -1,23 +1,21 @@
 'use strict'
 
-import Node from './node'
+import Modem = require('docker-modem')
+import { Node } from './node'
 
 /**
  * Class reprensenting a swarm
  */
-class Swarm {
-
-  modem: any
-  id: any
+export default class Swarm {
+  modem: Modem
+  data: Object = {}
 
   /**
    * Creates a new swarm
    * @param  {Modem}      modem     Modem to connect to the remote service
-   * @param  {string}     id        Id of the swarm (optional)
    */
-  constructor (modem, id?) {
+  constructor (modem: Modem) {
     this.modem = modem
-    this.id = id
   }
 
   /**
@@ -26,7 +24,7 @@ class Swarm {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the new node
    */
-  init (opts) {
+  init (opts?: Object): Promise<Node> {
     const call = {
       path: '/swarm/init?',
       method: 'POST',
@@ -54,7 +52,7 @@ class Swarm {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the swarm
    */
-  status (opts) {
+  status (opts?: Object): Promise<Swarm> {
     const call = {
       path: `/swarm?`,
       method: 'GET',
@@ -69,8 +67,9 @@ class Swarm {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, conf) => {
         if (err) return reject(err)
-        const swarm = new Swarm(this.modem, conf.ID)
-        resolve(Object.assign(swarm, conf))
+        const swarm = new Swarm(this.modem)
+        swarm.data = conf
+        resolve(swarm)
       })
     })
   }
@@ -81,7 +80,7 @@ class Swarm {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the result
    */
-  join (opts) {
+  join (opts?: Object): Promise<String> {
     const call = {
       path: `/swarm/join?`,
       method: 'POST',
@@ -94,9 +93,9 @@ class Swarm {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, res) => {
+      this.modem.dial(call, (err, id: String) => {
         if (err) return reject(err)
-        resolve(res)
+        resolve(id)
       })
     })
   }
@@ -107,7 +106,7 @@ class Swarm {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the swarm
    */
-  leave (opts) {
+  leave (opts?: Object): Promise<String> {
     const call = {
       path: `/swarm/leave?`,
       method: 'POST',
@@ -119,7 +118,7 @@ class Swarm {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, res) => {
+      this.modem.dial(call, (err, res: String) => {
         if (err) return reject(err)
         resolve(res)
       })
@@ -132,7 +131,7 @@ class Swarm {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the swarm
    */
-  update (opts) {
+  update (opts?: Object): Promise<String> {
     const call = {
       path: `/swarm/update?`,
       method: 'POST',
@@ -145,23 +144,10 @@ class Swarm {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, res) => {
+      this.modem.dial(call, (err, res: String) => {
         if (err) return reject(err)
         resolve(res)
       })
     })
   }
-
-  __processArguments (opts, id) {
-    if (typeof opts === 'string' && !id) {
-      id = opts
-    }
-    if (!id && this.id) {
-      id = this.id
-    }
-    if (!opts) opts = {}
-    return [ opts, id ]
-  }
 }
-
-export default Swarm

@@ -1,22 +1,17 @@
+import Modem = require('docker-modem');
 /**
  * Class representing a task
  */
-declare class Task {
-    modem: any;
-    id: any;
+export declare class Task {
+    modem: Modem;
+    id: String;
+    data: Object;
     /**
      * Create a task
      * @param  {Modem}      modem     Modem to connect to the remote service
      * @param  {string}     id        Id of the task (optional)
      */
-    constructor(modem: any, id?: any);
-    /**
-     * Get the list of tasks
-     * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/list-tasks
-     * @param  {Object}   opts  Query params in the request (optional)
-     * @return {Promise}        Promise returning the result as a list of tasks
-     */
-    list(opts: any): Promise<{}>;
+    constructor(modem: Modem, id: String);
     /**
      * Get low-level information on a task
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/inspect-a-task
@@ -25,7 +20,27 @@ declare class Task {
      * @param  {String}   id    ID of the task to inspect, if it's not set, use the id of the object (optional)
      * @return {Promise}        Promise return the task
      */
-    status(opts: any, id: any): Promise<{}>;
-    __processArguments(opts: any, id: any): any[];
+    status(opts?: Object): Promise<{}>;
 }
-export default Task;
+export default class  {
+    modem: Modem;
+    /**
+     * Create a task
+     * @param  {Modem}      modem     Modem to connect to the remote service
+     * @param  {string}     id        Id of the task (optional)
+     */
+    constructor(modem: Modem);
+    /**
+     * Get a Task object
+     * @param  {id}         string    ID of the secret
+     * @return {Task}
+     */
+    get(id: String): Task;
+    /**
+     * Get the list of tasks
+     * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/list-tasks
+     * @param  {Object}   opts  Query params in the request (optional)
+     * @return {Promise}        Promise returning the result as a list of tasks
+     */
+    list(opts?: Object): Promise<Array<Task>>;
+}

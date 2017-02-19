@@ -1,10 +1,11 @@
 {
 	"compilerOptions": {
-        "module": "commonjs",
-        "target": "es6",
-        "sourceMap": true,
-        "declaration": true,
-        "removeComments": false
-	},
-"include": ["src/**/*.ts"]
+    "module": "commonjs",
+    "target": "es6",
+    "sourceMap": true,
+    "declaration": true,
+    "types": ["node"],
+    "removeComments": false
+  },
+  "include": ["src/**/*.ts"]
 }

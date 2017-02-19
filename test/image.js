@@ -1,6 +1,6 @@
 import test from 'ava'
 import fs from 'fs'
-import Image from '../lib/image'
+import { Image } from '../lib/image'
 import { Docker } from '../lib/docker'
 
 const socket = process.env.DOCKER_SOCKET || '/var/run/docker.sock'
@@ -21,19 +21,19 @@ test('create', async t => {
 })
 
 test('status', async t => {
-  const image = await docker.image.status(testImage)
+  const image = await docker.image.get(testImage).status()
   t.is(image.constructor, Image)
 })
 
 test('history', async t => {
-  const history = await docker.image.history(testImage)
+  const history = await docker.image.get(testImage).history()
   t.is(history.constructor, Array)
 })
 
 test('tag', async t => {
-  const image = await docker.image.tag({ tag: 'test', repo: 'root' }, testImage)
+  const image = await docker.image.get(testImage).tag({ tag: 'test', repo: 'root' })
   t.is(image.constructor, Image)
-  t.not(image.RepoTags.indexOf('root:test'), -1)
+  t.not(image.data.RepoTags.indexOf('root:test'), -1)
 })
 
 test('search', async t => {
@@ -58,7 +58,7 @@ test('build', async t => {
         stream.on('error', reject)
       })
     })
-  const image = await docker.image.status('test')
+  const image = await docker.image.get('test').status()
   t.notThrows(image.remove())
 })
 

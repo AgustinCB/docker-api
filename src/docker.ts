@@ -1,33 +1,32 @@
 'use strict'
 
 import Modem = require('docker-modem')
-import Container from './container'
-import Image from './image'
-import Volume from './volume'
-import Network from './network'
-import Node from './node'
-import Plugin from './plugin'
-import Secret from './secret'
-import Service from './service'
-import Swarm from './swarm'
-import Task from './task'
+import ContainerManager from './container'
+import ImageManager from './image'
+import VolumeManager from './volume'
+import NetworkManager from './network'
+import NodeManager from './node'
+import PluginManager from './plugin'
+import SecretManager from './secret'
+import ServiceManager from './service'
+import SwarmManager from './swarm'
+import TaskManager from './task'
 
 /**
  * Docker class with all methods
  */
 export class Docker {
-
-  modem: any
-  container: any
-  image: any
-  volume: any
-  network: any
-  node: any
-  plugin: any
-  secret: any
-  service: any
-  swarm: any
-  task: any
+  modem: Modem
+  container: ContainerManager
+  image: ImageManager
+  volume: VolumeManager
+  network: NetworkManager
+  node: NodeManager
+  plugin: PluginManager
+  secret: SecretManager
+  service: ServiceManager
+  swarm: SwarmManager
+  task: TaskManager
 
   /**
    * Creates the Docker object
@@ -36,16 +35,16 @@ export class Docker {
   constructor (opts) {
     this.modem = new Modem(opts)
 
-    this.container = new Container(this.modem)
-    this.image = new Image(this.modem)
-    this.volume = new Volume(this.modem)
-    this.network = new Network(this.modem)
-    this.node = new Node(this.modem)
-    this.plugin = new Plugin(this.modem)
-    this.secret = new Secret(this.modem)
-    this.service = new Service(this.modem)
-    this.swarm = new Swarm(this.modem)
-    this.task = new Task(this.modem)
+    this.container = new ContainerManager(this.modem)
+    this.image = new ImageManager(this.modem)
+    this.volume = new VolumeManager(this.modem)
+    this.network = new NetworkManager(this.modem)
+    this.node = new NodeManager(this.modem)
+    this.plugin = new PluginManager(this.modem)
+    this.secret = new SecretManager(this.modem)
+    this.service = new ServiceManager(this.modem)
+    this.swarm = new SwarmManager(this.modem)
+    this.task = new TaskManager(this.modem)
   }
 
   /**
@@ -55,7 +54,7 @@ export class Docker {
    * @param  {Object}   opts  Auth options
    * @return {Promise}        Promise returning the result
    */
-  auth (opts) {
+  auth (opts: Object): Promise<Object> {
     const call = {
       path: '/auth?',
       method: 'POST',
@@ -68,7 +67,7 @@ export class Docker {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, data) => {
+      this.modem.dial(call, (err, data: Object) => {
         if (err) return reject(err)
         resolve(data)
       })
@@ -80,7 +79,7 @@ export class Docker {
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/display-system-wide-information
    * @return {Promise}        Promise returning the result
    */
-  info () {
+  info (): Promise<Object> {
     const call = {
       path: '/info?',
       method: 'GET',
@@ -91,7 +90,7 @@ export class Docker {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, data) => {
+      this.modem.dial(call, (err, data: Object) => {
         if (err) return reject(err)
         resolve(data)
       })
@@ -103,7 +102,7 @@ export class Docker {
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/show-the-docker-version-information
    * @return {Promise}        Promise returning the result
    */
-  version () {
+  version (): Promise<Object> {
     const call = {
       path: '/version?',
       method: 'GET',
@@ -126,7 +125,7 @@ export class Docker {
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/ping-the-docker-server
    * @return {Promise}        Promise returning the result
    */
-  ping () {
+  ping (): Promise<String> {
     const call = {
       path: '/_ping?',
       method: 'GET',
@@ -137,7 +136,7 @@ export class Docker {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, data) => {
+      this.modem.dial(call, (err, data: String) => {
         if (err) return reject(err)
         resolve(data)
       })
@@ -150,7 +149,7 @@ export class Docker {
    * @param  {Object}   opts  Options to send with the request (optional)
    * @return {Promise}        Promise returning the result
    */
-  events (opts = {}) {
+  events (opts: Object = {}): Promise<Object> {
     const call = {
       path: '/events?',
       method: 'GET',
@@ -163,7 +162,7 @@ export class Docker {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, data) => {
+      this.modem.dial(call, (err, data: Object) => {
         if (err) return reject(err)
         resolve(data)
       })

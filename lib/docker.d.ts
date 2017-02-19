@@ -1,18 +1,29 @@
+import Modem = require('docker-modem');
+import ContainerManager from './container';
+import ImageManager from './image';
+import VolumeManager from './volume';
+import NetworkManager from './network';
+import NodeManager from './node';
+import PluginManager from './plugin';
+import SecretManager from './secret';
+import ServiceManager from './service';
+import SwarmManager from './swarm';
+import TaskManager from './task';
 /**
  * Docker class with all methods
  */
 export declare class Docker {
-    modem: any;
-    container: any;
-    image: any;
-    volume: any;
-    network: any;
-    node: any;
-    plugin: any;
-    secret: any;
-    service: any;
-    swarm: any;
-    task: any;
+    modem: Modem;
+    container: ContainerManager;
+    image: ImageManager;
+    volume: VolumeManager;
+    network: NetworkManager;
+    node: NodeManager;
+    plugin: PluginManager;
+    secret: SecretManager;
+    service: ServiceManager;
+    swarm: SwarmManager;
+    task: TaskManager;
     /**
      * Creates the Docker object
      * @param {Object}  opts Docker options
@@ -25,30 +36,30 @@ export declare class Docker {
      * @param  {Object}   opts  Auth options
      * @return {Promise}        Promise returning the result
      */
-    auth(opts: any): Promise<{}>;
+    auth(opts: Object): Promise<Object>;
     /**
      * Get system wide information about docker
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/display-system-wide-information
      * @return {Promise}        Promise returning the result
      */
-    info(): Promise<{}>;
+    info(): Promise<Object>;
     /**
      * Get docker version information of server
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/show-the-docker-version-information
      * @return {Promise}        Promise returning the result
      */
-    version(): Promise<{}>;
+    version(): Promise<Object>;
     /**
      * Ping the docker server
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/ping-the-docker-server
      * @return {Promise}        Promise returning the result
      */
-    ping(): Promise<{}>;
+    ping(): Promise<String>;
     /**
      * Get container events from docker, can be in real time via streaming or via polling (with since)
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/monitor-docker-s-events
      * @param  {Object}   opts  Options to send with the request (optional)
      * @return {Promise}        Promise returning the result
      */
-    events(opts?: {}): Promise<{}>;
+    events(opts?: Object): Promise<Object>;
 }

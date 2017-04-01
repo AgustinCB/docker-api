@@ -529,7 +529,7 @@ export class Container {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}          Promise returning the container
    */
-  start (opts?: Object): Promise<Container> {
+  start (opts: Object = {}): Promise<Container> {
     const call = {
       path: `/containers/${this.id}/start?`,
       method: 'POST',

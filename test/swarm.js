@@ -82,8 +82,10 @@ test('create-service', async t => {
 })
 
 test('list-services', async t => {
+  const service = await createService()
   const services = await docker.service.list()
   t.is(services.constructor, Array)
+  t.not(services.length, 0)
 })
 
 test('inspect-service', async t => {

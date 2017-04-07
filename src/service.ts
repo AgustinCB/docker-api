@@ -172,8 +172,7 @@ export default class {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, result) => {
         if (err) return reject(err)
-        if (!result.Services || !result.Services.length) return resolve([])
-        resolve(result.Services.map((conf) => {
+        resolve(result.map((conf) => {
           const service = new Service(this.modem, conf.ID)
           service.data = conf
           return service

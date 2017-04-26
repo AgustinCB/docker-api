@@ -34,6 +34,13 @@ export declare class Service {
      * @return {Promise}        Promise return the result
      */
     remove(opts?: Object): Promise<String>;
+    /**
+     * Logs of a service
+     * https://docs.docker.com/engine/api/v1.27/#operation/ServiceLogs
+     * @param  {Object}   opts  Query params in the request (optional)
+     * @return {Promise}        Promise return the result
+     */
+    logs(opts?: Object): Promise<String>;
 }
 export default class  {
     modem: Modem;

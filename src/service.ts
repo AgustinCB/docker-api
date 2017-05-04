@@ -102,6 +102,35 @@ export class Service {
       })
     })
   }
+
+  /**
+   * Logs of a service
+   * https://docs.docker.com/engine/api/v1.27/#operation/ServiceLogs
+   * @param  {Object}   opts  Query params in the request (optional)
+   * @return {Promise}        Promise return the result
+   */
+  logs (opts?: Object): Promise<String> {
+    const call = {
+      path: `/services/${this.id}/logs?`,
+      method: 'GET',
+      options: opts,
+      statusCodes: {
+        101: true,
+        200: true,
+        404: 'no such service',
+        500: 'server error',
+        501: 'use --experimental to see this',
+        503: 'node is not part of a swarm'
+      }
+    }
+
+    return new Promise((resolve, reject) => {
+      this.modem.dial(call, (err, res: String) => {
+        if (err) return reject(err)
+        resolve(res)
+      })
+    })
+  }
 }
 
 export default class {

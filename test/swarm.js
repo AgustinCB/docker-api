@@ -105,6 +105,11 @@ test('delete-service', async t => {
   const service = await (await createService()).status()
   t.notThrows(service.remove())
 })
+
+test('logs-service', async t => {
+  const res = await (await createService()).logs({stdout: true})
+  t.is(res.constructor, String)
+})
       
 
 test('list-tasks', async t => {

@@ -1,0 +1,415 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>node-docker-api</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.js" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">node-docker-api</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="globals.html">Globals</a>
+				</li>
+			</ul>
+			<h1> node-docker-api</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<h1 id="docker-api">docker-api</h1>
+				<p><a href="https://travis-ci.org/AgustinCB/docker-api"><img src="https://travis-ci.org/AgustinCB/docker-api.png?branch=master" alt="travis-ci"></a></p>
+				<p>Docker Remote API driver for node.js. It uses the same modem than <a href="https://github.com/apocas/dockerode">dockerode</a>, but the interface is promisified and with a different syntax.</p>
+				<p>Support for:</p>
+				<ul>
+					<li><strong>streams</strong></li>
+					<li><strong>stream demux</strong></li>
+					<li><strong>entities</strong></li>
+					<li><strong>run</strong></li>
+					<li><strong>tests</strong></li>
+					<li><strong>promises</strong></li>
+					<li><strong>full es6 support</strong></li>
+				</ul>
+				<p>The current status of the package is in beta state. This module covers the full <a href="https://docs.docker.com/engine/api/v1.26">API reference</a>, including experimental stuff such as plugins.</p>
+				<p>Check the <a href="https://github.com/AgustinCB/docker-api/tree/master/docs">reference</a> and the <a href="https://github.com/AgustinCB/docker-api/tree/master/test">tests</a> for full examples.</p>
+				<h2 id="installation">Installation</h2>
+				<p><code>npm install node-docker-api</code></p>
+				<h2 id="usage">Usage</h2>
+				<h3 id="create-start-stop-restart-and-remove-a-container">Create, start, stop, restart and remove a container</h3>
+				<pre><code class="lang-js"><span class="hljs-keyword">const</span> Docker = <span class="hljs-built_in">require</span>(<span class="hljs-string">'node-docker-api'</span>).Docker
+
+<span class="hljs-keyword">let</span> docker = <span class="hljs-keyword">new</span> Docker({ <span class="hljs-attr">socketPath</span>: <span class="hljs-string">'/var/run/docker.sock'</span> })
+
+docker.container.create({
+  <span class="hljs-attr">Image</span>: <span class="hljs-string">'ubuntu'</span>,
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'test'</span>
+})
+  .then(<span class="hljs-function">(<span class="hljs-params">container</span>) =&gt;</span> container.start())
+  .then(<span class="hljs-function">(<span class="hljs-params">container</span>) =&gt;</span> container.stop())
+  .then(<span class="hljs-function">(<span class="hljs-params">container</span>) =&gt;</span> container.restart())
+  .then(<span class="hljs-function">(<span class="hljs-params">container</span>) =&gt;</span> container.delete({ <span class="hljs-attr">force</span>: <span class="hljs-literal">true</span> }))
+  .catch(<span class="hljs-function">(<span class="hljs-params">error</span>) =&gt;</span> <span class="hljs-built_in">console</span>.log(error))
+</code></pre>
+				<h3 id="list-inspect-and-top-containers">List, inspect and top containers</h3>
+				<pre><code class="lang-js"><span class="hljs-keyword">const</span> Docker = <span class="hljs-built_in">require</span>(<span class="hljs-string">'node-docker-api'</span>).Docker
+
+<span class="hljs-keyword">let</span> docker = <span class="hljs-keyword">new</span> Docker({ <span class="hljs-attr">socketPath</span>: <span class="hljs-string">'/var/run/docker.sock'</span> })
+
+<span class="hljs-comment">// List</span>
+docker.container.list()
+   <span class="hljs-comment">// Inspect</span>
+  .then(<span class="hljs-function">(<span class="hljs-params">containers</span>) =&gt;</span> containers[<span class="hljs-number">0</span>].status())
+  .then(<span class="hljs-function">(<span class="hljs-params">container</span>) =&gt;</span> container.top())
+  .then(<span class="hljs-function">(<span class="hljs-params">processes</span>) =&gt;</span> <span class="hljs-built_in">console</span>.log(processes))
+  .catch(<span class="hljs-function">(<span class="hljs-params">error</span>) =&gt;</span> <span class="hljs-built_in">console</span>.log(error))
+</code></pre>
+				<h3 id="list-inspect-and-stat-containers">List, inspect and stat containers</h3>
+				<pre><code class="lang-js"><span class="hljs-keyword">const</span> Docker = <span class="hljs-built_in">require</span>(<span class="hljs-string">'node-docker-api'</span>).Docker
+
+<span class="hljs-keyword">let</span> docker = <span class="hljs-keyword">new</span> Docker({ <span class="hljs-attr">socketPath</span>: <span class="hljs-string">'/var/run/docker.sock'</span> })
+
+<span class="hljs-comment">// List</span>
+docker.container.list()
+   <span class="hljs-comment">// Inspect</span>
+  .then(<span class="hljs-function">(<span class="hljs-params">containers</span>) =&gt;</span> containers[<span class="hljs-number">0</span>].status())
+  .then(<span class="hljs-function">(<span class="hljs-params">container</span>) =&gt;</span> container.stats())
+  .then(<span class="hljs-function">(<span class="hljs-params">stats</span>) =&gt;</span> {
+    stats.on(<span class="hljs-string">'data'</span>, (stat) =&gt; <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Stats: '</span>,stat))
+    stats.on(<span class="hljs-string">'error'</span>, (err) =&gt; <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Error: '</span>, err))
+  })
+  .catch(<span class="hljs-function">(<span class="hljs-params">error</span>) =&gt;</span> <span class="hljs-built_in">console</span>.log(error))
+</code></pre>
+				<h3 id="get-logs-of-a-container">Get logs of a container</h3>
+				<pre><code class="lang-js"><span class="hljs-keyword">const</span> Docker = <span class="hljs-built_in">require</span>(<span class="hljs-string">'node-docker-api'</span>).Docker
+
+<span class="hljs-keyword">let</span> docker = <span class="hljs-keyword">new</span> Docker({ <span class="hljs-attr">socketPath</span>: <span class="hljs-string">'/var/run/docker.sock'</span> })
+<span class="hljs-keyword">let</span> container
+
+docker.container.create({
+  <span class="hljs-attr">Image</span>: <span class="hljs-string">'ubuntu'</span>,
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'test'</span>
+})
+  .then(<span class="hljs-function">(<span class="hljs-params">container</span>) =&gt;</span> container.logs({
+    <span class="hljs-attr">follow</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">stdout</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">stderr</span>: <span class="hljs-literal">true</span>
+  }))
+  .then(<span class="hljs-function">(<span class="hljs-params">stream</span>) =&gt;</span> {
+    stream.on(<span class="hljs-string">'data'</span>, (info) =&gt; <span class="hljs-built_in">console</span>.log(info))
+    stream.on(<span class="hljs-string">'error'</span>, (err) =&gt; <span class="hljs-built_in">console</span>.log(err))
+  })
+  .catch(<span class="hljs-function">(<span class="hljs-params">error</span>) =&gt;</span> <span class="hljs-built_in">console</span>.log(error))
+</code></pre>
+				<h3 id="export-a-container">Export a container</h3>
+				<pre><code class="lang-js"><span class="hljs-keyword">const</span> Docker = <span class="hljs-built_in">require</span>(<span class="hljs-string">'node-docker-api'</span>).Docker,
+  fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">'fs'</span>)
+
+<span class="hljs-keyword">let</span> docker = <span class="hljs-keyword">new</span> Docker({ <span class="hljs-attr">socketPath</span>: <span class="hljs-string">'/var/run/docker.sock'</span> })
+<span class="hljs-keyword">let</span> container
+
+docker.container.create({
+  <span class="hljs-attr">Image</span>: <span class="hljs-string">'ubuntu'</span>,
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'test'</span>
+})
+  .then(<span class="hljs-function">(<span class="hljs-params">container</span>) =&gt;</span> container.start())
+  .then(<span class="hljs-function">(<span class="hljs-params">container</span>) =&gt;</span> container.export())
+  .then(<span class="hljs-function">(<span class="hljs-params">content</span>) =&gt;</span> {
+    <span class="hljs-keyword">let</span> file = fs.createWriteStream(<span class="hljs-string">"container.tar"</span>);
+    file.end(content)
+  })
+  .catch(<span class="hljs-function">(<span class="hljs-params">error</span>) =&gt;</span> <span class="hljs-built_in">console</span>.log(error))
+</code></pre>
+				<h3 id="manipulate-file-system-in-a-container">Manipulate file system in a container</h3>
+				<pre><code class="lang-js"><span class="hljs-keyword">const</span> Docker = <span class="hljs-built_in">require</span>(<span class="hljs-string">'node-docker-api'</span>).Docker,
+  fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">'fs'</span>)
+
+<span class="hljs-keyword">const</span> promisifyStream = <span class="hljs-function">(<span class="hljs-params">stream</span>) =&gt;</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+  stream.on(<span class="hljs-string">'data'</span>, (d) =&gt; <span class="hljs-built_in">console</span>.log(d.toString()))
+  stream.on(<span class="hljs-string">'end'</span>, resolve)
+  stream.on(<span class="hljs-string">'error'</span>, reject)
+})
+
+<span class="hljs-keyword">let</span> docker = <span class="hljs-keyword">new</span> Docker({ <span class="hljs-attr">socketPath</span>: <span class="hljs-string">'/var/run/docker.sock'</span> })
+<span class="hljs-keyword">let</span> container
+
+docker.container.create({
+  <span class="hljs-attr">Image</span>: <span class="hljs-string">'ubuntu'</span>,
+  <span class="hljs-attr">Cmd</span>: [ <span class="hljs-string">'/bin/bash'</span>, <span class="hljs-string">'-c'</span>, <span class="hljs-string">'tail -f /var/log/dmesg'</span> ],
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'test'</span>
+})
+  .then(<span class="hljs-function">(<span class="hljs-params">container</span>) =&gt;</span> container.start())
+  .then(<span class="hljs-function">(<span class="hljs-params">_container</span>) =&gt;</span> {
+    container = _container
+    <span class="hljs-keyword">return</span> _container.fs.put(<span class="hljs-string">'./file.tar'</span>, {
+      <span class="hljs-attr">path</span>: <span class="hljs-string">'root'</span>
+    })
+  })
+  .then(<span class="hljs-function">(<span class="hljs-params">stream</span>) =&gt;</span> promisifyStream(stream))
+  .then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> container.fs.get({ <span class="hljs-attr">path</span>: <span class="hljs-string">'/var/log/dmesg'</span> }))
+  .then(<span class="hljs-function">(<span class="hljs-params">stream</span>) =&gt;</span> {
+    <span class="hljs-keyword">let</span> file = fs.createWriteStream(<span class="hljs-string">"file.jpg"</span>);
+    stream.pipe(file)
+    <span class="hljs-keyword">return</span> promisifyStream(stream)
+  })
+  .then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> container.status())
+  .then(<span class="hljs-function">(<span class="hljs-params">container</span>) =&gt;</span> container.stop())
+  .catch(<span class="hljs-function">(<span class="hljs-params">error</span>) =&gt;</span> <span class="hljs-built_in">console</span>.log(error))
+</code></pre>
+				<h3 id="execute-commands-and-kill-containers">Execute commands and kill containers</h3>
+				<pre><code class="lang-js"><span class="hljs-keyword">const</span> Docker = <span class="hljs-built_in">require</span>(<span class="hljs-string">'node-docker-api'</span>).Docker
+
+<span class="hljs-keyword">const</span> promisifyStream = <span class="hljs-function">(<span class="hljs-params">stream</span>) =&gt;</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+  <span class="hljs-built_in">console</span>.log(stream);
+  stream.on(<span class="hljs-string">'data'</span>, (d) =&gt; <span class="hljs-built_in">console</span>.log(d.toString()))
+  stream.on(<span class="hljs-string">'end'</span>, resolve)
+  stream.on(<span class="hljs-string">'error'</span>, reject)
+})
+
+<span class="hljs-keyword">let</span> docker = <span class="hljs-keyword">new</span> Docker({ <span class="hljs-attr">socketPath</span>: <span class="hljs-string">'/var/run/docker.sock'</span> })
+
+docker.container.create({
+  <span class="hljs-attr">Image</span>: <span class="hljs-string">'ubuntu'</span>,
+  <span class="hljs-attr">Cmd</span>: [ <span class="hljs-string">'/bin/bash'</span>, <span class="hljs-string">'-c'</span>, <span class="hljs-string">'tail -f /var/log/dmesg'</span> ],
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'test'</span>
+})
+  .then(<span class="hljs-function">(<span class="hljs-params">container</span>) =&gt;</span> container.start())
+  .then(<span class="hljs-function">(<span class="hljs-params">_container</span>) =&gt;</span> {
+    container = _container
+    <span class="hljs-keyword">return</span> container.exec.create({
+      <span class="hljs-attr">Cmd</span>: [ <span class="hljs-string">"top"</span> ]
+    })
+  })
+  .then(<span class="hljs-function">(<span class="hljs-params">exec</span>) =&gt;</span> {
+    <span class="hljs-keyword">return</span> exec.start()
+  })
+  .then(<span class="hljs-function">(<span class="hljs-params">stream</span>) =&gt;</span> {
+    stream.on(<span class="hljs-string">'data'</span>, (info) =&gt; {
+      <span class="hljs-built_in">console</span>.log(info.toString())
+      _container.kill()
+    })
+    stream.on(<span class="hljs-string">'error'</span>, (err) =&gt; <span class="hljs-built_in">console</span>.log(err))
+  })
+  .catch(<span class="hljs-function">(<span class="hljs-params">error</span>) =&gt;</span> <span class="hljs-built_in">console</span>.log(error))
+</code></pre>
+				<h3 id="build-inspect-and-remove-an-image">Build, inspect and remove an image</h3>
+				<pre><code class="lang-js"><span class="hljs-keyword">const</span> Docker = <span class="hljs-built_in">require</span>(<span class="hljs-string">'node-docker-api'</span>).Docker,
+  tar = <span class="hljs-built_in">require</span>(<span class="hljs-string">'tar-fs'</span>)
+
+<span class="hljs-keyword">const</span> promisifyStream = <span class="hljs-function">(<span class="hljs-params">stream</span>) =&gt;</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+  stream.on(<span class="hljs-string">'data'</span>, (d) =&gt; <span class="hljs-built_in">console</span>.log(d.toString()))
+  stream.on(<span class="hljs-string">'end'</span>, resolve)
+  stream.on(<span class="hljs-string">'error'</span>, reject)
+})
+
+<span class="hljs-keyword">let</span> docker = <span class="hljs-keyword">new</span> Docker({ <span class="hljs-attr">socketPath</span>: <span class="hljs-string">'/var/run/docker.sock'</span> })
+
+<span class="hljs-keyword">var</span> tarStream = tar.pack(<span class="hljs-string">'/path/to/Dockerfile'</span>)
+docker.image.build(tarStream, {
+  <span class="hljs-attr">t</span>: <span class="hljs-string">'testimg'</span>
+})
+  .then(<span class="hljs-function">(<span class="hljs-params">stream</span>) =&gt;</span> promisifyStream(stream))
+  .then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> docker.image.status(<span class="hljs-string">'testimg'</span>))
+  .then(<span class="hljs-function">(<span class="hljs-params">image</span>) =&gt;</span> image.remove())
+  .catch(<span class="hljs-function">(<span class="hljs-params">error</span>) =&gt;</span> <span class="hljs-built_in">console</span>.log(error))
+</code></pre>
+				<h3 id="pull-and-check-history-of-an-image">Pull and check history of an image</h3>
+				<pre><code class="lang-js"><span class="hljs-keyword">const</span> Docker = <span class="hljs-built_in">require</span>(<span class="hljs-string">'node-docker-api'</span>).Docker
+
+<span class="hljs-keyword">const</span> promisifyStream = <span class="hljs-function">(<span class="hljs-params">stream</span>) =&gt;</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+  stream.on(<span class="hljs-string">'data'</span>, (d) =&gt; <span class="hljs-built_in">console</span>.log(d.toString()))
+  stream.on(<span class="hljs-string">'end'</span>, resolve)
+  stream.on(<span class="hljs-string">'error'</span>, reject)
+})
+
+<span class="hljs-keyword">let</span> docker = <span class="hljs-keyword">new</span> Docker({ <span class="hljs-attr">socketPath</span>: <span class="hljs-string">'/var/run/docker.sock'</span> })
+
+<span class="hljs-keyword">return</span> docker.image.create({}, { <span class="hljs-attr">fromImage</span>: <span class="hljs-string">'ubuntu'</span>, <span class="hljs-attr">tag</span>: <span class="hljs-string">'latest'</span> })
+  .then(<span class="hljs-function">(<span class="hljs-params">stream</span>) =&gt;</span> promisifyStream(stream))
+  .then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> docker.image.status(<span class="hljs-string">'ubuntu'</span>))
+  .then(<span class="hljs-function">(<span class="hljs-params">image</span>) =&gt;</span> image.history())
+  .then(<span class="hljs-function">(<span class="hljs-params">events</span>) =&gt;</span> <span class="hljs-built_in">console</span>.log(events))
+  .catch(<span class="hljs-function">(<span class="hljs-params">error</span>) =&gt;</span> <span class="hljs-built_in">console</span>.log(error))
+</code></pre>
+				<h3 id="fetch-events-from-docker">Fetch events from docker</h3>
+				<pre><code class="lang-js"><span class="hljs-keyword">const</span> Docker = <span class="hljs-built_in">require</span>(<span class="hljs-string">'node-docker-api'</span>).Docker,
+  fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">'fs'</span>)
+
+<span class="hljs-keyword">const</span> promisifyStream = <span class="hljs-function">(<span class="hljs-params">stream</span>) =&gt;</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+  stream.on(<span class="hljs-string">'data'</span>, (d) =&gt; <span class="hljs-built_in">console</span>.log(data))
+  stream.on(<span class="hljs-string">'end'</span>, resolve)
+  stream.on(<span class="hljs-string">'error'</span>, reject)
+})
+
+<span class="hljs-keyword">let</span> docker = <span class="hljs-keyword">new</span> Docker({ <span class="hljs-attr">socketPath</span>: <span class="hljs-string">'/var/run/docker.sock'</span> })
+
+docker.events({
+  <span class="hljs-attr">since</span>: ((<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>().getTime() / <span class="hljs-number">1000</span>) - <span class="hljs-number">60</span>).toFixed(<span class="hljs-number">0</span>)
+})
+  .then(<span class="hljs-function">(<span class="hljs-params">container</span>) =&gt;</span> container.events())
+  .then(<span class="hljs-function">(<span class="hljs-params">stream</span>) =&gt;</span> promisifyStream(stream))
+  .catch(<span class="hljs-function">(<span class="hljs-params">error</span>) =&gt;</span> <span class="hljs-built_in">console</span>.log(error))
+</code></pre>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="globals.html"><em>Globals</em></a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_container_.html">"container"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_docker_.html">"docker"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_image_.html">"image"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_network_.html">"network"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_node_.html">"node"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_plugin_.html">"plugin"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_secret_.html">"secret"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_service_.html">"service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_swarm_.html">"swarm"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_task_.html">"task"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_volume_.html">"volume"</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="http://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="assets/js/search.js"><' + '/script>');</script>
+</body>
+</html>

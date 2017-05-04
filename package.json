@@ -7,7 +7,7 @@
     "watch-test": "nodemon --watch build --watch test --exec 'npm run test'",
     "lint": "./node_modules/tslint/bin/tslint -c tslint.json 'src/**/*.ts'",
     "test": "chmod +x test.sh; ./test.sh",
-    "gendoc": "./node_modules/jsdox/bin/jsdox --output docs src",
+    "gendoc": "typedoc --out docs src",
     "build": "./node_modules/typescript/bin/tsc -d --outDir lib"
   },
   "repository": {
@@ -33,6 +33,7 @@
     "mocha": "^2.5.3",
     "nodemon": "^1.11.0",
     "tslint": "^4.4.2",
+    "typedoc": "^0.6.0",
     "typescript": "^2.1.6"
   },
   "dependencies": {

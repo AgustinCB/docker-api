@@ -15,7 +15,7 @@ Support for:
 
 The current status of the package is in beta state. This module covers the full [API reference](https://docs.docker.com/engine/api/v1.26), including experimental stuff such as plugins.
 
-Check the [reference](https://github.com/AgustinCB/docker-api/tree/master/docs) and the [tests](https://github.com/AgustinCB/docker-api/tree/master/test) for full examples.
+Check the [reference](https://agustincb.github.io/docker-api/) and the [tests](https://github.com/AgustinCB/docker-api/tree/master/test) for full examples.
 
 ## Installation
 

@@ -114,6 +114,7 @@ export class Service {
       path: `/services/${this.id}/logs?`,
       method: 'GET',
       options: opts,
+      isStream: true,
       statusCodes: {
         101: true,
         200: true,

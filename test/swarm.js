@@ -108,7 +108,7 @@ test('delete-service', async t => {
 
 test('logs-service', async t => {
   const res = await (await createService()).logs({stdout: true})
-  t.truthy(logs.pipe)
+  t.truthy(res.pipe)
 })
       
 

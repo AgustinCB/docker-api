@@ -126,9 +126,9 @@ export class Service {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, res: String) => {
+      this.modem.dial(call, (err, logs) => {
         if (err) return reject(err)
-        resolve(res)
+        resolve(logs)
       })
     })
   }

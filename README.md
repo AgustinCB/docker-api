@@ -125,6 +125,7 @@ docker.container.create({
 ### Manipulate file system in a container
 
 ``` js
+'use strict'
 const Docker = require('node-docker-api').Docker,
   fs = require('fs')
 
@@ -164,16 +165,17 @@ docker.container.create({
 ### Execute commands and kill containers
 
 ``` js
+'use strict'
 const Docker = require('node-docker-api').Docker
 
 const promisifyStream = (stream) => new Promise((resolve, reject) => {
-  console.log(stream);
   stream.on('data', (d) => console.log(d.toString()))
   stream.on('end', resolve)
   stream.on('error', reject)
 })
 
 let docker = new Docker({ socketPath: '/var/run/docker.sock' })
+let _container
 
 docker.container.create({
   Image: 'ubuntu',
@@ -181,22 +183,19 @@ docker.container.create({
   name: 'test'
 })
   .then((container) => container.start())
-  .then((_container) => {
-    container = _container
+  .then((container) => {
+    _container = container
     return container.exec.create({
-      Cmd: [ "top" ]
+      AttachStdout: true,
+      AttachStderr: true,
+      Cmd: [ 'echo', 'test' ]
     })
   })
   .then((exec) => {
-    return exec.start()
+    return exec.start({ Detach: false })
   })
-  .then((stream) => {
-    stream.on('data', (info) => {
-      console.log(info.toString())
-      _container.kill()
-    })
-    stream.on('error', (err) => console.log(err))
-  })
+  .then((stream) => promisifyStream(stream))
+  .then(() => _container.kill())
   .catch((error) => console.log(error))
 ```
 
@@ -219,7 +218,7 @@ docker.image.build(tarStream, {
   t: 'testimg'
 })
   .then((stream) => promisifyStream(stream))
-  .then(() => docker.image.status('testimg'))
+  .then(() => docker.image.get('testimg').status())
   .then((image) => image.remove())
   .catch((error) => console.log(error))
 ```
@@ -227,6 +226,8 @@ docker.image.build(tarStream, {
 ### Pull and check history of an image
 
 ``` js
+'use strict'
+
 const Docker = require('node-docker-api').Docker
 
 const promisifyStream = (stream) => new Promise((resolve, reject) => {
@@ -239,7 +240,7 @@ let docker = new Docker({ socketPath: '/var/run/docker.sock' })
 
 return docker.image.create({}, { fromImage: 'ubuntu', tag: 'latest' })
   .then((stream) => promisifyStream(stream))
-  .then(() => docker.image.status('ubuntu'))
+  .then(() => docker.image.get('ubuntu').status())
   .then((image) => image.history())
   .then((events) => console.log(events))
   .catch((error) => console.log(error))
@@ -248,21 +249,22 @@ return docker.image.create({}, { fromImage: 'ubuntu', tag: 'latest' })
 ### Fetch events from docker
 
 ``` js
-const Docker = require('node-docker-api').Docker,
-  fs = require('fs')
+'use strict'
+
+const Docker = require('../lib/docker').Docker,
+    fs = require('fs')
 
 const promisifyStream = (stream) => new Promise((resolve, reject) => {
-  stream.on('data', (d) => console.log(data))
-  stream.on('end', resolve)
-  stream.on('error', reject)
+    stream.on('data', (d) => console.log(d.toString()))
+    stream.on('end', resolve)
+    stream.on('error', reject)
 })
 
 let docker = new Docker({ socketPath: '/var/run/docker.sock' })
 
 docker.events({
-  since: ((new Date().getTime() / 1000) - 60).toFixed(0)
+    since: ((new Date().getTime() / 1000) - 60).toFixed(0)
 })
-  .then((container) => container.events())
   .then((stream) => promisifyStream(stream))
   .catch((error) => console.log(error))
 ```

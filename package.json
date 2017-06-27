@@ -1,6 +1,6 @@
 {
   "name": "node-docker-api",
-  "version": "1.1.12",
+  "version": "1.1.13",
   "description": "Docker Remote API driver for node",
   "main": "./lib/docker",
   "scripts": {
@@ -8,7 +8,7 @@
     "lint": "./node_modules/tslint/bin/tslint -c tslint.json 'src/**/*.ts'",
     "test": "chmod +x test.sh; ./test.sh",
     "gendoc": "typedoc --out docs src",
-    "build": "./node_modules/typescript/bin/tsc -d --outDir lib"
+    "build": "tsc --outDir lib"
   },
   "repository": {
     "type": "git",

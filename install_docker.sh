@@ -1,6 +1,5 @@
 #!/bin/bash
-set -x
-set -e
+set -euo pipefail
 
 # argv[0]
 DOCKER_VERSION=$1

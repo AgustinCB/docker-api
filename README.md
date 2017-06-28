@@ -23,6 +23,8 @@ Check the [reference](https://agustincb.github.io/docker-api/) and the [tests](h
 
 ## Usage
 
+You can find more into the [examples folder](https://github.com/AgustinCB/docker-api/tree/master/examples)
+
 ### Create, start, stop, restart and remove a container
 
 ``` js
@@ -251,7 +253,7 @@ return docker.image.create({}, { fromImage: 'ubuntu', tag: 'latest' })
 ``` js
 'use strict'
 
-const Docker = require('../lib/docker').Docker,
+const Docker = require('node-docker-api').Docker,
     fs = require('fs')
 
 const promisifyStream = (stream) => new Promise((resolve, reject) => {

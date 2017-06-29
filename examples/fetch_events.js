@@ -9,7 +9,7 @@ const promisifyStream = (stream) => new Promise((resolve, reject) => {
     stream.on('error', reject)
 })
 
-let docker = new Docker({ socketPath: '/var/run/docker.sock' })
+const docker = new Docker({ socketPath: '/var/run/docker.sock' })
 
 docker.events({
     since: ((new Date().getTime() / 1000) - 60).toFixed(0)

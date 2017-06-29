@@ -8,7 +8,7 @@ const promisifyStream = (stream) => new Promise((resolve, reject) => {
   stream.on('error', reject)
 })
 
-let docker = new Docker({ socketPath: '/var/run/docker.sock' })
+const docker = new Docker({ socketPath: '/var/run/docker.sock' })
 
 return docker.image.create({}, { fromImage: 'ubuntu', tag: 'latest' })
   .then((stream) => promisifyStream(stream))

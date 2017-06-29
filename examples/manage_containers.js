@@ -1,6 +1,6 @@
 const Docker = require('node-docker-api').Docker
 
-let docker = new Docker({ socketPath: '/var/run/docker.sock' })
+const docker = new Docker({ socketPath: '/var/run/docker.sock' })
 
 docker.container.create({
   Image: 'ubuntu',

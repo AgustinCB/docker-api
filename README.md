@@ -30,7 +30,7 @@ You can find more into the [examples folder](https://github.com/AgustinCB/docker
 ``` js
 const Docker = require('node-docker-api').Docker
 
-let docker = new Docker({ socketPath: '/var/run/docker.sock' })
+const docker = new Docker({ socketPath: '/var/run/docker.sock' })
 
 docker.container.create({
   Image: 'ubuntu',
@@ -48,7 +48,7 @@ docker.container.create({
 ``` js
 const Docker = require('node-docker-api').Docker
 
-let docker = new Docker({ socketPath: '/var/run/docker.sock' })
+const docker = new Docker({ socketPath: '/var/run/docker.sock' })
 
 // List
 docker.container.list()
@@ -64,7 +64,7 @@ docker.container.list()
 ``` js
 const Docker = require('node-docker-api').Docker
 
-let docker = new Docker({ socketPath: '/var/run/docker.sock' })
+const docker = new Docker({ socketPath: '/var/run/docker.sock' })
 
 // List
 docker.container.list()
@@ -72,7 +72,7 @@ docker.container.list()
   .then((containers) => containers[0].status())
   .then((container) => container.stats())
   .then((stats) => {
-    stats.on('data', (stat) => console.log('Stats: ',stat))
+    stats.on('data', (stat) => console.log('Stats: ', stat.toString()))
     stats.on('error', (err) => console.log('Error: ', err))
   })
   .catch((error) => console.log(error))
@@ -83,7 +83,7 @@ docker.container.list()
 ```js
 const Docker = require('node-docker-api').Docker
 
-let docker = new Docker({ socketPath: '/var/run/docker.sock' })
+const docker = new Docker({ socketPath: '/var/run/docker.sock' })
 let container
 
 docker.container.create({
@@ -108,7 +108,7 @@ docker.container.create({
 const Docker = require('node-docker-api').Docker,
   fs = require('fs')
 
-let docker = new Docker({ socketPath: '/var/run/docker.sock' })
+const docker = new Docker({ socketPath: '/var/run/docker.sock' })
 let container
 
 docker.container.create({
@@ -118,7 +118,7 @@ docker.container.create({
   .then((container) => container.start())
   .then((container) => container.export())
   .then((content) => {
-    let file = fs.createWriteStream("container.tar");
+    const file = fs.createWriteStream("container.tar");
     file.end(content)
   })
   .catch((error) => console.log(error))
@@ -137,7 +137,7 @@ const promisifyStream = (stream) => new Promise((resolve, reject) => {
   stream.on('error', reject)
 })
 
-let docker = new Docker({ socketPath: '/var/run/docker.sock' })
+const docker = new Docker({ socketPath: '/var/run/docker.sock' })
 let container
 
 docker.container.create({
@@ -155,7 +155,7 @@ docker.container.create({
   .then((stream) => promisifyStream(stream))
   .then(() => container.fs.get({ path: '/var/log/dmesg' }))
   .then((stream) => {
-    let file = fs.createWriteStream("file.jpg");
+    const file = fs.createWriteStream("file.jpg");
     stream.pipe(file)
     return promisifyStream(stream)
   })
@@ -176,7 +176,7 @@ const promisifyStream = (stream) => new Promise((resolve, reject) => {
   stream.on('error', reject)
 })
 
-let docker = new Docker({ socketPath: '/var/run/docker.sock' })
+const docker = new Docker({ socketPath: '/var/run/docker.sock' })
 let _container
 
 docker.container.create({
@@ -213,7 +213,7 @@ const promisifyStream = (stream) => new Promise((resolve, reject) => {
   stream.on('error', reject)
 })
 
-let docker = new Docker({ socketPath: '/var/run/docker.sock' })
+const docker = new Docker({ socketPath: '/var/run/docker.sock' })
 
 var tarStream = tar.pack('/path/to/Dockerfile')
 docker.image.build(tarStream, {
@@ -238,7 +238,7 @@ const promisifyStream = (stream) => new Promise((resolve, reject) => {
   stream.on('error', reject)
 })
 
-let docker = new Docker({ socketPath: '/var/run/docker.sock' })
+const docker = new Docker({ socketPath: '/var/run/docker.sock' })
 
 return docker.image.create({}, { fromImage: 'ubuntu', tag: 'latest' })
   .then((stream) => promisifyStream(stream))
@@ -262,7 +262,7 @@ const promisifyStream = (stream) => new Promise((resolve, reject) => {
     stream.on('error', reject)
 })
 
-let docker = new Docker({ socketPath: '/var/run/docker.sock' })
+const docker = new Docker({ socketPath: '/var/run/docker.sock' })
 
 docker.events({
     since: ((new Date().getTime() / 1000) - 60).toFixed(0)

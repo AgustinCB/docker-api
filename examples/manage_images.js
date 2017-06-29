@@ -7,7 +7,7 @@ const promisifyStream = (stream) => new Promise((resolve, reject) => {
   stream.on('error', reject)
 })
 
-let docker = new Docker({ socketPath: '/var/run/docker.sock' })
+const docker = new Docker({ socketPath: '/var/run/docker.sock' })
 
 var tarStream = tar.pack('/path/to/Dockerfile')
 docker.image.build(tarStream, {

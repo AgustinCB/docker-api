@@ -8,7 +8,7 @@ const promisifyStream = (stream) => new Promise((resolve, reject) => {
   stream.on('error', reject)
 })
 
-let docker = new Docker({ socketPath: '/var/run/docker.sock' })
+const docker = new Docker({ socketPath: '/var/run/docker.sock' })
 let container
 
 docker.container.create({
@@ -26,7 +26,7 @@ docker.container.create({
   .then((stream) => promisifyStream(stream))
   .then(() => container.fs.get({ path: '/var/log/dmesg' }))
   .then((stream) => {
-    let file = fs.createWriteStream("file.jpg");
+    const file = fs.createWriteStream("file.jpg");
     stream.pipe(file)
     return promisifyStream(stream)
   })

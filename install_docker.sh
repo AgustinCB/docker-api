@@ -5,7 +5,7 @@ set -euo pipefail
 DOCKER_VERSION=$1
 
 service docker stop
-apt-get -y --purge remove docker docker-engine docker-ce docker.io
+apt-get -y --purge remove docker docker-engine docker.io
 
 apt-get update
 apt-get install -y apt-transport-https ca-certificates curl software-properties-common

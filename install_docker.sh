@@ -5,23 +5,30 @@ set -euo pipefail
 DOCKER_VERSION=$1
 
 service docker stop
-apt-get -y --purge remove docker-engine
+apt-get -y --purge remove docker docker-engine docker-ce docker.io
+
+apt-get update
+apt-get install -y apt-transport-https ca-certificates curl software-properties-common
 
 # install gpg key for docker rpo
-apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv 58118E89F3A912897C070ADBF76221572C52609D
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+apt-key fingerprint 0EBFCD88
 
 # enable docker repo
-echo 'deb "https://apt.dockerproject.org/repo" ubuntu-trusty main' >> /etc/apt/sources.list.d/docker-main.list
-apt-get update -o Dir::Etc::sourcelist='sources.list.d/docker-main.list' -o Dir::Etc::sourceparts='-' -o APT::Get::List-Cleanup='0'
+add-apt-repository \
+  "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) \
+  stable"
+apt-get update
 apt-cache gencaches
 
 # install package
-apt-get -y --force-yes install docker-engine=${DOCKER_VERSION}-0~ubuntu-trusty
+apt-get -y --force-yes install docker-ce
 echo 'DOCKER_OPTS="-H unix:///var/run/docker.sock --pidfile=/var/run/docker.pid --experimental=true"' > /etc/default/docker
-cat /etc/default/docker
+#cat /etc/default/docker
 
-service docker stop
+#service docker stop
 
-/usr/bin/dockerd -H unix:///var/run/docker.sock --pidfile=/var/run/docker.pid --experimental=true &
+#/usr/bin/dockerd -H unix:///var/run/docker.sock --pidfile=/var/run/docker.pid --experimental=true &
 
 docker --version

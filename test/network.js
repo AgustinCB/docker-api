@@ -35,5 +35,16 @@ test('status', async t => {
 })
 
 test.after('prune', async t => {
-  t.truthy(await docker.network.prune())
+  async function tryPrune(attempt = 5) {
+    if (attempt > 0) {
+      try {
+        await docker.network.prune()
+      } catch (e) {
+        tryPrune(attempt - 1)
+      }
+    } else {
+      t.truthy(await docker.network.prune())
+    }
+  }
+  await tryPrune()
 })

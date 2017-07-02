@@ -23,7 +23,7 @@ apt-get update
 apt-cache gencaches
 
 # install package
-apt-get -y --force-yes install docker-ce
+apt-get -y --force-yes install docker-ce=${DOCKER_VERSION}~ce~0~debian
 echo 'DOCKER_OPTS="-H unix:///var/run/docker.sock --pidfile=/var/run/docker.pid --experimental=true"' > /etc/default/docker
 #cat /etc/default/docker
 

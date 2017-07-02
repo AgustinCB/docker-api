@@ -4,7 +4,7 @@ dist: trusty
 sudo: required
 group: deprecated-2017Q2
 env:
-- DOCKER_VERSION=1.13.1
+- DOCKER_VERSION=17.06.0
 before_script:
 - chmod +x install_docker.sh
 - sudo ./install_docker.sh ${DOCKER_VERSION}

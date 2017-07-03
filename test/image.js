@@ -63,5 +63,16 @@ test('build', async t => {
 })
 
 test.after('prune', async t => {
-  t.truthy(await docker.image.prune())
+  async function tryPrune(attempt = 5) {
+    if (attempt > 0) {
+      try {
+        await docker.image.prune()
+      } catch (e) {
+        tryPrune(attempt - 1)
+      }
+    } else {
+      t.truthy(await docker.image.prune())
+    }
+  }
+  await tryPrune()
 })

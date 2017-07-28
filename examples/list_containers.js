@@ -8,7 +8,7 @@ docker.container.list()
   .then((containers) => containers[0].status())
   .then((container) => container.stats())
   .then((stats) => {
-    stats.on('data', (stat) => console.log('Stats: ',stat))
+    stats.on('data', (stat) => console.log('Stats: ', stat.toString()))
     stats.on('error', (err) => console.log('Error: ', err))
   })
   .catch((error) => console.log(error))

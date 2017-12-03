@@ -92,8 +92,8 @@ export default class {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, result) => {
         if (err) return reject(err)
-        if (!result.Tasks || !result.Tasks.length) return resolve([])
-        resolve(result.Tasks.map((conf) => {
+        if (!result || !result.length) return resolve([])
+        resolve(result.map((conf) => {
           const task = new Task(this.modem, conf.ID)
           task.data = conf
           return task

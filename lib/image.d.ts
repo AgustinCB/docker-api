@@ -88,9 +88,10 @@ export default class  {
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/build-image-from-a-dockerfile
      * @file   {File}     file  Dockerfile to build
      * @param  {Object}   opts  Query params in the request (optional)
+     * @param  {Object}   auth  Registry Auth Config, see linked engine documentation for details (optional)
      * @return {Promise}        Promise return the resulting stream
      */
-    build(file: fs.ReadStream, opts?: Object): Promise<Object>;
+    build(file: fs.ReadStream, opts?: Object, auth?: Object): Promise<Object>;
     /**
      * Create an image
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/create-an-image

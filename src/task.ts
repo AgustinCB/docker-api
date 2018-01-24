@@ -7,15 +7,15 @@ import Modem = require('docker-modem')
  */
 export class Task {
   modem: Modem
-  id: String
-  data: Object = {}
+  id: string
+  data: object = {}
 
   /**
    * Create a task
    * @param  {Modem}      modem     Modem to connect to the remote service
    * @param  {string}     id        Id of the task (optional)
    */
-  constructor (modem: Modem, id: String) {
+  constructor (modem: Modem, id: string) {
     this.modem = modem
     this.id = id
   }
@@ -28,7 +28,7 @@ export class Task {
    * @param  {String}   id    ID of the task to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the task
    */
-  status (opts?: Object) {
+  status (opts?: object) {
     const call = {
       path: `/tasks/${this.id}?`,
       method: 'GET',
@@ -68,7 +68,7 @@ export default class {
    * @param  {id}         string    ID of the secret
    * @return {Task}
    */
-  get (id: String): Task {
+  get (id: string): Task {
     return new Task(this.modem, id)
   }
 
@@ -78,7 +78,7 @@ export default class {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise returning the result as a list of tasks
    */
-  list (opts?: Object): Promise<Array<Task>> {
+  list (opts?: object): Promise<Array<Task>> {
     const call = {
       path: '/tasks?',
       method: 'GET',

@@ -7,15 +7,15 @@ import Modem = require('docker-modem')
  */
 export class Network {
   modem: Modem
-  id: String
-  data: Object = {}
+  id: string
+  data: object = {}
 
   /**
    * Creates a new network
    * @param  {Modem}      modem     Modem to connect to the remote service
    * @param  {string}     id        Id of the network (optional)
    */
-  constructor (modem: Modem, id: String) {
+  constructor (modem: Modem, id: string) {
     this.modem = modem
     this.id = id
   }
@@ -27,7 +27,7 @@ export class Network {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the network
    */
-  status (opts?: Object) {
+  status (opts?: object) {
     const call = {
       path: `/networks/${this.id}?`,
       method: 'GET',
@@ -55,7 +55,7 @@ export class Network {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the result
    */
-  remove (opts?: Object): Promise<{}> {
+  remove (opts?: object): Promise<{}> {
     const call = {
       path: `/networks/${this.id}?`,
       method: 'DELETE',
@@ -81,7 +81,7 @@ export class Network {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the network
    */
-  connect (opts?: Object) {
+  connect (opts?: object) {
     const call = {
       path: `/networks/${this.id}/connect?`,
       method: 'POST',
@@ -110,7 +110,7 @@ export class Network {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the network
    */
-  disconnect (opts?: Object): Promise<Network> {
+  disconnect (opts?: object): Promise<Network> {
     const call = {
       path: `/networks/${this.id}/disconnect?`,
       method: 'POST',
@@ -146,7 +146,7 @@ export default class {
    * @param  {id}         string    ID of the secret
    * @return {Network}
    */
-  get (id: String): Network {
+  get (id: string): Network {
     return new Network(this.modem, id)
   }
 
@@ -156,7 +156,7 @@ export default class {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise returning the result as a list of networks
    */
-  list (opts?: Object): Promise<Array<Network>> {
+  list (opts?: object): Promise<Array<Network>> {
     const call = {
       path: '/networks?',
       method: 'GET',
@@ -186,7 +186,7 @@ export default class {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the new network
    */
-  create (opts?: Object): Promise<Network> {
+  create (opts?: object): Promise<Network> {
     const call = {
       path: '/networks/create?',
       method: 'POST',
@@ -214,7 +214,7 @@ export default class {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}          Promise returning the container
    */
-  prune (opts?: Object): Promise<Object> {
+  prune (opts?: object): Promise<Object> {
     const call = {
       path: `/networks/prune`,
       method: 'POST',
@@ -226,7 +226,7 @@ export default class {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, res: Object) => {
+      this.modem.dial(call, (err, res: object) => {
         if (err) return reject(err)
         resolve(res)
       })

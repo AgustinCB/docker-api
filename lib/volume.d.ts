@@ -4,14 +4,14 @@ import Modem = require('docker-modem');
  */
 export declare class Volume {
     modem: Modem;
-    id: String;
-    data: Object;
+    id: string;
+    data: object;
     /**
      * Create a volume
      * @param  {Modem}      modem     Modem to connect to the remote service
      * @param  {string}     id        Id of the volume (optional)
      */
-    constructor(modem: Modem, id: String);
+    constructor(modem: Modem, id: string);
     /**
      * Get low-level information on a volume
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/inspect-a-volume
@@ -20,7 +20,7 @@ export declare class Volume {
      * @param  {String}   id    ID of the volume to inspect, if it's not set, use the id of the object (optional)
      * @return {Promise}        Promise return the volume
      */
-    status(opts?: Object): Promise<Volume>;
+    status(opts?: object): Promise<Volume>;
     /**
      * Remove a volume from the filesystem
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/remove-a-volume
@@ -28,7 +28,7 @@ export declare class Volume {
      * @param  {String}   id    ID of the volume to inspect, if it's not set, use the id of the object (optional)
      * @return {Promise}        Promise return the result
      */
-    remove(opts?: Object): Promise<{}>;
+    remove(opts?: object): Promise<{}>;
 }
 export default class  {
     modem: Modem;
@@ -43,26 +43,26 @@ export default class  {
      * @param  {id}         String    ID of the secret
      * @return {Volume}
      */
-    get(id: String): Volume;
+    get(id: string): Volume;
     /**
      * Get the list of volumes
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/list-volumes
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise returning the result as a list of volumes
      */
-    list(opts?: Object): Promise<Array<Volume>>;
+    list(opts?: object): Promise<Array<Volume>>;
     /**
      * Create a volume
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/create-a-volume
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the new volume
      */
-    create(opts?: Object): Promise<Volume>;
+    create(opts?: object): Promise<Volume>;
     /**
      * Prune volumes
      * https://docs.docker.com/engine/api/v1.25/#operation/VolumePrune
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}          Promise returning the container
      */
-    prune(opts?: Object): Promise<Object>;
+    prune(opts?: object): Promise<Object>;
 }

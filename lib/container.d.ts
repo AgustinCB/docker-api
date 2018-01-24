@@ -8,22 +8,22 @@ import fs = require('fs');
 export declare class Exec {
     modem: Modem;
     container: Container;
-    id: String;
-    data: Object;
+    id: string;
+    data: object;
     /**
      * Create an execution
      * @param  {Modem}      modem     Modem to connect to the remote service
      * @param  {Container}  container Container that owns the execution (optional)
      * @param  {string}     id        Id of the execution
      */
-    constructor(modem: Modem, container: Container, id: String);
+    constructor(modem: Modem, container: Container, id: string);
     /**
      * Create an exec instance in a container
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/create-a-container
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the new exec instance
      */
-    create(opts?: Object): Promise<Exec>;
+    create(opts?: object): Promise<Exec>;
     /**
      * Start an exec instance
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/exec-start
@@ -37,7 +37,7 @@ export declare class Exec {
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the result
      */
-    resize(opts?: Object): Promise<{}>;
+    resize(opts?: object): Promise<{}>;
     /**
      * Get status of an exec instance
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/exec-inspect
@@ -45,7 +45,7 @@ export declare class Exec {
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the exec instance
      */
-    status(opts?: Object): Promise<Exec>;
+    status(opts?: object): Promise<Exec>;
 }
 /**
  * Class representing container execution management
@@ -65,14 +65,14 @@ export declare class ExecManager {
      * @param  {id}         string    ID of the exec
      * @return {Exec}
      */
-    get(id: String): Exec;
+    get(id: string): Exec;
     /**
      * Create an exec instance in a container
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/create-a-container
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the new exec instance
      */
-    create(opts?: Object): Promise<Exec>;
+    create(opts?: object): Promise<Exec>;
 }
 /**
  * Class representing container filesystem
@@ -92,7 +92,7 @@ export declare class ContainerFs {
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise returning the info about the filesystem
      */
-    info(opts?: Object): Promise<String>;
+    info(opts?: object): Promise<String>;
     /**
      * Get a tar archive of a resource in the filesystem of a container
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/get-an-archive-of-a-filesystem-resource-in-a-container
@@ -106,24 +106,24 @@ export declare class ContainerFs {
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise returning the result
      */
-    put(file: fs.ReadStream, opts?: Object): Promise<Object>;
+    put(file: fs.ReadStream, opts?: object): Promise<Object>;
 }
 /**
  * Class representing a container
  */
 export declare class Container {
     modem: Modem;
-    id: String;
+    id: string;
     fs: ContainerFs;
     exec: ExecManager;
     Warnings: Array<String>;
-    data: Object;
+    data: object;
     /**
      * Create an container object
      * @param  {Modem}  modem Modem to connect to the remote service
      * @param  {string} id    Container id
      */
-    constructor(modem: Modem, id: String);
+    constructor(modem: Modem, id: string);
     /**
      * Get low-level information on a container
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/inspect-a-container
@@ -131,21 +131,21 @@ export declare class Container {
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the container
      */
-    status(opts?: Object): Promise<Container>;
+    status(opts?: object): Promise<Container>;
     /**
      * Get list of processes (ps) inside a container. Not supported in Windows.
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/list-processes-running-inside-a-container
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the list of processes
      */
-    top(opts?: Object): Promise<Array<Object>>;
+    top(opts?: object): Promise<Array<Object>>;
     /**
      * Get stdout and stderr logs from a container
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/get-container-logs
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise returning the concatenated logs
      */
-    logs(opts?: Object): Promise<Object>;
+    logs(opts?: object): Promise<Object>;
     /**
      * Get changes on a container's filesystem
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/inspect-changes-on-a-container-s-filesystem
@@ -165,42 +165,42 @@ export declare class Container {
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}          Promise returning the stats, in a stream or string
      */
-    stats(opts?: Object): Promise<Object>;
+    stats(opts?: object): Promise<Object>;
     /**
      * Resize the TTY for a container. You must restart the container to make the resize take effect.
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/resize-a-container-tty
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}          Promise returning the response
      */
-    resize(opts?: Object): Promise<Object>;
+    resize(opts?: object): Promise<Object>;
     /**
      * Start a container
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/start-a-container
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}          Promise returning the container
      */
-    start(opts?: Object): Promise<Container>;
+    start(opts?: object): Promise<Container>;
     /**
      * Stop a container
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/stop-a-container
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}          Promise returning the container
      */
-    stop(opts?: Object): Promise<Container>;
+    stop(opts?: object): Promise<Container>;
     /**
      * Restart a container
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/restart-a-container
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}          Promise returning the container
      */
-    restart(opts?: Object): Promise<Container>;
+    restart(opts?: object): Promise<Container>;
     /**
      * Kill a container
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/kill-a-container
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}          Promise returning the container
      */
-    kill(opts?: Object): Promise<Container>;
+    kill(opts?: object): Promise<Container>;
     /**
      * Update configuration a container.
      * Docs says you can do it for more than one, but doesn't exaplin how, so let's leave it in only one
@@ -208,14 +208,14 @@ export declare class Container {
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}          Promise returning the container
      */
-    update(opts?: Object): Promise<Container>;
+    update(opts?: object): Promise<Container>;
     /**
      * Rename a container.
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/rename-a-container
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}          Promise returning the container
      */
-    rename(opts: Object): Promise<Container>;
+    rename(opts: object): Promise<Container>;
     /**
      * Pause a container.
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/pause-a-container
@@ -241,7 +241,7 @@ export declare class Container {
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}          Promise returning the stream and the container
      */
-    wsattach(opts?: Object): Promise<Array<Object>>;
+    wsattach(opts?: object): Promise<Array<Object>>;
     /**
      * Block until a container stops, returning exit code
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/wait-a-container
@@ -254,7 +254,7 @@ export declare class Container {
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}          Promise returning nothing
      */
-    delete(opts?: Object): Promise<{}>;
+    delete(opts?: object): Promise<{}>;
     /**
      * Commit container into an image
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/create-a-new-image-from-a-container-s-changes
@@ -271,26 +271,26 @@ export default class  {
      * @param  {id}         string    ID of the container
      * @return {Container}
      */
-    get(id: String): Container;
+    get(id: string): Container;
     /**
      * Get the list of containers
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/list-containers
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise returning the result as a list of containers
      */
-    list(opts?: Object): Promise<Array<Container>>;
+    list(opts?: object): Promise<Array<Container>>;
     /**
      * Create a container
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/create-a-container
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the new container
      */
-    create(opts?: Object): Promise<Container>;
+    create(opts?: object): Promise<Container>;
     /**
      * Prune a container
      * https://docs.docker.com/engine/api/v1.25/#operation/ContainerPrune
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}          Promise returning the container
      */
-    prune(opts?: Object): Promise<Object>;
+    prune(opts?: object): Promise<Object>;
 }

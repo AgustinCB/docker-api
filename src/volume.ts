@@ -7,15 +7,15 @@ import Modem = require('docker-modem')
  */
 export class Volume {
   modem: Modem
-  id: String
-  data: Object = {}
+  id: string
+  data: object = {}
 
   /**
    * Create a volume
    * @param  {Modem}      modem     Modem to connect to the remote service
    * @param  {string}     id        Id of the volume (optional)
    */
-  constructor (modem: Modem, id: String) {
+  constructor (modem: Modem, id: string) {
     this.modem = modem
     this.id = id
   }
@@ -28,7 +28,7 @@ export class Volume {
    * @param  {String}   id    ID of the volume to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the volume
    */
-  status (opts?: Object): Promise<Volume> {
+  status (opts?: object): Promise<Volume> {
     const call = {
       path: `/volumes/${this.id}?`,
       method: 'GET',
@@ -57,7 +57,7 @@ export class Volume {
    * @param  {String}   id    ID of the volume to inspect, if it's not set, use the id of the object (optional)
    * @return {Promise}        Promise return the result
    */
-  remove (opts?: Object): Promise<{}> {
+  remove (opts?: object): Promise<{}> {
     const call = {
       path: `/volumes/${this.id}?`,
       method: 'DELETE',
@@ -96,7 +96,7 @@ export default class {
    * @param  {id}         String    ID of the secret
    * @return {Volume}
    */
-  get (id: String): Volume {
+  get (id: string): Volume {
     return new Volume(this.modem, id)
   }
 
@@ -106,7 +106,7 @@ export default class {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise returning the result as a list of volumes
    */
-  list (opts?: Object): Promise<Array<Volume>> {
+  list (opts?: object): Promise<Array<Volume>> {
     const call = {
       path: '/volumes',
       method: 'GET',
@@ -136,7 +136,7 @@ export default class {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the new volume
    */
-  create (opts?: Object): Promise<Volume> {
+  create (opts?: object): Promise<Volume> {
     const call = {
       path: '/volumes/create?',
       method: 'POST',
@@ -163,7 +163,7 @@ export default class {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}          Promise returning the container
    */
-  prune (opts?: Object): Promise<Object> {
+  prune (opts?: object): Promise<Object> {
     const call = {
       path: `/volumes/prune`,
       method: 'POST',
@@ -175,7 +175,7 @@ export default class {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, res: Object) => {
+      this.modem.dial(call, (err, res: object) => {
         if (err) return reject(err)
         resolve(res)
       })

@@ -7,15 +7,15 @@ import Modem = require('docker-modem')
  */
 export class Secret {
   modem: Modem
-  id: String
-  data: Object = {}
+  id: string
+  data: object = {}
 
   /**
    * Create a secret
    * @param  {Modem}      modem     Modem to connect to the remote service
    * @param  {string}     id        Id of the secret (optional)
    */
-  constructor (modem: Modem, id: String) {
+  constructor (modem: Modem, id: string) {
     this.modem = modem
     this.id = id
   }
@@ -27,7 +27,7 @@ export class Secret {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the secret
    */
-  status (opts?: Object): Promise<Secret> {
+  status (opts?: object): Promise<Secret> {
     const call = {
       path: `/secrets/${this.id}?`,
       method: 'GET',
@@ -56,7 +56,7 @@ export class Secret {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the result
    */
-  remove (opts?: Object): Promise<{}> {
+  remove (opts?: object): Promise<{}> {
     const call = {
       path: `/secrets/${this.id}?`,
       method: 'DELETE',
@@ -93,7 +93,7 @@ export default class {
    * @param  {id}         string    ID of the secret
    * @return {Secret}
    */
-  get (id: String): Secret {
+  get (id: string): Secret {
     return new Secret(this.modem, id)
   }
 
@@ -103,7 +103,7 @@ export default class {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise returning the result as a list of secrets
    */
-  list (opts?: Object): Promise<Array<Secret>> {
+  list (opts?: object): Promise<Array<Secret>> {
     const call = {
       path: '/secrets',
       method: 'GET',
@@ -133,7 +133,7 @@ export default class {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the new secret
    */
-  create (opts?: Object): Promise<Secret> {
+  create (opts?: object): Promise<Secret> {
     const call = {
       path: '/secrets/create?',
       method: 'POST',

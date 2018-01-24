@@ -4,21 +4,21 @@ import Modem = require('docker-modem');
  */
 export declare class Node {
     modem: Modem;
-    id: String;
-    data: Object;
+    id: string;
+    data: object;
     /**
      * Create a node
      * @param  {Modem}      modem     Modem to connect to the remote service
      * @param  {string}     id        Id of the node (optional)
      */
-    constructor(modem: Modem, id: String);
+    constructor(modem: Modem, id: string);
     /**
      * Update a node
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/update-a-node
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the new node
      */
-    update(opts?: Object): Promise<Node>;
+    update(opts?: object): Promise<Node>;
     /**
      * Get low-level information on a node
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/inspect-a-node
@@ -26,14 +26,14 @@ export declare class Node {
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the node
      */
-    status(opts?: Object): Promise<{}>;
+    status(opts?: object): Promise<{}>;
     /**
      * Remove a node
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/remove-a-node
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the result
      */
-    remove(opts: Object): Promise<{}>;
+    remove(opts: object): Promise<{}>;
 }
 export default class  {
     modem: Modem;
@@ -47,12 +47,12 @@ export default class  {
      * @param  {id}         string    ID of the secret
      * @return {Node}
      */
-    get(id: String): Node;
+    get(id: string): Node;
     /**
      * Get the list of nodes
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/list-nodes
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise returning the result as a list of nodes
      */
-    list(opts?: Object): Promise<Array<Node>>;
+    list(opts?: object): Promise<Array<Node>>;
 }

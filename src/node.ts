@@ -7,15 +7,15 @@ import Modem = require('docker-modem')
  */
 export class Node {
   modem: Modem
-  id: String
-  data: Object = {}
+  id: string
+  data: object = {}
 
   /**
    * Create a node
    * @param  {Modem}      modem     Modem to connect to the remote service
    * @param  {string}     id        Id of the node (optional)
    */
-  constructor (modem: Modem, id: String) {
+  constructor (modem: Modem, id: string) {
     this.modem = modem
     this.id = id
   }
@@ -26,7 +26,7 @@ export class Node {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the new node
    */
-  update (opts?: Object): Promise<Node> {
+  update (opts?: object): Promise<Node> {
     const call = {
       path: `/nodes/${this.id}/update?`,
       method: 'POST',
@@ -55,7 +55,7 @@ export class Node {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the node
    */
-  status (opts?: Object) {
+  status (opts?: object) {
     const call = {
       path: `/nodes/${this.id}?`,
       method: 'GET',
@@ -83,7 +83,7 @@ export class Node {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the result
    */
-  remove (opts: Object): Promise<{}> {
+  remove (opts: object): Promise<{}> {
     const call = {
       path: `/nodes/${this.id}?`,
       method: 'DELETE',
@@ -120,7 +120,7 @@ export default class {
    * @param  {id}         string    ID of the secret
    * @return {Node}
    */
-  get (id: String): Node {
+  get (id: string): Node {
     return new Node(this.modem, id)
   }
 
@@ -130,7 +130,7 @@ export default class {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise returning the result as a list of nodes
    */
-  list (opts?: Object): Promise<Array<Node>> {
+  list (opts?: object): Promise<Array<Node>> {
     const call = {
       path: '/nodes?',
       method: 'GET',

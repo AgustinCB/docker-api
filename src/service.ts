@@ -7,15 +7,15 @@ import Modem = require('docker-modem')
  */
 export class Service {
   modem: Modem
-  id: String
-  data: Object = {}
+  id: string
+  data: object = {}
 
   /**
    * Create a service
    * @param  {Modem}      modem     Modem to connect to the remote service
    * @param  {string}     id        Id of the service (optional)
    */
-  constructor (modem: Modem, id: String) {
+  constructor (modem: Modem, id: string) {
     this.modem = modem
     this.id = id
   }
@@ -26,7 +26,7 @@ export class Service {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the new service
    */
-  update (opts?: Object): Promise<Service> {
+  update (opts?: object): Promise<Service> {
     const call = {
       path: `/services/${this.id}/update?`,
       method: 'POST',
@@ -55,7 +55,7 @@ export class Service {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the service
    */
-  status (opts?: Object): Promise<Service> {
+  status (opts?: object): Promise<Service> {
     const call = {
       path: `/services/${this.id}?`,
       method: 'GET',
@@ -83,7 +83,7 @@ export class Service {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the result
    */
-  remove (opts?: Object): Promise<String> {
+  remove (opts?: object): Promise<String> {
     const call = {
       path: `/services/${this.id}?`,
       method: 'DELETE',
@@ -96,7 +96,7 @@ export class Service {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, res: String) => {
+      this.modem.dial(call, (err, res: string) => {
         if (err) return reject(err)
         resolve(res)
       })
@@ -109,7 +109,7 @@ export class Service {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the result
    */
-  logs (opts?: Object): Promise<String> {
+  logs (opts?: object): Promise<String> {
     const call = {
       path: `/services/${this.id}/logs?`,
       method: 'GET',
@@ -150,7 +150,7 @@ export default class {
    * @param  {id}         string    ID of the secret
    * @return {Network}
    */
-  get (id: String): Service {
+  get (id: string): Service {
     return new Service(this.modem, id)
   }
 
@@ -160,7 +160,7 @@ export default class {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the new service
    */
-  create (opts?: Object): Promise<Service> {
+  create (opts?: object): Promise<Service> {
     const call = {
       path: '/services/create?',
       method: 'POST',
@@ -188,7 +188,7 @@ export default class {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise returning the result as a list of services
    */
-  list (opts?: Object): Promise<Array<Service>> {
+  list (opts?: object): Promise<Array<Service>> {
     const call = {
       path: '/services?',
       method: 'GET',

@@ -112,7 +112,7 @@ test('resize', async t => {
 
 test('prune', async t => {
   const container = await createContainer('prune')
-  t.notThrows(docker.container.prune())
+  await t.notThrows(docker.container.prune())
 })
 
 test('start', async t => {
@@ -201,8 +201,10 @@ test('exec', async t => {
   const exec = await container.exec.create({
     Cmd: [ "top" ]
   })
-  const stream = await exec.start()
-  t.truthy(stream.pipe)
+  const stream = await exec.start({
+      stream: true
+  })
+  t.truthy(stream)
 })
 
 test('exec-status', async t => {
@@ -277,5 +279,5 @@ test.after.always('cleanup', async t => {
       })
       .catch((err) => console.log(err))
   )
-  t.notThrows(Promise.all(promises))
+  await t.notThrows(Promise.all(promises))
 })

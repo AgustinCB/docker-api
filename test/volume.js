@@ -25,7 +25,7 @@ test('create', async t => {
   })
 
   t.is(volume.constructor, Volume)
-  t.notThrows(volume.remove())
+  await t.notThrows(volume.remove())
 })
 
 test('status', async t => {
@@ -39,7 +39,7 @@ test('status', async t => {
   })
   const volumeStatus = await volume.status()
   t.is(volumeStatus.constructor, Volume)
-  t.notThrows(volume.remove())
+  await t.notThrows(volume.remove())
 })
 
 test.after('prune', async t => {

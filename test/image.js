@@ -59,7 +59,7 @@ test('build', async t => {
       })
     })
   const image = await docker.image.get('test').status()
-  t.notThrows(image.remove())
+  await t.notThrows(image.remove())
 })
 
 test.after('prune', async t => {

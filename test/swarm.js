@@ -15,7 +15,7 @@ const docker = isSocket
 
 const createService = _ =>
   docker.service.create({
-    "Name": "redis-" + Date.now(),
+    "Name": "redis-" + Date.now().toString()+ "-" + Math.floor(Math.random().toString() * 100000),
     "TaskTemplate": {
       "ContainerSpec": {
         "Image": "redis"
@@ -103,7 +103,7 @@ test('update-service', async t => {
 
 test('delete-service', async t => {
   const service = await (await createService()).status()
-  t.notThrows(service.remove())
+  await t.notThrows(service.remove())
 })
 
 test('logs-service', async t => {
@@ -132,7 +132,7 @@ test('inspect-node', async t => {
 test('remove-node', async t => {
   const nodes = await docker.node.list()
   const node = await nodes[0].status()
-  t.throws(node.remove())
+  await t.throws(node.remove())
 })
 
 test('list-secret', async t => {
@@ -150,7 +150,7 @@ test('create-secret', async t => {
 	})
 
   t.is(secret.constructor, Secret)
-  t.notThrows(secret.remove())
+  await t.notThrows(secret.remove())
 })
 
 test('status-secret', async t => {
@@ -161,5 +161,5 @@ test('status-secret', async t => {
 	const secretStatus = await secret.status()
 
   t.is(secretStatus.constructor, Secret)
-  t.notThrows(secret.remove())
+  await t.notThrows(secret.remove())
 })

@@ -20,7 +20,7 @@ test('create', async t => {
     "Driver": "bridge",
   })
   t.is(network.constructor, Network)
-  t.notThrows(network.remove())
+  await t.notThrows(network.remove())
 })
 
 test('status', async t => {
@@ -31,7 +31,7 @@ test('status', async t => {
   t.is(network.constructor, Network)
   const networkStatus = await network.status()
   t.is(networkStatus.constructor, Network)
-  t.notThrows(network.remove())
+  await t.notThrows(network.remove())
 })
 
 test.after('prune', async t => {

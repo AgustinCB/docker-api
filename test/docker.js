@@ -25,7 +25,7 @@ test('info', async t => {
 })
 
 test('auth', async t => {
-  t.throws(docker.auth({
+  await t.throws(docker.auth({
     username: "AgustinCB",
     password: "AgustinIsAwesome"
   }))

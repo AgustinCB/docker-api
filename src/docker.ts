@@ -54,7 +54,7 @@ export class Docker {
    * @param  {Object}   opts  Auth options
    * @return {Promise}        Promise returning the result
    */
-  auth (opts: Object): Promise<Object> {
+  auth (opts: object): Promise<Object> {
     const call = {
       path: '/auth?',
       method: 'POST',
@@ -67,7 +67,7 @@ export class Docker {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, data: Object) => {
+      this.modem.dial(call, (err, data: object) => {
         if (err) return reject(err)
         resolve(data)
       })
@@ -90,7 +90,7 @@ export class Docker {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, data: Object) => {
+      this.modem.dial(call, (err, data: object) => {
         if (err) return reject(err)
         resolve(data)
       })
@@ -136,7 +136,7 @@ export class Docker {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, data: String) => {
+      this.modem.dial(call, (err, data: string) => {
         if (err) return reject(err)
         resolve(data)
       })
@@ -149,7 +149,7 @@ export class Docker {
    * @param  {Object}   opts  Options to send with the request (optional)
    * @return {Promise}        Promise returning the result
    */
-  events (opts: Object = {}): Promise<Object> {
+  events (opts: object = {}): Promise<Object> {
     const call = {
       path: '/events?',
       method: 'GET',
@@ -162,7 +162,7 @@ export class Docker {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, data: Object) => {
+      this.modem.dial(call, (err, data: object) => {
         if (err) return reject(err)
         resolve(data)
       })

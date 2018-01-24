@@ -6,14 +6,14 @@ import fs = require('fs');
  */
 export declare class Image {
     modem: Modem;
-    id: String;
-    data: Object;
+    id: string;
+    data: object;
     /**
      * Creates a new image
      * @param  {Modem}  modem Modem to connect to the remote service
      * @param  {string} id    Container id
      */
-    constructor(modem: Modem, id: String);
+    constructor(modem: Modem, id: string);
     /**
      * Get low-level information on an image
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/inspect-an-image
@@ -21,7 +21,7 @@ export declare class Image {
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the image
      */
-    status(opts?: Object): Promise<Image>;
+    status(opts?: object): Promise<Image>;
     /**
      * History of the image
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/get-the-history-of-an-image
@@ -29,7 +29,7 @@ export declare class Image {
      * @param  {String}   id    ID of the image to inspect, if it's not set, use the id of the object (optional)
      * @return {Promise}        Promise return the events in the history
      */
-    history(opts?: Object): Promise<Array<Object>>;
+    history(opts?: object): Promise<Array<Object>>;
     /**
      * Push an image to the registry
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/push-an-image-on-the-registry
@@ -37,28 +37,28 @@ export declare class Image {
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the resulting stream
      */
-    push(auth?: Object, opts?: Object): Promise<Object>;
+    push(auth?: object, opts?: object): Promise<Object>;
     /**
      * Tag the image into the registry
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/tag-an-image-into-a-repository
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the image
      */
-    tag(opts?: Object): Promise<Image>;
+    tag(opts?: object): Promise<Image>;
     /**
      * Remove an image from the filesystem
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/remove-an-image
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the result
      */
-    remove(opts?: Object): Promise<Array<Object>>;
+    remove(opts?: object): Promise<Array<Object>>;
     /**
      * Get an image in a tarball
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/get-a-tarball-containing-all-images-in-a-repository
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the stream with the tarball
      */
-    get(opts?: Object): Promise<Object>;
+    get(opts?: object): Promise<Object>;
 }
 export default class  {
     modem: Modem;
@@ -68,21 +68,21 @@ export default class  {
      * @param  {id}         string    ID of the secret
      * @return {Image}
      */
-    get(id: String): Image;
+    get(id: string): Image;
     /**
      * Search an image on Docker Hub
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/search-images
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the images
      */
-    search(opts?: Object): Promise<Array<Object>>;
+    search(opts?: object): Promise<Array<Object>>;
     /**
      * Get the list of images
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/list-images
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise returning the result as a list of images
      */
-    list(opts?: Object): Promise<Array<Image>>;
+    list(opts?: object): Promise<Array<Image>>;
     /**
      * Build image from dockerfile
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/build-image-from-a-dockerfile
@@ -91,7 +91,7 @@ export default class  {
      * @param  {Object}   auth  Registry Auth Config, see linked engine documentation for details (optional)
      * @return {Promise}        Promise return the resulting stream
      */
-    build(file: fs.ReadStream, opts?: Object, auth?: Object): Promise<Object>;
+    build(file: fs.ReadStream, opts?: object, auth?: object): Promise<Object>;
     /**
      * Create an image
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/create-an-image
@@ -99,14 +99,14 @@ export default class  {
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the resulting stream
      */
-    create(auth: Object, opts?: Object): Promise<Object>;
+    create(auth: object, opts?: object): Promise<Object>;
     /**
      * Get all images in a tarball
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/get-a-tarball-containing-all-images
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the stream with the tarball
      */
-    getAll(opts?: Object): Promise<Object>;
+    getAll(opts?: object): Promise<Object>;
     /**
      * Load image from tarball
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/load-a-tarball-with-a-set-of-images-and-tags-into-docker
@@ -114,12 +114,12 @@ export default class  {
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the stream with the process
      */
-    load(file: fs.ReadStream, opts?: Object): Promise<Object>;
+    load(file: fs.ReadStream, opts?: object): Promise<Object>;
     /**
      * Prune images
      * https://docs.docker.com/engine/api/v1.25/#operation/ImagePrune
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}          Promise returning the container
      */
-    prune(opts?: Object): Promise<String>;
+    prune(opts?: object): Promise<String>;
 }

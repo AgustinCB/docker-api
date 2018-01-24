@@ -4,14 +4,14 @@ import Modem = require('docker-modem');
  */
 export declare class Secret {
     modem: Modem;
-    id: String;
-    data: Object;
+    id: string;
+    data: object;
     /**
      * Create a secret
      * @param  {Modem}      modem     Modem to connect to the remote service
      * @param  {string}     id        Id of the secret (optional)
      */
-    constructor(modem: Modem, id: String);
+    constructor(modem: Modem, id: string);
     /**
      * Get low-level information on a secret
      * https://docs.docker.com/engine/api/v1.25/#operation/SecretInspect
@@ -19,14 +19,14 @@ export declare class Secret {
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the secret
      */
-    status(opts?: Object): Promise<Secret>;
+    status(opts?: object): Promise<Secret>;
     /**
      * Remove a secret
      * https://docs.docker.com/engine/api/v1.25/#operation/SecretDelete
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the result
      */
-    remove(opts?: Object): Promise<{}>;
+    remove(opts?: object): Promise<{}>;
 }
 export default class  {
     modem: Modem;
@@ -40,19 +40,19 @@ export default class  {
      * @param  {id}         string    ID of the secret
      * @return {Secret}
      */
-    get(id: String): Secret;
+    get(id: string): Secret;
     /**
      * Get the list of secrets
      * https://docs.docker.com/engine/api/v1.25/#operation/SecretList
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise returning the result as a list of secrets
      */
-    list(opts?: Object): Promise<Array<Secret>>;
+    list(opts?: object): Promise<Array<Secret>>;
     /**
      * Create a secret
      * https://docs.docker.com/engine/api/v1.25/#operation/SecretCreate
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the new secret
      */
-    create(opts?: Object): Promise<Secret>;
+    create(opts?: object): Promise<Secret>;
 }

@@ -36,7 +36,7 @@ export declare class Docker {
      * @param  {Object}   opts  Auth options
      * @return {Promise}        Promise returning the result
      */
-    auth(opts: Object): Promise<Object>;
+    auth(opts: object): Promise<Object>;
     /**
      * Get system wide information about docker
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/display-system-wide-information
@@ -61,5 +61,5 @@ export declare class Docker {
      * @param  {Object}   opts  Options to send with the request (optional)
      * @return {Promise}        Promise returning the result
      */
-    events(opts?: Object): Promise<Object>;
+    events(opts?: object): Promise<Object>;
 }

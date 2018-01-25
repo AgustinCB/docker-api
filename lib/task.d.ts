@@ -5,7 +5,7 @@ import Modem = require('docker-modem');
 export declare class Task {
     modem: Modem;
     id: string;
-    data: object;
+    data: Object;
     /**
      * Create a task
      * @param  {Modem}      modem     Modem to connect to the remote service
@@ -17,10 +17,10 @@ export declare class Task {
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/inspect-a-task
      * The reason why this module isn't called inspect is because that interferes with the inspect utility of task.
      * @param  {Object}   opts  Query params in the request (optional)
-     * @param  {String}   id    ID of the task to inspect, if it's not set, use the id of the object (optional)
+     * @param  {String}   id    ID of the task to inspect, if it's not set, use the id of the Object (optional)
      * @return {Promise}        Promise return the task
      */
-    status(opts?: object): Promise<{}>;
+    status(opts?: Object): Promise<{}>;
 }
 export default class  {
     modem: Modem;
@@ -31,7 +31,7 @@ export default class  {
      */
     constructor(modem: Modem);
     /**
-     * Get a Task object
+     * Get a Task Object
      * @param  {id}         string    ID of the secret
      * @return {Task}
      */
@@ -42,5 +42,5 @@ export default class  {
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise returning the result as a list of tasks
      */
-    list(opts?: object): Promise<Array<Task>>;
+    list(opts?: Object): Promise<Array<Task>>;
 }

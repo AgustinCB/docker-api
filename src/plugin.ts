@@ -134,7 +134,7 @@ class Plugin {
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/inspect-a-plugin
    * The reason why this module isn't called inspect is because that interferes with the inspect utility of node.
    * @param  {Object}   opts  Query params in the request (optional)
-   * @param  {String}   id    ID of the plugin to inspect, if it's not set, use the id of the object (optional)
+   * @param  {String}   id    ID of the plugin to inspect, if it's not set, use the id of the Object (optional)
    * @return {Promise}        Promise return the plugin
    */
   status (opts, id) {
@@ -164,7 +164,7 @@ class Plugin {
    * Remove a plugin
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/remove-a-plugin
    * @param  {Object}   opts  Query params in the request (optional)
-   * @param  {String}   id    ID of the plugin to inspect, if it's not set, use the id of the object (optional)
+   * @param  {String}   id    ID of the plugin to inspect, if it's not set, use the id of the Object (optional)
    * @return {Promise}        Promise return the result
    */
   remove (opts, id) {
@@ -192,7 +192,7 @@ class Plugin {
    * push a plugin
    * https://docs.docker.com/engine/api/v1.26/#operation/PluginPush
    * @param  {Object}   opts  Query params in the request (optional)
-   * @param  {String}   id    ID of the plugin, if it's not set, use the id of the object (optional)
+   * @param  {String}   id    ID of the plugin, if it's not set, use the id of the Object (optional)
    * @return {Promise}        Promise return the plugin
    */
   push (opts, id) {
@@ -222,7 +222,7 @@ class Plugin {
    * Set a plugin configuration
    * https://docs.docker.com/engine/api/v1.25/#operation/PluginSet
    * @param  {Object}   opts  Query params in the request (optional)
-   * @param  {String}   id    ID of the plugin, if it's not set, use the id of the object (optional)
+   * @param  {String}   id    ID of the plugin, if it's not set, use the id of the Object (optional)
    * @return {Promise}        Promise return the plugin
    */
   set (opts, id) {
@@ -252,7 +252,7 @@ class Plugin {
    * Enable a plugin
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/enable-a-plugin
    * @param  {Object}   opts  Query params in the request (optional)
-   * @param  {String}   id    ID of the plugin, if it's not set, use the id of the object (optional)
+   * @param  {String}   id    ID of the plugin, if it's not set, use the id of the Object (optional)
    * @return {Promise}        Promise return the plugin
    */
   enable (opts, id) {
@@ -281,7 +281,7 @@ class Plugin {
    * Disable a plugin
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/disable-a-plugin
    * @param  {Object}   opts  Query params in the request (optional)
-   * @param  {String}   id    ID of the plugin, if it's not set, use the id of the object (optional)
+   * @param  {String}   id    ID of the plugin, if it's not set, use the id of the Object (optional)
    * @return {Promise}        Promise return the plugin
    */
   disable (opts, id) {

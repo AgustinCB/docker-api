@@ -9,7 +9,7 @@ import fs = require('fs')
 export class Image {
   modem: Modem
   id: string
-  data: object = {}
+  data: Object = {}
 
   /**
    * Creates a new image
@@ -28,7 +28,7 @@ export class Image {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the image
    */
-  status (opts?: object): Promise<Image> {
+  status (opts?: Object): Promise<Image> {
     const call = {
       path: `/images/${this.id}/json?`,
       method: 'GET',
@@ -54,10 +54,10 @@ export class Image {
    * History of the image
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/get-the-history-of-an-image
    * @param  {Object}   opts  Query params in the request (optional)
-   * @param  {String}   id    ID of the image to inspect, if it's not set, use the id of the object (optional)
+   * @param  {String}   id    ID of the image to inspect, if it's not set, use the id of the Object (optional)
    * @return {Promise}        Promise return the events in the history
    */
-  history (opts?: object): Promise<Array<Object>> {
+  history (opts?: Object): Promise<Array<Object>> {
     const call = {
       path: `/images/${this.id}/history?`,
       method: 'GET',
@@ -84,7 +84,7 @@ export class Image {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the resulting stream
    */
-  push (auth?: object, opts?: object): Promise<Object> {
+  push (auth?: Object, opts?: Object): Promise<Object> {
     const call = {
       path: `/images/${this.id}/push?`,
       method: 'POST',
@@ -99,7 +99,7 @@ export class Image {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, stream: object) => {
+      this.modem.dial(call, (err, stream: Object) => {
         if (err) return reject(err)
         resolve(stream)
       })
@@ -112,7 +112,7 @@ export class Image {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the image
    */
-  tag (opts?: object): Promise<Image> {
+  tag (opts?: Object): Promise<Image> {
     const call = {
       path: `/images/${this.id}/tag?`,
       method: 'POST',
@@ -141,7 +141,7 @@ export class Image {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the result
    */
-  remove (opts?: object): Promise<Array<Object>> {
+  remove (opts?: Object): Promise<Array<Object>> {
     const call = {
       path: `/images/${this.id}?`,
       method: 'DELETE',
@@ -168,7 +168,7 @@ export class Image {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the stream with the tarball
    */
-  get (opts?: object): Promise<Object> {
+  get (opts?: Object): Promise<Object> {
     const call = {
       path: `/images/${this.id}/get?`,
       method: 'GET',
@@ -181,7 +181,7 @@ export class Image {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, stream: object) => {
+      this.modem.dial(call, (err, stream: Object) => {
         if (err) return reject(err)
         resolve(stream)
       })
@@ -197,7 +197,7 @@ export default class {
   }
 
   /**
-   * Get a Image object
+   * Get a Image Object
    * @param  {id}         string    ID of the secret
    * @return {Image}
    */
@@ -211,7 +211,7 @@ export default class {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the images
    */
-  search (opts?: object): Promise<Array<Object>> {
+  search (opts?: Object): Promise<Array<Object>> {
     const call = {
       path: `/images/search?`,
       method: 'GET',
@@ -236,7 +236,7 @@ export default class {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise returning the result as a list of images
    */
-  list (opts?: object): Promise<Array<Image>> {
+  list (opts?: Object): Promise<Array<Image>> {
     const call = {
       path: '/images/json?',
       method: 'GET',
@@ -268,7 +268,7 @@ export default class {
    * @param  {Object}   auth  Registry Auth Config, see linked engine documentation for details (optional)
    * @return {Promise}        Promise return the resulting stream
    */
-  build (file: fs.ReadStream, opts?: object, auth?: object): Promise<Object> {
+  build (file: fs.ReadStream, opts?: Object, auth?: Object): Promise<Object> {
     const call = {
       path: '/build?',
       method: 'POST',
@@ -283,7 +283,7 @@ export default class {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, stream: object) => {
+      this.modem.dial(call, (err, stream: Object) => {
         if (err) return reject(err)
         resolve(stream)
       })
@@ -297,7 +297,7 @@ export default class {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the resulting stream
    */
-  create (auth: object, opts?: object): Promise<Object> {
+  create (auth: Object, opts?: Object): Promise<Object> {
     const call = {
       path: '/images/create?',
       method: 'POST',
@@ -311,7 +311,7 @@ export default class {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, stream: object) => {
+      this.modem.dial(call, (err, stream: Object) => {
         if (err) return reject(err)
         resolve(stream)
       })
@@ -324,7 +324,7 @@ export default class {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the stream with the tarball
    */
-  getAll (opts?: object): Promise<Object> {
+  getAll (opts?: Object): Promise<Object> {
     const call = {
       path: `/images/get?`,
       method: 'GET',
@@ -337,7 +337,7 @@ export default class {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, stream: object) => {
+      this.modem.dial(call, (err, stream: Object) => {
         if (err) return reject(err)
         resolve(stream)
       })
@@ -351,7 +351,7 @@ export default class {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the stream with the process
    */
-  load (file: fs.ReadStream, opts?: object): Promise<Object> {
+  load (file: fs.ReadStream, opts?: Object): Promise<Object> {
     const call = {
       path: '/images/load?',
       method: 'POST',
@@ -365,7 +365,7 @@ export default class {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, stream: object) => {
+      this.modem.dial(call, (err, stream: Object) => {
         if (err) return reject(err)
         resolve(stream)
       })
@@ -378,7 +378,7 @@ export default class {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}          Promise returning the container
    */
-  prune (opts?: object): Promise<String> {
+  prune (opts?: Object): Promise<String> {
     const call = {
       path: `/images/prune`,
       method: 'POST',

@@ -5,7 +5,7 @@ import Modem = require('docker-modem');
 export declare class Service {
     modem: Modem;
     id: string;
-    data: object;
+    data: Object;
     /**
      * Create a service
      * @param  {Modem}      modem     Modem to connect to the remote service
@@ -16,9 +16,10 @@ export declare class Service {
      * Update a service
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/update-a-service
      * @param  {Object}   opts  Query params in the request (optional)
+     * @param  {Object}   auth  Authentication (optional)
      * @return {Promise}        Promise return the new service
      */
-    update(opts?: object): Promise<Service>;
+    update(opts?: Object, auth?: Object): Promise<Service>;
     /**
      * Get low-level information on a service
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/inspect-one-or-more-services
@@ -26,21 +27,21 @@ export declare class Service {
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the service
      */
-    status(opts?: object): Promise<Service>;
+    status(opts?: Object): Promise<Service>;
     /**
      * Remove a service
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/remove-a-service
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the result
      */
-    remove(opts?: object): Promise<String>;
+    remove(opts?: Object): Promise<String>;
     /**
      * Logs of a service
      * https://docs.docker.com/engine/api/v1.27/#operation/ServiceLogs
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the result
      */
-    logs(opts?: object): Promise<String>;
+    logs(opts?: Object): Promise<String>;
 }
 export default class  {
     modem: Modem;
@@ -50,7 +51,7 @@ export default class  {
      */
     constructor(modem: Modem);
     /**
-     * Get a Service object
+     * Get a Service Object
      * @param  {id}         string    ID of the secret
      * @return {Network}
      */
@@ -59,14 +60,15 @@ export default class  {
      * Create a service
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/create-a-service
      * @param  {Object}   opts  Query params in the request (optional)
+     * @param  {Object}   auth  Authentication (optional)
      * @return {Promise}        Promise return the new service
      */
-    create(opts?: object): Promise<Service>;
+    create(opts?: Object, auth?: Object): Promise<Service>;
     /**
      * Get the list of services
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/list-services
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise returning the result as a list of services
      */
-    list(opts?: object): Promise<Array<Service>>;
+    list(opts?: Object): Promise<Array<Service>>;
 }

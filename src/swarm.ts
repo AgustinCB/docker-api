@@ -8,7 +8,7 @@ import { Node } from './node'
  */
 export default class Swarm {
   modem: Modem
-  data: object = {}
+  data: Object = {}
 
   /**
    * Creates a new swarm
@@ -24,7 +24,7 @@ export default class Swarm {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the new node
    */
-  init (opts?: object): Promise<Node> {
+  init (opts?: Object): Promise<Node> {
     const call = {
       path: '/swarm/init?',
       method: 'POST',
@@ -52,7 +52,7 @@ export default class Swarm {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the swarm
    */
-  status (opts?: object): Promise<Swarm> {
+  status (opts?: Object): Promise<Swarm> {
     const call = {
       path: `/swarm?`,
       method: 'GET',
@@ -80,7 +80,7 @@ export default class Swarm {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the result
    */
-  join (opts?: object): Promise<String> {
+  join (opts?: Object): Promise<String> {
     const call = {
       path: `/swarm/join?`,
       method: 'POST',
@@ -106,7 +106,7 @@ export default class Swarm {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the swarm
    */
-  leave (opts?: object): Promise<String> {
+  leave (opts?: Object): Promise<String> {
     const call = {
       path: `/swarm/leave?`,
       method: 'POST',
@@ -131,7 +131,7 @@ export default class Swarm {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the swarm
    */
-  update (opts?: object): Promise<String> {
+  update (opts?: Object): Promise<String> {
     const call = {
       path: `/swarm/update?`,
       method: 'POST',

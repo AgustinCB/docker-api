@@ -5,7 +5,7 @@ import Modem = require('docker-modem');
 export declare class Volume {
     modem: Modem;
     id: string;
-    data: object;
+    data: Object;
     /**
      * Create a volume
      * @param  {Modem}      modem     Modem to connect to the remote service
@@ -17,18 +17,18 @@ export declare class Volume {
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/inspect-a-volume
      * The reason why this module isn't called inspect is because that interferes with the inspect utility of node.
      * @param  {Object}   opts  Query params in the request (optional)
-     * @param  {String}   id    ID of the volume to inspect, if it's not set, use the id of the object (optional)
+     * @param  {String}   id    ID of the volume to inspect, if it's not set, use the id of the Object (optional)
      * @return {Promise}        Promise return the volume
      */
-    status(opts?: object): Promise<Volume>;
+    status(opts?: Object): Promise<Volume>;
     /**
      * Remove a volume from the filesystem
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/remove-a-volume
      * @param  {Object}   opts  Query params in the request (optional)
-     * @param  {String}   id    ID of the volume to inspect, if it's not set, use the id of the object (optional)
+     * @param  {String}   id    ID of the volume to inspect, if it's not set, use the id of the Object (optional)
      * @return {Promise}        Promise return the result
      */
-    remove(opts?: object): Promise<{}>;
+    remove(opts?: Object): Promise<{}>;
 }
 export default class  {
     modem: Modem;
@@ -39,7 +39,7 @@ export default class  {
      */
     constructor(modem: Modem);
     /**
-     * Get a Volume object
+     * Get a Volume Object
      * @param  {id}         String    ID of the secret
      * @return {Volume}
      */
@@ -50,19 +50,19 @@ export default class  {
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise returning the result as a list of volumes
      */
-    list(opts?: object): Promise<Array<Volume>>;
+    list(opts?: Object): Promise<Array<Volume>>;
     /**
      * Create a volume
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/create-a-volume
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the new volume
      */
-    create(opts?: object): Promise<Volume>;
+    create(opts?: Object): Promise<Volume>;
     /**
      * Prune volumes
      * https://docs.docker.com/engine/api/v1.25/#operation/VolumePrune
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}          Promise returning the container
      */
-    prune(opts?: object): Promise<Object>;
+    prune(opts?: Object): Promise<Object>;
 }

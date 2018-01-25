@@ -25,7 +25,7 @@ export declare class Docker {
     swarm: SwarmManager;
     task: TaskManager;
     /**
-     * Creates the Docker object
+     * Creates the Docker Object
      * @param {Object}  opts Docker options
      */
     constructor(opts: any);
@@ -36,7 +36,7 @@ export declare class Docker {
      * @param  {Object}   opts  Auth options
      * @return {Promise}        Promise returning the result
      */
-    auth(opts: object): Promise<Object>;
+    auth(opts: Object): Promise<Object>;
     /**
      * Get system wide information about docker
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/display-system-wide-information
@@ -61,5 +61,5 @@ export declare class Docker {
      * @param  {Object}   opts  Options to send with the request (optional)
      * @return {Promise}        Promise returning the result
      */
-    events(opts?: object): Promise<Object>;
+    events(opts?: Object): Promise<Object>;
 }

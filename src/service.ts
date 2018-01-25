@@ -8,7 +8,7 @@ import Modem = require('docker-modem')
 export class Service {
   modem: Modem
   id: string
-  data: object = {}
+  data: Object = {}
 
   /**
    * Create a service
@@ -27,7 +27,7 @@ export class Service {
    * @param  {Object}   auth  Authentication (optional)
    * @return {Promise}        Promise return the new service
    */
-  update (opts?: object, auth?: object): Promise<Service> {
+  update (opts?: Object, auth?: Object): Promise<Service> {
     const call = {
       path: `/services/${this.id}/update?`,
       method: 'POST',
@@ -57,7 +57,7 @@ export class Service {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the service
    */
-  status (opts?: object): Promise<Service> {
+  status (opts?: Object): Promise<Service> {
     const call = {
       path: `/services/${this.id}?`,
       method: 'GET',
@@ -85,7 +85,7 @@ export class Service {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the result
    */
-  remove (opts?: object): Promise<String> {
+  remove (opts?: Object): Promise<String> {
     const call = {
       path: `/services/${this.id}?`,
       method: 'DELETE',
@@ -111,7 +111,7 @@ export class Service {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the result
    */
-  logs (opts?: object): Promise<String> {
+  logs (opts?: Object): Promise<String> {
     const call = {
       path: `/services/${this.id}/logs?`,
       method: 'GET',
@@ -148,7 +148,7 @@ export default class {
   }
 
   /**
-   * Get a Service object
+   * Get a Service Object
    * @param  {id}         string    ID of the secret
    * @return {Network}
    */
@@ -163,7 +163,7 @@ export default class {
    * @param  {Object}   auth  Authentication (optional)
    * @return {Promise}        Promise return the new service
    */
-  create (opts?: object, auth?: object): Promise<Service> {
+  create (opts?: Object, auth?: Object): Promise<Service> {
     const call = {
       path: '/services/create?',
       method: 'POST',
@@ -192,7 +192,7 @@ export default class {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise returning the result as a list of services
    */
-  list (opts?: object): Promise<Array<Service>> {
+  list (opts?: Object): Promise<Array<Service>> {
     const call = {
       path: '/services?',
       method: 'GET',

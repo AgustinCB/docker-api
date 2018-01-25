@@ -8,7 +8,7 @@ import Modem = require('docker-modem')
 export class Secret {
   modem: Modem
   id: string
-  data: object = {}
+  data: Object = {}
 
   /**
    * Create a secret
@@ -27,7 +27,7 @@ export class Secret {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the secret
    */
-  status (opts?: object): Promise<Secret> {
+  status (opts?: Object): Promise<Secret> {
     const call = {
       path: `/secrets/${this.id}?`,
       method: 'GET',
@@ -56,7 +56,7 @@ export class Secret {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the result
    */
-  remove (opts?: object): Promise<{}> {
+  remove (opts?: Object): Promise<{}> {
     const call = {
       path: `/secrets/${this.id}?`,
       method: 'DELETE',
@@ -89,7 +89,7 @@ export default class {
   }
 
   /**
-   * Get a Secret object
+   * Get a Secret Object
    * @param  {id}         string    ID of the secret
    * @return {Secret}
    */
@@ -103,7 +103,7 @@ export default class {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise returning the result as a list of secrets
    */
-  list (opts?: object): Promise<Array<Secret>> {
+  list (opts?: Object): Promise<Array<Secret>> {
     const call = {
       path: '/secrets',
       method: 'GET',
@@ -133,7 +133,7 @@ export default class {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the new secret
    */
-  create (opts?: object): Promise<Secret> {
+  create (opts?: Object): Promise<Secret> {
     const call = {
       path: '/secrets/create?',
       method: 'POST',
@@ -141,7 +141,7 @@ export default class {
       statusCodes: {
         201: true,
         406: 'server error or node is not part of a swarm',
-        409: '409 name conflicts with an existing object',
+        409: '409 name conflicts with an existing Object',
         500: 'server error'
       }
     }

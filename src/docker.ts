@@ -29,7 +29,7 @@ export class Docker {
   task: TaskManager
 
   /**
-   * Creates the Docker object
+   * Creates the Docker Object
    * @param {Object}  opts Docker options
    */
   constructor (opts) {
@@ -54,7 +54,7 @@ export class Docker {
    * @param  {Object}   opts  Auth options
    * @return {Promise}        Promise returning the result
    */
-  auth (opts: object): Promise<Object> {
+  auth (opts: Object): Promise<Object> {
     const call = {
       path: '/auth?',
       method: 'POST',
@@ -67,7 +67,7 @@ export class Docker {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, data: object) => {
+      this.modem.dial(call, (err, data: Object) => {
         if (err) return reject(err)
         resolve(data)
       })
@@ -90,7 +90,7 @@ export class Docker {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, data: object) => {
+      this.modem.dial(call, (err, data: Object) => {
         if (err) return reject(err)
         resolve(data)
       })
@@ -149,7 +149,7 @@ export class Docker {
    * @param  {Object}   opts  Options to send with the request (optional)
    * @return {Promise}        Promise returning the result
    */
-  events (opts: object = {}): Promise<Object> {
+  events (opts: Object = {}): Promise<Object> {
     const call = {
       path: '/events?',
       method: 'GET',
@@ -162,7 +162,7 @@ export class Docker {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, data: object) => {
+      this.modem.dial(call, (err, data: Object) => {
         if (err) return reject(err)
         resolve(data)
       })

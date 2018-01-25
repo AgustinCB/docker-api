@@ -5,7 +5,7 @@ import { Node } from './node';
  */
 export default class Swarm {
     modem: Modem;
-    data: object;
+    data: Object;
     /**
      * Creates a new swarm
      * @param  {Modem}      modem     Modem to connect to the remote service
@@ -17,7 +17,7 @@ export default class Swarm {
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the new node
      */
-    init(opts?: object): Promise<Node>;
+    init(opts?: Object): Promise<Node>;
     /**
      * Get low-level information on a swarm
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/inspect-swarm
@@ -25,26 +25,26 @@ export default class Swarm {
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the swarm
      */
-    status(opts?: object): Promise<Swarm>;
+    status(opts?: Object): Promise<Swarm>;
     /**
      * Join a swarm
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/join-an-existing-swarm
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the result
      */
-    join(opts?: object): Promise<String>;
+    join(opts?: Object): Promise<String>;
     /**
      * Leave a swarm
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/leave-a-swarm
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the swarm
      */
-    leave(opts?: object): Promise<String>;
+    leave(opts?: Object): Promise<String>;
     /**
      * Update a swarm
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/update-a-swarm
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the swarm
      */
-    update(opts?: object): Promise<String>;
+    update(opts?: Object): Promise<String>;
 }

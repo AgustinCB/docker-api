@@ -8,7 +8,7 @@ import Modem = require('docker-modem')
 export class Node {
   modem: Modem
   id: string
-  data: object = {}
+  data: Object = {}
 
   /**
    * Create a node
@@ -26,7 +26,7 @@ export class Node {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the new node
    */
-  update (opts?: object): Promise<Node> {
+  update (opts?: Object): Promise<Node> {
     const call = {
       path: `/nodes/${this.id}/update?`,
       method: 'POST',
@@ -55,7 +55,7 @@ export class Node {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the node
    */
-  status (opts?: object) {
+  status (opts?: Object) {
     const call = {
       path: `/nodes/${this.id}?`,
       method: 'GET',
@@ -83,7 +83,7 @@ export class Node {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the result
    */
-  remove (opts: object): Promise<{}> {
+  remove (opts: Object): Promise<{}> {
     const call = {
       path: `/nodes/${this.id}?`,
       method: 'DELETE',
@@ -116,7 +116,7 @@ export default class {
   }
 
   /**
-   * Get a Node object
+   * Get a Node Object
    * @param  {id}         string    ID of the secret
    * @return {Node}
    */
@@ -130,7 +130,7 @@ export default class {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise returning the result as a list of nodes
    */
-  list (opts?: object): Promise<Array<Node>> {
+  list (opts?: Object): Promise<Array<Node>> {
     const call = {
       path: '/nodes?',
       method: 'GET',

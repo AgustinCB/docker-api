@@ -12,7 +12,7 @@ export class Exec {
   modem: Modem
   container: Container
   id: string
-  data: object = {}
+  data: Object = {}
 
   /**
    * Create an execution
@@ -33,7 +33,7 @@ export class Exec {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the new exec instance
    */
-  create (opts?: object): Promise<Exec> {
+  create (opts?: Object): Promise<Exec> {
     const call = {
       path: `/containers/${this.container.id}/exec?`,
       method: 'POST',
@@ -79,7 +79,7 @@ export class Exec {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, stream: object) => {
+      this.modem.dial(call, (err, stream: Object) => {
         if (err) return reject(err)
         resolve(stream)
       })
@@ -92,7 +92,7 @@ export class Exec {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the result
    */
-  resize (opts?: object): Promise<{}> {
+  resize (opts?: Object): Promise<{}> {
     const call = {
       path: `/exec/${this.id}/resize?`,
       method: 'POST',
@@ -118,7 +118,7 @@ export class Exec {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the exec instance
    */
-  status (opts?: object): Promise<Exec> {
+  status (opts?: Object): Promise<Exec> {
     const call = {
       path: `/exec/${this.id}/json?`,
       method: 'GET',
@@ -161,7 +161,7 @@ export class ExecManager {
   }
 
   /**
-   * Get a Exec object
+   * Get a Exec Object
    * @param  {id}         string    ID of the exec
    * @return {Exec}
    */
@@ -175,7 +175,7 @@ export class ExecManager {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the new exec instance
    */
-  create (opts?: object): Promise<Exec> {
+  create (opts?: Object): Promise<Exec> {
     const call = {
       path: `/containers/${this.container.id}/exec?`,
       method: 'POST',
@@ -208,7 +208,7 @@ export class ContainerFs {
   container: Container
 
   /**
-   * Create an container filesystem object
+   * Create an container filesystem Object
    * @param  {Modem}      modem     Modem to connect to the remote service
    * @param  {Container}  container Container that owns the filesystem (optional)
    */
@@ -223,7 +223,7 @@ export class ContainerFs {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise returning the info about the filesystem
    */
-  info (opts?: object): Promise<String> {
+  info (opts?: Object): Promise<String> {
     const call = {
       path: `/containers/${this.container.id}/archive?`,
       method: 'HEAD',
@@ -265,7 +265,7 @@ export class ContainerFs {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, stream: object) => {
+      this.modem.dial(call, (err, stream: Object) => {
         if (err) return reject(err)
         resolve(stream)
       })
@@ -278,7 +278,7 @@ export class ContainerFs {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise returning the result
    */
-  put (file: fs.ReadStream, opts?: object): Promise<Object> {
+  put (file: fs.ReadStream, opts?: Object): Promise<Object> {
     const call = {
       path: `/containers/${this.container.id}/archive?`,
       method: 'PUT',
@@ -295,7 +295,7 @@ export class ContainerFs {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, res: object) => {
+      this.modem.dial(call, (err, res: Object) => {
         if (err) return reject(err)
         resolve(res)
       })
@@ -312,10 +312,10 @@ export class Container {
   fs: ContainerFs
   exec: ExecManager
   Warnings: Array<String> = []
-  data: object = {}
+  data: Object = {}
 
   /**
-   * Create an container object
+   * Create an container Object
    * @param  {Modem}  modem Modem to connect to the remote service
    * @param  {string} id    Container id
    */
@@ -333,7 +333,7 @@ export class Container {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the container
    */
-  status (opts?: object): Promise<Container> {
+  status (opts?: Object): Promise<Container> {
     const call = {
       path: `/containers/${this.id}/json?`,
       method: 'GET',
@@ -361,7 +361,7 @@ export class Container {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the list of processes
    */
-  top (opts?: object): Promise<Array<Object>> {
+  top (opts?: Object): Promise<Array<Object>> {
     const call = {
       path: `/containers/${this.id}/top?`,
       method: 'GET',
@@ -387,7 +387,7 @@ export class Container {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise returning the concatenated logs
    */
-  logs (opts?: object): Promise<Object> {
+  logs (opts?: Object): Promise<Object> {
     const call = {
       path: `/containers/${this.id}/logs?`,
       method: 'GET',
@@ -402,7 +402,7 @@ export class Container {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, logs: object) => {
+      this.modem.dial(call, (err, logs: Object) => {
         if (err) return reject(err)
         resolve(logs)
       })
@@ -476,7 +476,7 @@ export class Container {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}          Promise returning the stats, in a stream or string
    */
-  stats (opts?: object): Promise<Object> {
+  stats (opts?: Object): Promise<Object> {
     const call = {
       path: `/containers/${this.id}/stats?`,
       method: 'GET',
@@ -490,7 +490,7 @@ export class Container {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, stats: object) => {
+      this.modem.dial(call, (err, stats: Object) => {
         if (err) return reject(err)
         resolve(stats)
       })
@@ -503,7 +503,7 @@ export class Container {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}          Promise returning the response
    */
-  resize (opts?: object): Promise<Object> {
+  resize (opts?: Object): Promise<Object> {
     const call = {
       path: `/containers/${this.id}/resize?`,
       method: 'GET',
@@ -516,7 +516,7 @@ export class Container {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, res: object) => {
+      this.modem.dial(call, (err, res: Object) => {
         if (err) return reject(err)
         resolve(res)
       })
@@ -529,7 +529,7 @@ export class Container {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}          Promise returning the container
    */
-  start (opts: object = {}): Promise<Container> {
+  start (opts: Object = {}): Promise<Container> {
     const call = {
       path: `/containers/${this.id}/start?`,
       method: 'POST',
@@ -556,7 +556,7 @@ export class Container {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}          Promise returning the container
    */
-  stop (opts?: object): Promise<Container> {
+  stop (opts?: Object): Promise<Container> {
     const call = {
       path: `/containers/${this.id}/stop?`,
       method: 'POST',
@@ -583,7 +583,7 @@ export class Container {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}          Promise returning the container
    */
-  restart (opts?: object): Promise<Container> {
+  restart (opts?: Object): Promise<Container> {
     const call = {
       path: `/containers/${this.id}/restart?`,
       method: 'POST',
@@ -609,7 +609,7 @@ export class Container {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}          Promise returning the container
    */
-  kill (opts?: object): Promise<Container> {
+  kill (opts?: Object): Promise<Container> {
     const call = {
       path: `/containers/${this.id}/kill?`,
       method: 'POST',
@@ -636,7 +636,7 @@ export class Container {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}          Promise returning the container
    */
-  update (opts?: object): Promise<Container> {
+  update (opts?: Object): Promise<Container> {
     const call = {
       path: `/containers/${this.id}/update?`,
       method: 'POST',
@@ -665,7 +665,7 @@ export class Container {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}          Promise returning the container
    */
-  rename (opts: object): Promise<Container> {
+  rename (opts: Object): Promise<Container> {
     const call = {
       path: `/containers/${this.id}/rename?`,
       method: 'POST',
@@ -772,7 +772,7 @@ export class Container {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}          Promise returning the stream and the container
    */
-  wsattach (opts?: object): Promise<Array<Object>> {
+  wsattach (opts?: Object): Promise<Array<Object>> {
     const call = {
       path: `/containers/${this.id}/attach/ws?`,
       method: 'GET',
@@ -824,7 +824,7 @@ export class Container {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}          Promise returning nothing
    */
-  delete (opts?: object): Promise<{}> {
+  delete (opts?: Object): Promise<{}> {
     const call = {
       path: `/containers/${this.id}?`,
       method: 'DELETE',
@@ -882,7 +882,7 @@ export default class {
   }
 
   /**
-   * Get a Container object
+   * Get a Container Object
    * @param  {id}         string    ID of the container
    * @return {Container}
    */
@@ -896,7 +896,7 @@ export default class {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise returning the result as a list of containers
    */
-  list (opts?: object): Promise<Array<Container>> {
+  list (opts?: Object): Promise<Array<Container>> {
     const call = {
       path: '/containers/json?',
       method: 'GET',
@@ -926,7 +926,7 @@ export default class {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the new container
    */
-  create (opts?: object): Promise<Container> {
+  create (opts?: Object): Promise<Container> {
     const call = {
       path: '/containers/create?',
       method: 'POST',
@@ -957,7 +957,7 @@ export default class {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}          Promise returning the container
    */
-  prune (opts?: object): Promise<Object> {
+  prune (opts?: Object): Promise<Object> {
     const call = {
       path: `/containers/prune`,
       method: 'POST',
@@ -969,7 +969,7 @@ export default class {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, res: object) => {
+      this.modem.dial(call, (err, res: Object) => {
         if (err) return reject(err)
         resolve(res)
       })

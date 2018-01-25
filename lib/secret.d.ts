@@ -5,7 +5,7 @@ import Modem = require('docker-modem');
 export declare class Secret {
     modem: Modem;
     id: string;
-    data: object;
+    data: Object;
     /**
      * Create a secret
      * @param  {Modem}      modem     Modem to connect to the remote service
@@ -19,14 +19,14 @@ export declare class Secret {
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the secret
      */
-    status(opts?: object): Promise<Secret>;
+    status(opts?: Object): Promise<Secret>;
     /**
      * Remove a secret
      * https://docs.docker.com/engine/api/v1.25/#operation/SecretDelete
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the result
      */
-    remove(opts?: object): Promise<{}>;
+    remove(opts?: Object): Promise<{}>;
 }
 export default class  {
     modem: Modem;
@@ -36,7 +36,7 @@ export default class  {
      */
     constructor(modem: Modem);
     /**
-     * Get a Secret object
+     * Get a Secret Object
      * @param  {id}         string    ID of the secret
      * @return {Secret}
      */
@@ -47,12 +47,12 @@ export default class  {
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise returning the result as a list of secrets
      */
-    list(opts?: object): Promise<Array<Secret>>;
+    list(opts?: Object): Promise<Array<Secret>>;
     /**
      * Create a secret
      * https://docs.docker.com/engine/api/v1.25/#operation/SecretCreate
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the new secret
      */
-    create(opts?: object): Promise<Secret>;
+    create(opts?: Object): Promise<Secret>;
 }

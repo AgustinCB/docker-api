@@ -8,7 +8,7 @@ import Modem = require('docker-modem')
 export class Volume {
   modem: Modem
   id: string
-  data: object = {}
+  data: Object = {}
 
   /**
    * Create a volume
@@ -25,10 +25,10 @@ export class Volume {
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/inspect-a-volume
    * The reason why this module isn't called inspect is because that interferes with the inspect utility of node.
    * @param  {Object}   opts  Query params in the request (optional)
-   * @param  {String}   id    ID of the volume to inspect, if it's not set, use the id of the object (optional)
+   * @param  {String}   id    ID of the volume to inspect, if it's not set, use the id of the Object (optional)
    * @return {Promise}        Promise return the volume
    */
-  status (opts?: object): Promise<Volume> {
+  status (opts?: Object): Promise<Volume> {
     const call = {
       path: `/volumes/${this.id}?`,
       method: 'GET',
@@ -54,10 +54,10 @@ export class Volume {
    * Remove a volume from the filesystem
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/remove-a-volume
    * @param  {Object}   opts  Query params in the request (optional)
-   * @param  {String}   id    ID of the volume to inspect, if it's not set, use the id of the object (optional)
+   * @param  {String}   id    ID of the volume to inspect, if it's not set, use the id of the Object (optional)
    * @return {Promise}        Promise return the result
    */
-  remove (opts?: object): Promise<{}> {
+  remove (opts?: Object): Promise<{}> {
     const call = {
       path: `/volumes/${this.id}?`,
       method: 'DELETE',
@@ -92,7 +92,7 @@ export default class {
   }
 
   /**
-   * Get a Volume object
+   * Get a Volume Object
    * @param  {id}         String    ID of the secret
    * @return {Volume}
    */
@@ -106,7 +106,7 @@ export default class {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise returning the result as a list of volumes
    */
-  list (opts?: object): Promise<Array<Volume>> {
+  list (opts?: Object): Promise<Array<Volume>> {
     const call = {
       path: '/volumes',
       method: 'GET',
@@ -136,7 +136,7 @@ export default class {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the new volume
    */
-  create (opts?: object): Promise<Volume> {
+  create (opts?: Object): Promise<Volume> {
     const call = {
       path: '/volumes/create?',
       method: 'POST',
@@ -163,7 +163,7 @@ export default class {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}          Promise returning the container
    */
-  prune (opts?: object): Promise<Object> {
+  prune (opts?: Object): Promise<Object> {
     const call = {
       path: `/volumes/prune`,
       method: 'POST',
@@ -175,7 +175,7 @@ export default class {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, res: object) => {
+      this.modem.dial(call, (err, res: Object) => {
         if (err) return reject(err)
         resolve(res)
       })

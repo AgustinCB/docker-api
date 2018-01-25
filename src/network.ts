@@ -8,7 +8,7 @@ import Modem = require('docker-modem')
 export class Network {
   modem: Modem
   id: string
-  data: object = {}
+  data: Object = {}
 
   /**
    * Creates a new network
@@ -27,7 +27,7 @@ export class Network {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the network
    */
-  status (opts?: object) {
+  status (opts?: Object) {
     const call = {
       path: `/networks/${this.id}?`,
       method: 'GET',
@@ -55,7 +55,7 @@ export class Network {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the result
    */
-  remove (opts?: object): Promise<{}> {
+  remove (opts?: Object): Promise<{}> {
     const call = {
       path: `/networks/${this.id}?`,
       method: 'DELETE',
@@ -81,7 +81,7 @@ export class Network {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the network
    */
-  connect (opts?: object) {
+  connect (opts?: Object) {
     const call = {
       path: `/networks/${this.id}/connect?`,
       method: 'POST',
@@ -110,7 +110,7 @@ export class Network {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the network
    */
-  disconnect (opts?: object): Promise<Network> {
+  disconnect (opts?: Object): Promise<Network> {
     const call = {
       path: `/networks/${this.id}/disconnect?`,
       method: 'POST',
@@ -142,7 +142,7 @@ export default class {
   }
 
   /**
-   * Get a Network object
+   * Get a Network Object
    * @param  {id}         string    ID of the secret
    * @return {Network}
    */
@@ -156,7 +156,7 @@ export default class {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise returning the result as a list of networks
    */
-  list (opts?: object): Promise<Array<Network>> {
+  list (opts?: Object): Promise<Array<Network>> {
     const call = {
       path: '/networks?',
       method: 'GET',
@@ -186,7 +186,7 @@ export default class {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the new network
    */
-  create (opts?: object): Promise<Network> {
+  create (opts?: Object): Promise<Network> {
     const call = {
       path: '/networks/create?',
       method: 'POST',
@@ -214,7 +214,7 @@ export default class {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}          Promise returning the container
    */
-  prune (opts?: object): Promise<Object> {
+  prune (opts?: Object): Promise<Object> {
     const call = {
       path: `/networks/prune`,
       method: 'POST',
@@ -226,7 +226,7 @@ export default class {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, res: object) => {
+      this.modem.dial(call, (err, res: Object) => {
         if (err) return reject(err)
         resolve(res)
       })

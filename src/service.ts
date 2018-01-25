@@ -24,13 +24,15 @@ export class Service {
    * Update a service
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/update-a-service
    * @param  {Object}   opts  Query params in the request (optional)
+   * @param  {Object}   auth  Authentication (optional)
    * @return {Promise}        Promise return the new service
    */
-  update (opts?: object): Promise<Service> {
+  update (opts?: object, auth?: object): Promise<Service> {
     const call = {
       path: `/services/${this.id}/update?`,
       method: 'POST',
       options: opts,
+      authconfig: auth,
       statusCodes: {
         200: true,
         404: 'no such service',
@@ -158,13 +160,15 @@ export default class {
    * Create a service
    * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/create-a-service
    * @param  {Object}   opts  Query params in the request (optional)
+   * @param  {Object}   auth  Authentication (optional)
    * @return {Promise}        Promise return the new service
    */
-  create (opts?: object): Promise<Service> {
+  create (opts?: object, auth?: object): Promise<Service> {
     const call = {
       path: '/services/create?',
       method: 'POST',
       options: opts,
+      authconfig: auth,
       statusCodes: {
         201: true,
         406: 'node is not part of a swarm',

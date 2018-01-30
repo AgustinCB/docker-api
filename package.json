@@ -29,6 +29,7 @@
   "devDependencies": {
     "@types/node": "^7.0.5",
     "ava": "^0.17.0",
+    "brace-expansion": "^1.1.7",
     "chai": "^3.5.0",
     "jsdox": "^0.4.10",
     "marked": "0.3.9",

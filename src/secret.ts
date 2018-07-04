@@ -117,8 +117,8 @@ export default class {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err, result) => {
         if (err) return reject(err)
-        if (!result.Secrets || !result.Secrets.length) return resolve([])
-        resolve(result.Secrets.map((conf) => {
+        if (!result.length) return resolve([])
+        resolve(result.map((conf) => {
           const secret = new Secret(this.modem, conf.Name)
           secret.data = conf
           return secret

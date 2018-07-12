@@ -1,7 +1,7 @@
 /// <reference types="node" />
 import * as Modem from 'docker-modem';
 import * as fs from 'fs';
-import { Stream } from 'stream';
+import { Stream, Readable } from 'stream';
 import { Image } from './image';
 /**
  * Class representing container execution
@@ -146,7 +146,7 @@ export declare class Container {
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise returning the concatenated logs
      */
-    logs(opts?: Object): Promise<Object>;
+    logs(opts?: Object): Promise<Readable>;
     /**
      * Get changes on a container's filesystem
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/inspect-changes-on-a-container-s-filesystem

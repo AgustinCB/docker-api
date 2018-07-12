@@ -1,8 +1,8 @@
 'use strict'
 
-import Modem = require('docker-modem')
-import fs = require('fs')
-
+import * as Modem from 'docker-modem'
+import * as fs from 'fs'
+import { Stream } from 'stream'
 /**
  * Class representing an image
  */
@@ -84,7 +84,7 @@ export class Image {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the resulting stream
    */
-  push (auth?: Object, opts?: Object): Promise<Object> {
+  push (auth?: Object, opts?: Object): Promise<Stream> {
     const call = {
       path: `/images/${this.id}/push?`,
       method: 'POST',
@@ -99,7 +99,7 @@ export class Image {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, stream: Object) => {
+      this.modem.dial(call, (err, stream: Stream) => {
         if (err) return reject(err)
         resolve(stream)
       })
@@ -168,7 +168,7 @@ export class Image {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the stream with the tarball
    */
-  get (opts?: Object): Promise<Object> {
+  get (opts?: Object): Promise<Stream> {
     const call = {
       path: `/images/${this.id}/get?`,
       method: 'GET',
@@ -181,7 +181,7 @@ export class Image {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, stream: Object) => {
+      this.modem.dial(call, (err, stream: Stream) => {
         if (err) return reject(err)
         resolve(stream)
       })
@@ -268,7 +268,7 @@ export default class {
    * @param  {Object}   auth  Registry Auth Config, see linked engine documentation for details (optional)
    * @return {Promise}        Promise return the resulting stream
    */
-  build (file: fs.ReadStream, opts?: Object, auth?: Object): Promise<Object> {
+  build (file: fs.ReadStream, opts?: Object, auth?: Object): Promise<Stream> {
     const call = {
       path: '/build?',
       method: 'POST',
@@ -283,7 +283,7 @@ export default class {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, stream: Object) => {
+      this.modem.dial(call, (err, stream: Stream) => {
         if (err) return reject(err)
         resolve(stream)
       })
@@ -297,7 +297,7 @@ export default class {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the resulting stream
    */
-  create (auth: Object, opts?: Object): Promise<Object> {
+  create (auth: Object, opts?: Object): Promise<Stream> {
     const call = {
       path: '/images/create?',
       method: 'POST',
@@ -311,7 +311,7 @@ export default class {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, stream: Object) => {
+      this.modem.dial(call, (err, stream: Stream) => {
         if (err) return reject(err)
         resolve(stream)
       })
@@ -324,7 +324,7 @@ export default class {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the stream with the tarball
    */
-  getAll (opts?: Object): Promise<Object> {
+  getAll (opts?: Object): Promise<Stream> {
     const call = {
       path: `/images/get?`,
       method: 'GET',
@@ -337,7 +337,7 @@ export default class {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, stream: Object) => {
+      this.modem.dial(call, (err, stream: Stream) => {
         if (err) return reject(err)
         resolve(stream)
       })
@@ -351,7 +351,7 @@ export default class {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the stream with the process
    */
-  load (file: fs.ReadStream, opts?: Object): Promise<Object> {
+  load (file: fs.ReadStream, opts?: Object): Promise<Stream> {
     const call = {
       path: '/images/load?',
       method: 'POST',
@@ -365,7 +365,7 @@ export default class {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, stream: Object) => {
+      this.modem.dial(call, (err, stream: Stream) => {
         if (err) return reject(err)
         resolve(stream)
       })

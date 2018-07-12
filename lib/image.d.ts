@@ -1,6 +1,7 @@
 /// <reference types="node" />
-import Modem = require('docker-modem');
-import fs = require('fs');
+import * as Modem from 'docker-modem';
+import * as fs from 'fs';
+import { Stream } from 'stream';
 /**
  * Class representing an image
  */
@@ -37,7 +38,7 @@ export declare class Image {
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the resulting stream
      */
-    push(auth?: Object, opts?: Object): Promise<Object>;
+    push(auth?: Object, opts?: Object): Promise<Stream>;
     /**
      * Tag the image into the registry
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/tag-an-image-into-a-repository
@@ -58,7 +59,7 @@ export declare class Image {
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the stream with the tarball
      */
-    get(opts?: Object): Promise<Object>;
+    get(opts?: Object): Promise<Stream>;
 }
 export default class  {
     modem: Modem;
@@ -91,7 +92,7 @@ export default class  {
      * @param  {Object}   auth  Registry Auth Config, see linked engine documentation for details (optional)
      * @return {Promise}        Promise return the resulting stream
      */
-    build(file: fs.ReadStream, opts?: Object, auth?: Object): Promise<Object>;
+    build(file: fs.ReadStream, opts?: Object, auth?: Object): Promise<Stream>;
     /**
      * Create an image
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/create-an-image
@@ -99,14 +100,14 @@ export default class  {
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the resulting stream
      */
-    create(auth: Object, opts?: Object): Promise<Object>;
+    create(auth: Object, opts?: Object): Promise<Stream>;
     /**
      * Get all images in a tarball
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/get-a-tarball-containing-all-images
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the stream with the tarball
      */
-    getAll(opts?: Object): Promise<Object>;
+    getAll(opts?: Object): Promise<Stream>;
     /**
      * Load image from tarball
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/load-a-tarball-with-a-set-of-images-and-tags-into-docker
@@ -114,7 +115,7 @@ export default class  {
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the stream with the process
      */
-    load(file: fs.ReadStream, opts?: Object): Promise<Object>;
+    load(file: fs.ReadStream, opts?: Object): Promise<Stream>;
     /**
      * Prune images
      * https://docs.docker.com/engine/api/v1.25/#operation/ImagePrune

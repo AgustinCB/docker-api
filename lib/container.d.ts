@@ -1,7 +1,8 @@
 /// <reference types="node" />
-import Modem = require('docker-modem');
+import * as Modem from 'docker-modem';
+import * as fs from 'fs';
+import { Stream } from 'stream';
 import { Image } from './image';
-import fs = require('fs');
 /**
  * Class representing container execution
  */
@@ -30,7 +31,7 @@ export declare class Exec {
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise return the stream to the execution
      */
-    start(opts?: any): Promise<Object>;
+    start(opts?: any): Promise<Stream>;
     /**
      * Resize an exec instance
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/exec-resize
@@ -99,7 +100,7 @@ export declare class ContainerFs {
      * @param  {Object}   opts  Query params in the request (optional)
      * @return {Promise}        Promise returning the result as a stream to the tar file
      */
-    get(opts?: any): Promise<Object>;
+    get(opts?: any): Promise<Stream>;
     /**
      * Put an extracted tar archive in the filesystem of a container
      * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/extract-an-archive-of-files-or-folders-to-a-directory-in-a-container

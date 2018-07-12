@@ -404,7 +404,7 @@ export class Container {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, logs: Object) => {
+      this.modem.dial(call, (err, logs: Readable) => {
         if (err) return reject(err)
         resolve(logs)
       })

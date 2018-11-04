@@ -1,8 +1,10 @@
 'use strict'
 
-import Modem = require('docker-modem')
+import * as Modem from 'docker-modem'
+import * as fs from 'fs'
+import { Stream, Readable } from 'stream'
+
 import { Image } from './image'
-import fs = require('fs')
 
 /**
  * Class representing container execution
@@ -63,7 +65,7 @@ export class Exec {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise return the stream to the execution
    */
-  start (opts: any = {}): Promise<Object> {
+  start (opts: any = {}): Promise<Stream> {
     const call = {
       path: `/exec/${this.id}/start?`,
       method: 'POST',
@@ -79,7 +81,7 @@ export class Exec {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, stream: Object) => {
+      this.modem.dial(call, (err, stream: Stream) => {
         if (err) return reject(err)
         resolve(stream)
       })
@@ -250,7 +252,7 @@ export class ContainerFs {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise returning the result as a stream to the tar file
    */
-  get (opts: any = {}): Promise<Object> {
+  get (opts: any = {}): Promise<Stream> {
     const call = {
       path: `/containers/${this.container.id}/archive?path=${opts.path}&`,
       method: 'GET',
@@ -265,7 +267,7 @@ export class ContainerFs {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, stream: Object) => {
+      this.modem.dial(call, (err, stream: Stream) => {
         if (err) return reject(err)
         resolve(stream)
       })
@@ -387,7 +389,7 @@ export class Container {
    * @param  {Object}   opts  Query params in the request (optional)
    * @return {Promise}        Promise returning the concatenated logs
    */
-  logs (opts?: Object): Promise<Object> {
+  logs (opts?: Object): Promise<Readable> {
     const call = {
       path: `/containers/${this.id}/logs?`,
       method: 'GET',
@@ -402,7 +404,7 @@ export class Container {
     }
 
     return new Promise((resolve, reject) => {
-      this.modem.dial(call, (err, logs: Object) => {
+      this.modem.dial(call, (err, logs: Readable) => {
         if (err) return reject(err)
         resolve(logs)
       })

@@ -1,9 +1,8 @@
 import test from 'ava'
 import fs from 'fs'
-import { Container } from '../lib/container'
-import { Image } from '../lib/image'
-import {default as MemoryStream} from 'memorystream'
-import { Docker } from '../lib/docker'
+import { Container } from '../src/container'
+import { Image } from '../src/image'
+import { Docker } from '../src/docker'
 
 const socket = process.env.DOCKER_SOCKET || '/var/run/docker.sock'
 const isSocket = fs.existsSync(socket) ? fs.statSync(socket).isSocket() : false
@@ -58,7 +57,7 @@ test('inspect', async t => {
 
 test('top', async t => {
   const container = await createContainer('top', {
-    Cmd: [ '/bin/bash', '-c', 'tail -f /var/log/dmesg' ], 
+    Cmd: [ '/bin/bash', '-c', 'tail -f /var/log/dmesg' ],
   })
   await container.start()
   const processes = await container.top()
@@ -67,7 +66,7 @@ test('top', async t => {
 
 test('log', async t => {
   const container = await createContainer('logs', {
-    Cmd: [ '/bin/bash', '-c', 'tail -f /var/log/dmesg' ], 
+    Cmd: [ '/bin/bash', '-c', 'tail -f /var/log/dmesg' ],
   })
   await container.start()
   const logs = await container.logs({ stdout: 1, follow: true })
@@ -76,7 +75,7 @@ test('log', async t => {
 
 test('changes', async t => {
   const container = await createContainer('changes', {
-    Cmd: [ '/bin/bash', '-c', 'echo "xfoo" > foo.txt' ], 
+    Cmd: [ '/bin/bash', '-c', 'echo "xfoo" > foo.txt' ],
   })
   await container.start()
   const changes = await container.changes()
@@ -91,7 +90,7 @@ test('export', async t => {
 
 test('stats', async t => {
   const container = await createContainer('stats', {
-    Cmd: [ '/bin/bash', '-c', 'tail -f /var/log/dmesg' ], 
+    Cmd: [ '/bin/bash', '-c', 'tail -f /var/log/dmesg' ],
   })
   await container.start()
   const stats = await container.stats()
@@ -100,7 +99,7 @@ test('stats', async t => {
 
 test('resize', async t => {
   const container = await createContainer('resize', {
-    Cmd: [ '/bin/bash', '-c', 'tail -f /var/log/dmesg' ], 
+    Cmd: [ '/bin/bash', '-c', 'tail -f /var/log/dmesg' ],
   })
   await container.start()
   const result = await container.stats({
@@ -117,7 +116,7 @@ test('prune', async t => {
 
 test('start', async t => {
   const container = await createContainer('start', {
-    Cmd: [ '/bin/bash', '-c', 'tail -f /var/log/dmesg' ], 
+    Cmd: [ '/bin/bash', '-c', 'tail -f /var/log/dmesg' ],
   })
   const result = await container.start()
   t.is(result.constructor, Container)
@@ -125,7 +124,7 @@ test('start', async t => {
 
 test('stop', async t => {
   const container = await createContainer('stop', {
-    Cmd: [ '/bin/bash', '-c', 'tail -f /var/log/dmesg' ], 
+    Cmd: [ '/bin/bash', '-c', 'tail -f /var/log/dmesg' ],
   })
   await container.start()
   await container.stop()
@@ -135,7 +134,7 @@ test('stop', async t => {
 
 test('restart', async t => {
   const container = await createContainer('restart', {
-    Cmd: [ '/bin/bash', '-c', 'tail -f /var/log/dmesg' ], 
+    Cmd: [ '/bin/bash', '-c', 'tail -f /var/log/dmesg' ],
   })
   await container.start()
   await container.restart()
@@ -145,7 +144,7 @@ test('restart', async t => {
 
 test('kill', async t => {
   const container = await createContainer('kill', {
-    Cmd: [ '/bin/bash', '-c', 'tail -f /var/log/dmesg' ], 
+    Cmd: [ '/bin/bash', '-c', 'tail -f /var/log/dmesg' ],
   })
   await container.start()
   await container.kill()
@@ -155,7 +154,7 @@ test('kill', async t => {
 
 test('update', async t => {
   const container = await createContainer('update', {
-    Cmd: [ '/bin/bash', '-c', 'tail -f /var/log/dmesg' ], 
+    Cmd: [ '/bin/bash', '-c', 'tail -f /var/log/dmesg' ],
   })
   await container.update({ 'CpuShares': 512 })
   const containerStatus = await container.status()
@@ -164,7 +163,7 @@ test('update', async t => {
 
 test('rename', async t => {
   const container = await createContainer('rename_prev', {
-    Cmd: [ '/bin/bash', '-c', 'tail -f /var/log/dmesg' ], 
+    Cmd: [ '/bin/bash', '-c', 'tail -f /var/log/dmesg' ],
   })
   await container.rename({ 'name': containerNames.get('rename') })
   const containerStatus = await container.status()
@@ -173,7 +172,7 @@ test('rename', async t => {
 
 test('pause', async t => {
   const container = await createContainer('pause', {
-    Cmd: [ '/bin/bash', '-c', 'tail -f /var/log/dmesg' ], 
+    Cmd: [ '/bin/bash', '-c', 'tail -f /var/log/dmesg' ],
   })
   await container.start()
   await container.pause()
@@ -186,7 +185,7 @@ test('pause', async t => {
 
 test('commit', async t => {
   const container = await createContainer('commit', {
-    Cmd: [ '/bin/bash', '-c', 'tail -f /var/log/dmesg' ], 
+    Cmd: [ '/bin/bash', '-c', 'tail -f /var/log/dmesg' ],
   })
   await container.start()
   const image = await container.commit({ comment: 'commit test' })
@@ -195,7 +194,7 @@ test('commit', async t => {
 
 test('exec', async t => {
   const container = await createContainer('exec', {
-    Cmd: [ '/bin/bash', '-c', 'tail -f /var/log/dmesg' ], 
+    Cmd: [ '/bin/bash', '-c', 'tail -f /var/log/dmesg' ],
   })
   await container.start()
   const exec = await container.exec.create({
@@ -207,7 +206,7 @@ test('exec', async t => {
 
 test('exec-status', async t => {
   const container = await createContainer('inspect_exec', {
-    Cmd: [ '/bin/bash', '-c', 'tail -f /var/log/dmesg' ], 
+    Cmd: [ '/bin/bash', '-c', 'tail -f /var/log/dmesg' ],
   })
   await container.start()
   const exec = await container.exec.create({
@@ -245,7 +244,7 @@ test('attach', async t => {
 
 test('get-archive', async t => {
   const container = await createContainer('get_archive', {
-    Cmd: [ '/bin/bash', '-c', 'tail -f /var/log/dmesg' ], 
+    Cmd: [ '/bin/bash', '-c', 'tail -f /var/log/dmesg' ],
   })
   const data = await container.fs.get({ path: '/var/log/dmesg' })
   t.truthy(data)
@@ -253,7 +252,7 @@ test('get-archive', async t => {
 
 test('put-archive', async t => {
   const container = await createContainer('put_archive', {
-    Cmd: [ '/bin/bash', '-c', 'tail -f /var/log/dmesg' ], 
+    Cmd: [ '/bin/bash', '-c', 'tail -f /var/log/dmesg' ],
   })
   const data = await container.fs.put('./test/test.tar', {
     path: '/root'
@@ -263,7 +262,7 @@ test('put-archive', async t => {
 
 test('inspect-archive', async t => {
   const container = await createContainer('info_archive', {
-    Cmd: [ '/bin/bash', '-c', 'tail -f /var/log/dmesg' ], 
+    Cmd: [ '/bin/bash', '-c', 'tail -f /var/log/dmesg' ],
   })
   const data = await container.fs.info({ path: '/var/log/dmesg' })
   t.truthy(data)

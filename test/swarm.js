@@ -1,11 +1,10 @@
 import test from 'ava'
 import fs from 'fs'
-import { Node } from '../lib/node'
-import { Secret } from '../lib/secret'
-import { Service } from '../lib/service'
-import Swarm from '../lib/swarm'
-import { Task } from '../lib/task'
-import { Docker } from '../lib/docker'
+import { Node } from '../src/node'
+import { Secret } from '../src/secret'
+import { Service } from '../src/service'
+import Swarm from '../src/swarm'
+import { Docker } from '../src/docker'
 
 const socket = process.env.DOCKER_SOCKET || '/var/run/docker.sock'
 const isSocket = fs.existsSync(socket) ? fs.statSync(socket).isSocket() : false
@@ -110,13 +109,13 @@ test('logs-service', async t => {
   const res = await (await createService()).logs({stdout: true})
   t.truthy(res.pipe)
 })
-      
+
 
 test('list-tasks', async t => {
   const tasks = await docker.task.list()
   t.is(tasks.constructor, Array)
 })
-  
+
 test('list-nodes', async t => {
   const nodes = await docker.node.list()
   t.is(nodes.constructor, Array)

@@ -108,7 +108,7 @@ export class Exec {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err) => {
         if (err) return reject(err)
-        resolve()
+        resolve(null)
       })
     })
   }
@@ -314,7 +314,21 @@ export class Container {
   fs: ContainerFs
   exec: ExecManager
   Warnings: Array<String> = []
-  data: Object = {}
+  data: {
+    Id: string;
+    Names: string[];
+    Image: string;
+    ImageID: string;
+    Command: string;
+    Created: number;
+    Ports: number[];
+    Labels: any;
+    State: 'running' | 'exited';
+    Status: string;
+    HostConfig: any;
+    NetworkSettings: any;
+    Mounts: any[];
+  }
 
   /**
    * Create an container Object
@@ -842,7 +856,7 @@ export class Container {
     return new Promise((resolve, reject) => {
       this.modem.dial(call, (err) => {
         if (err) return reject(err)
-        resolve()
+        resolve(null)
       })
     })
   }

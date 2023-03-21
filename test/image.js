@@ -1,7 +1,7 @@
 import test from 'ava'
 import fs from 'fs'
-import { Image } from '../lib/image'
-import { Docker } from '../lib/docker'
+import { Image } from '../src/image'
+import { Docker } from '../src/docker'
 
 const socket = process.env.DOCKER_SOCKET || '/var/run/docker.sock'
 const isSocket = fs.existsSync(socket) ? fs.statSync(socket).isSocket() : false

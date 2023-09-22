@@ -47,3 +47,4 @@ test_folder
 #compiled files
 *.js
 *.js.map
+*.d.ts

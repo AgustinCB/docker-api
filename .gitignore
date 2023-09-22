@@ -43,3 +43,7 @@ test_folder
 
 # Editor
 .vscode
+
+#compiled files
+*.js
+*.js.map

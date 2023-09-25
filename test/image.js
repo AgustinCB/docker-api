@@ -2,12 +2,11 @@ import test from 'ava'
 import fs from 'fs'
 import { Image } from '../src/image'
 import { Docker } from '../src/docker'
+import {platform} from "process"
 
-const socket = process.env.DOCKER_SOCKET || '/var/run/docker.sock'
-const isSocket = fs.existsSync(socket) ? fs.statSync(socket).isSocket() : false
-const docker = isSocket
-  ? new Docker()
-  : new Docker({ socketPath: socket })
+
+const socket = process.env.DOCKER_SOCKET || platform == "win32" ? '\\\\.\\pipe\\docker_engine': '/var/run/docker.sock'
+const docker = new Docker({ socketPath: socket })
 const testImage = 'ubuntu:latest'
 
 test('list', async t => {
